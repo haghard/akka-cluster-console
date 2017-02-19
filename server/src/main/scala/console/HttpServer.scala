@@ -8,7 +8,9 @@ object HttpServer {
   object Stop
 }
 
-class HttpServer(port: Int, address: String, keypass: String, storepass: String) extends Actor with ActorLogging {
+class HttpServer(port: Int, address: String, override val sslFile: String,
+                 keypass: String, storepass: String) extends Actor with ActorLogging
+  with SslSupport {
   import HttpServer._
   import akka.http.scaladsl.Http
   import akka.pattern.pipe
@@ -21,10 +23,9 @@ class HttpServer(port: Int, address: String, keypass: String, storepass: String)
     ActorMaterializerSettings.create(system)
       .withDispatcher(HttpDispatcher))(system)
 
-  val routes = api.RestApi.route(system, mat)
-
-  //connectionContext = https(keypass, storepass))
-  Http().bindAndHandle(routes, address, port).pipeTo(self)
+  Http().bindAndHandle(
+    api.RestApi.route(system, mat), address, port,
+    connectionContext = https(keypass, storepass)).pipeTo(self)
 
   override def receive = {
     case b: akka.http.scaladsl.Http.ServerBinding => serverBinding(b)

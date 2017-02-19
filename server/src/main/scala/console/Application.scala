@@ -55,7 +55,9 @@ object Application extends App with AppSupport {
   val coreSystem: ActorSystem = ActorSystem("cluster-console", config)
 
   coreSystem.actorOf(Props(new HttpServer(httpPort.toInt, config.getString("akka.http.interface"),
-    config.getString("akka.http.ssl.keypass"), config.getString("akka.http.ssl.storepass"))), "http-server")
+    config.getString("akka.http.ssl.file"),
+    config.getString("akka.http.ssl.keypass"), config.getString("akka.http.ssl.storepass"))),
+    "http-server")
 
   val tz = TimeZone.getDefault.getID
   val greeting = new StringBuilder()

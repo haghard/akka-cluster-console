@@ -40,9 +40,10 @@ lazy val server = (project in file("server")).settings(
     //"com.typesafe.play.extras" %% "play-geojson" % "1.4.0",
     "ch.qos.logback"  %   "logback-classic" % "1.1.2",
     "org.mindrot"     %   "jbcrypt"         % "0.3m",
-    "com.lihaoyi"     %%  "scalatags"       % "0.6.2",
     "org.webjars"     %   "bootstrap"       % "3.3.6",
-    "org.scalatest"    %% "scalatest"       % "3.0.1" % "test"
+    "com.lihaoyi"     %%  "scalatags"       % "0.6.2",
+    "com.jsuereth"    %%  "scala-arm"       % "2.0",
+    "org.scalatest"   %%  "scalatest"       % "3.0.1" % "test"
   ) ++ Seq(
     "com.softwaremill.akka-http-session" %% "core" % "0.4.0",
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
@@ -123,7 +124,7 @@ lazy val server = (project in file("server")).settings(
     val dockerResourcesDir = baseDir / "docker-resources"
     val dockerResourcesTargetPath = s"$imageAppBaseDir/"
 
-    val jks = baseDir / "ssl" / "linguistic.jks"
+    val jks = baseDir / "ssl" / "haghard.jks"
 
     //val prodConfigSrc = baseDir / "src" / "main" / "resources" / "production.conf"
 
@@ -172,19 +173,16 @@ lazy val server = (project in file("server")).settings(
       entryPoint(s"${dockerResourcesTargetPath}docker-entrypoint.sh")
     }
   }
-
 ).enablePlugins(SbtWeb, JavaAppPackaging, sbtdocker.DockerPlugin).dependsOn(sharedJvm)
 
 //for debugging
 def cpCss() = (baseDirectory) map { dir =>
   def execute() = {
     //IO.copyFile(dir / "src" / "main" / "twirl" / "linguistic"/ "main.css", dir / "target" /"web"/"web-modules"/"main"/"webjars"/"lib"/"bootstrap"/"css"/"main.css")
-
     //IO.copyFile(dir /"src"/"main"/"resources"/"chat.css", dir/"target"/"web"/"web-modules"/"main"/"webjars"/"lib"/"bootstrap"/"css"/"chat.css")
 
     //Process(s"cp ${dir}/src/main/resources/nv.d3.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
     //Process(s"cp ${dir}/src/main/resources/nv.d3.css ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css/").!
-
     //Process(s"cp ${dir}/src/main/resources/graph/graph.css ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css/").!
     //Process(s"cp ${dir}/src/main/resources/graph/graph.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
     //Process(s"cp ${dir}/src/main/resources/nv.d3.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
@@ -197,10 +195,6 @@ def cpCss() = (baseDirectory) map { dir =>
 
     Process(s"cp ${dir}/src/main/resources/web/linked-charts/area1.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
     Process(s"cp ${dir}/src/main/resources/web/linked-charts/area2.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-
-
-
-
 
     //Process(s"cp ${dir}/src/main/resources/wordtree/raphael.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
     //Process(s"cp ${dir}/src/main/resources/wordtree/word-tree-layout.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!

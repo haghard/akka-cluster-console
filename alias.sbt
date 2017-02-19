@@ -23,13 +23,13 @@ addCommandAlias(
 
 addCommandAlias(
   "console-1",
-  "runMain linguistic.Application " +
+  "runMain console.Application " +
   "-DENV=development " +
   "-DCONFIG=./server/conf " +
   "-Dakka.remote.netty.tcp.port=2552 " +
   "-Dakka.http.port=9444 " +
   "-DHOSTNAME=192.168.10.98 " +
-  "-Dakka.cluster.roles.0=linguistic-engine " +
+  "-Dakka.cluster.roles.0=console " +
   "-Dakka.cluster.seed-nodes.0=akka.tcp://linguistics@192.168.10.98:2551 " +
   "-Dakka.cluster.seed-nodes.1=akka.tcp://linguistics@192.168.10.98:2552 "
 )
