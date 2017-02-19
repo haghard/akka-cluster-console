@@ -25,12 +25,12 @@ The first step is to create a certificate authority that will sign the haghard.c
 Export the haghard.com public certificate as haghard.crt so that it can be used in trust stores.
 
 	`keytool -export -v \
-	  -alias haghard.com \
-	  -file haghard.crt \
-	  -keypass ... \
-	  -storepass ... \
-	  -keystore server/src/main/resources/haghard.jks \
-	  -rfc`
+         -alias haghard.com \
+         -file ./haghard.crt \
+         -keypass ... \
+         -storepass ... \
+         -keystore server/src/main/resources/haghard.jks \
+         -rfc`
 	  
 Links
     

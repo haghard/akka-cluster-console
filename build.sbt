@@ -48,10 +48,10 @@ lazy val server = (project in file("server")).settings(
     "com.softwaremill.akka-http-session" %% "core" % "0.4.0",
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
-    //"com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
-    //"com.typesafe.akka" %% "akka-persistence-cassandra" % "0.22",
+    "com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
+    "com.typesafe.akka" %% "akka-persistence-cassandra" % "0.23",
     //"com.typesafe.akka" %% "akka-cluster-sharding" % akkaVersion,
-    //"com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
+    "com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
     "com.typesafe.akka" %% "akka-cluster-metrics" % akkaVersion
   ),
 
