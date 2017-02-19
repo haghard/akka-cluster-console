@@ -1,0 +1,22 @@
+name,parent,CID,QUESTION,CUSTOMER,WHO,WHEN
+1,,,Maximising Response,CTP,MRD,2021
+2,1,PLM007,Where do I allocate field staff?,CFO,MRD,18/07/2018
+3,1,NEW,How many Field Staff do I need?,CFO,MRD,01/09/2018
+4,3,MRD1,What are the response rate objectives?,MRD,CTP,01/05/2018
+5,3,MRD2,What is the objective for online take-up?,MRD,CTP,01/05/2018
+6,3,MRD3,What strategies provide best response for cost?,CFO,MRD,01/05/2018
+7,3,MRD4,What will be the pattern of response?,MRD,MRD,01/05/2018
+8,3,MRD5,Who/where will require digital assistance?,MRD,MRD,01/05/2018
+9,2,MRD6,How difficult/resource intensive will follow-up be in an area?,CFO,MRD,01/05/2018
+10,2,MRD7,What information will help collectors?,CFO,MRD,01/05/2018
+11,2,MRD8,Who will require help?,CFO,MRD,01/05/2018
+12,2,MRD9,Which subgroups should we engage with?,CFO,MRD,01/05/2018
+13,4,,CTP decision on response rate objectives,MRD,CTP,a date
+14,5,,CTP decision on online takeup,MRD,CTP,a date
+15,14,,Digital Enagement Work,CTP,MRD,a date
+16,12,,Target Population Groups,CTP,MRD,a date
+17,6,,FOS,CTP,MRD,a date
+18,17,,Admin data,CTP,MRD,a date
+19,17,,contact rates,CTP,MRD,a date
+20,17,,Success rates,CTP,MRD,a date
+21,17,,other inputs,CTP,MRD,a date

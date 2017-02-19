@@ -12,6 +12,14 @@ src_managed/
 project/boot/
 project/plugins/project/
 
-# Scala-IDE specific
-.scala_dependencies
-.worksheet
+
+# hidden cross project folders
+shared/.js
+shared/.jvm
+
+.idea/
+.idea_modules/
+logs/
+
+/target
+/server/src/main/resources/linguistic.jks

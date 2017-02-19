@@ -1,0 +1,183 @@
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" rel="stylesheet" type="text/css">
+    <style>
+        #chartContainer {
+            font-family: Roboto, sans-serif;
+    </style>
+</head>
+
+<div id="chartContainer">
+    <!--    http://blockbuilder.org/azizkamoun/b9dd3e5a804a2832370e47e0a8a366f8  -->
+    <!--    <script src="http://d3js.org/d3.v4.min.js"></script> -->
+    <script src="/assets/lib/bootstrap/js/d3.v4.min.js"></script>
+    <script src="http://dimplejs.org/dist/dimple.v2.3.0.min.js"></script>
+
+    <script type="text/javascript">
+        var svg = dimple.newSvg("#chartContainer", 850, 500);
+        var myChart;
+
+        d3.csv("timeseries_data.csv", function (data) {
+            toggle_data = [ {"Timeframe": "total", "Height": 1},  {"Timeframe": "per capita", "Height": 1}  ];
+
+            drawToggles();
+
+            // Remove tooltip from toggles chart
+            function onHover(e) {
+            }
+
+            // On click of the toggles
+            function onClick(e) {
+                // change color toggles
+                toggleSeries.shapes
+                    .transition()
+                    .duration(500)
+                    .style("fill", function (d) {
+                        return (d.x === e.xValue ? indicatorColor.fill : defaultColor.fill)
+                    })
+                    .style("stroke", function (d) {
+                        return (d.x === e.xValue ? indicatorColor.stroke : defaultColor.stroke)
+                    })
+                toggles.draw();
+
+                //moveToggleLabels();
+            }
+
+            function drawToggles() {
+                // Create the toggles
+                var toggles = new dimple.chart(svg, toggle_data);
+                var defaultColor = new dimple.color("rgb(245, 245, 245)", "#226d9e", 1);
+                var indicatorColor = new dimple.color("#226d9e", "#226d9e", 1);
+
+                // Place the toggles bar chart just below title
+                toggles.setBounds("75%", "85%", 200, 20);
+
+                var toggleX = toggles.addCategoryAxis("x", "Timeframe");
+                //toggleX.addOrderRule(["day", "Month", "Year"])
+                var toggleY = toggles.addMeasureAxis("y", "Height");
+                toggleY.hidden = true;
+
+                // Add the bars to the toggles and add event handlers
+                var toggleSeries = toggles.addSeries(null, dimple.plot.bar);
+                toggleSeries.barGap = 0.08;
+                toggleSeries.addEventHandler("mouseover", onHover);
+                toggleSeries.addEventHandler("click", onClick)
+
+                // Draw toggles
+                toggles.draw();
+
+                // Manually set the bar colors
+                toggleSeries.shapes
+                    .attr("rx", 10)
+                    .attr("ry", 10)
+                    .style("fill", function (d) {
+                        return (d.x === 'Monthly' ? indicatorColor.fill : defaultColor.fill)
+                    })
+                    .style("stroke", function (d) {
+                        return (d.x === 'Monthly' ? indicatorColor.stroke : defaultColor.stroke)
+                    })
+                    .style("opacity", 0.4);
+
+                moveToggleLabels(toggleX);
+            }
+
+            function moveToggleLabels(toggleX) {
+                // remove x axis marks and title
+                toggleX.titleShape.remove();
+                toggleX.shapes.selectAll("line,path").remove();
+
+                // Move the x axis text inside the plot area
+                toggleX.shapes.selectAll("text")
+                    .style("font-size", "12px")
+                    .attr("transform", function (d, i) {
+                        return "translate(" + (1 + 4 * i) + " -22.5)"
+                    });
+            }
+
+            myChart = new dimple.chart(svg, data);
+            myChart.setBounds(50, 50, "65%", 400);
+            var x = myChart.addCategoryAxis("x", "YEAR");
+            //x.addOrderRule("Date");
+            myChart.addMeasureAxis("y", "Accidents");
+            var s = myChart.addSeries("state", dimple.plot.line);
+            s.interpolation = "cardinal";
+
+            var myLegend = myChart.addLegend("75%", "11%", 300, "80%", "left");
+
+            myChart.draw();
+
+            // This is a critical step.  By doing this we orphan the legend. This
+            // means it will not respond to graph updates.  Without this the legend
+            // will redraw when the chart refreshes removing the unchecked item and
+            // also dropping the events we define below.
+            myChart.legends = [];
+
+            filterValues = [];
+            // Get all the rectangles from our now orphaned legend
+            myLegend.shapes.selectAll("rect").on("click", function (e) {
+                // This indicates whether the item is already visible or not
+                var hide = false;
+                var newFilters = [];
+                // If the filters contain the clicked shape hide it
+                filterValues.forEach(function (f) {
+                    if (f === e.aggField.slice(-1)[0]) {
+                        hide = true;
+                    } else {
+                        newFilters.push(f);
+                    }
+                });
+
+                // Hide the shape or show it
+                if (hide) {
+                    d3.select(this).style("opacity", 0.2);
+                } else {
+                    newFilters.push(e.aggField.slice(-1)[0]);
+                    d3.select(this).style("opacity", 0.8);
+                }
+
+                // Update the filters
+                filterValues = newFilters;
+
+                // Filter the data
+                myChart.data = dimple.filterData(data, "state", filterValues);
+                // Passing a duration parameter makes the chart animate. Without
+                // it there is no transition
+                myChart.draw(800);
+            });
+
+            myLegend.shapes.selectAll("rect").style("opacity", 0.2);
+            filterValues = ["California", "Texas", "Florida", "New York", "Pennsylvania"];
+            var x = d3.select("#dimple-legend dimple-legend-key dimple-texas dimple-custom-legend-key dimple-custom-format-1").style("opacity", 0.8);
+            console.log(x);
+
+            // Filter the data
+            myChart.data = dimple.filterData(data, "state", filterValues);
+            // Passing a duration parameter makes the chart animate. Without
+            // it there is no transition
+
+            myLegend.shapes.selectAll("rect").each(function (d) {
+                if (this.getAttribute("class") === "dimple-legend dimple-legend-key dimple-texas dimple-custom-legend-key dimple-custom-format-2"
+                    || this.getAttribute("class") === "dimple-legend dimple-legend-key dimple-florida dimple-custom-legend-key dimple-custom-format-3"
+                    || this.getAttribute("class") === "dimple-legend dimple-legend-key dimple-california dimple-custom-legend-key dimple-custom-format-1"
+                    || this.getAttribute("class") === "dimple-legend dimple-legend-key dimple-new-york dimple-custom-legend-key dimple-custom-format-4"
+                    || this.getAttribute("class") === "dimple-legend dimple-legend-key dimple-pennsylvania dimple-custom-legend-key dimple-custom-format-5"
+                ) {
+                    d3.select(this).style("opacity", 0.8);
+                }
+            });
+
+            myChart.draw();
+        });
+
+        // Add a method to draw the chart on resize of the window
+        window.onresize = function () {
+            console.log("in window resize listener");
+
+            // As of 1.1.0 the second parameter here allows you to draw
+            // without reprocessing data.  This saves a lot on performance
+            // when you know the data won't have changed.
+            myChart.draw(0, true);
+        }
+    </script>
+</div>
+</html>

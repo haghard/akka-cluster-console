@@ -1,0 +1,1903 @@
+state,Accidents,YEAR
+Alabama,783,2015
+Alaska,60,2015
+Arizona,810,2015
+Arkansas,472,2015
+California,2925,2015
+Colorado,506,2015
+Connecticut,253,2015
+Delaware,122,2015
+District of Columbia,23,2015
+Florida,2699,2015
+Georgia,1327,2015
+Hawaii,86,2015
+Idaho,198,2015
+Illinois,914,2015
+Indiana,756,2015
+Iowa,282,2015
+Kansas,322,2015
+Kentucky,694,2015
+Lousiana,674,2015
+Maine,144,2015
+Maryland,472,2015
+Massachusetts,291,2015
+Michigan,893,2015
+Minnesota,375,2015
+Mississippi,604,2015
+Missouri,802,2015
+Montana,204,2015
+Nebraska,218,2015
+Nevada,296,2015
+New Hampsire,103,2015
+New Jersey,522,2015
+New Mexico,269,2015
+New York,1046,2015
+North Carolina,1275,2015
+North Dakota,111,2015
+Ohio,1029,2015
+Oklahoma,588,2015
+Oregon,412,2015
+Pennsylvania,1102,2015
+Rhode Island,41,2015
+South Carolina,909,2015
+South Dakota,115,2015
+Tennessee,884,2015
+Texas,3124,2015
+Utah,256,2015
+Vermont,50,2015
+Virginia,711,2015
+Washington,516,2015
+West Virginia,246,2015
+Wisconsin,523,2015
+Wyoming,129,2015
+Alabama,747,2014
+Delaware,109,2014
+District of Columbia,21,2014
+Florida,2336,2014
+Georgia,1080,2014
+Hawaii,94,2014
+Idaho,175,2014
+Illinois,845,2014
+Indiana,704,2014
+Iowa,288,2014
+Alaska,68,2014
+Kansas,341,2014
+Kentucky,612,2014
+Lousiana,665,2014
+Maine,115,2014
+Maryland,416,2014
+Massachusetts,336,2014
+Michigan,831,2014
+Minnesota,324,2014
+Mississippi,543,2014
+Missouri,696,2014
+Montana,176,2014
+Nebraska,203,2014
+Nevada,268,2014
+New Hampsire,89,2014
+New Jersey,523,2014
+New Mexico,340,2014
+New York,980,2014
+North Carolina,1188,2014
+North Dakota,121,2014
+Ohio,917,2014
+Arizona,708,2014
+Oklahoma,589,2014
+Oregon,322,2014
+Pennsylvania,1107,2014
+Rhode Island,51,2014
+South Carolina,756,2014
+South Dakota,125,2014
+Tennessee,893,2014
+Texas,3190,2014
+Utah,222,2014
+Arkansas,436,2014
+Vermont,42,2014
+Virginia,659,2014
+Washington,429,2014
+West Virginia,242,2014
+Wisconsin,459,2014
+Wyoming,131,2014
+California,2859,2014
+Colorado,451,2014
+Connecticut,234,2014
+Alabama,767,2013
+Delaware,94,2013
+District of Columbia,20,2013
+Florida,2223,2013
+Georgia,1085,2013
+Hawaii,93,2013
+Idaho,200,2013
+Illinois,895,2013
+Indiana,710,2013
+Iowa,290,2013
+Alaska,49,2013
+Kansas,327,2013
+Kentucky,590,2013
+Lousiana,651,2013
+Maine,136,2013
+Maryland,431,2013
+Massachusetts,334,2013
+Michigan,876,2013
+Minnesota,357,2013
+Mississippi,558,2013
+Missouri,683,2013
+Montana,203,2013
+Nebraska,190,2013
+Nevada,245,2013
+New Hampsire,124,2013
+New Jersey,508,2013
+New Mexico,275,2013
+New York,1124,2013
+North Carolina,1188,2013
+North Dakota,133,2013
+Ohio,917,2013
+Arizona,782,2013
+Oklahoma,621,2013
+Oregon,292,2013
+Pennsylvania,1119,2013
+Rhode Island,62,2013
+South Carolina,719,2013
+South Dakota,121,2013
+Tennessee,911,2013
+Texas,3047,2013
+Utah,202,2013
+Arkansas,460,2013
+Vermont,63,2013
+Virginia,682,2013
+Washington,401,2013
+West Virginia,305,2013
+Wisconsin,507,2013
+Wyoming,75,2013
+California,2860,2013
+Colorado,432,2013
+Connecticut,265,2013
+Alabama,809,2012
+Delaware,108,2012
+District of Columbia,14,2012
+Florida,2253,2012
+Georgia,1126,2012
+Hawaii,114,2012
+Idaho,169,2012
+Illinois,886,2012
+Indiana,720,2012
+Iowa,330,2012
+Alaska,54,2012
+Kansas,368,2012
+Kentucky,694,2012
+Lousiana,653,2012
+Maine,151,2012
+Maryland,462,2012
+Massachusetts,365,2012
+Michigan,874,2012
+Minnesota,349,2012
+Mississippi,507,2012
+Missouri,762,2012
+Montana,192,2012
+Nebraska,190,2012
+Nevada,238,2012
+New Hampsire,101,2012
+New Jersey,553,2012
+New Mexico,338,2012
+New York,1096,2012
+North Carolina,1229,2012
+North Dakota,147,2012
+Ohio,1022,2012
+Arizona,738,2012
+Oklahoma,643,2012
+Oregon,306,2012
+Pennsylvania,1211,2012
+Rhode Island,62,2012
+South Carolina,806,2012
+South Dakota,118,2012
+Tennessee,929,2012
+Texas,3033,2012
+Utah,200,2012
+Arkansas,504,2012
+Vermont,70,2012
+Virginia,715,2012
+Washington,403,2012
+West Virginia,318,2012
+Wisconsin,549,2012
+Wyoming,112,2012
+California,2733,2012
+Colorado,434,2012
+Connecticut,248,2012
+Alabama,811,2011
+Delaware,94,2011
+District of Columbia,22,2011
+Florida,2212,2011
+Georgia,1119,2011
+Hawaii,97,2011
+Idaho,152,2011
+Illinois,835,2011
+Indiana,676,2011
+Iowa,329,2011
+Alaska,63,2011
+Kansas,350,2011
+Kentucky,669,2011
+Lousiana,634,2011
+Maine,126,2011
+Maryland,455,2011
+Massachusetts,356,2011
+Michigan,834,2011
+Minnesota,334,2011
+Mississippi,567,2011
+Missouri,716,2011
+Montana,187,2011
+Nebraska,164,2011
+Nevada,223,2011
+New Hampsire,84,2011
+New Jersey,586,2011
+New Mexico,305,2011
+New York,1093,2011
+North Carolina,1143,2011
+North Dakota,130,2011
+Ohio,942,2011
+Arizona,755,2011
+Oklahoma,609,2011
+Oregon,310,2011
+Pennsylvania,1191,2011
+Rhode Island,63,2011
+South Carolina,767,2011
+South Dakota,101,2011
+Tennessee,867,2011
+Texas,2790,2011
+Utah,224,2011
+Arkansas,509,2011
+Vermont,48,2011
+Virginia,700,2011
+Washington,421,2011
+West Virginia,320,2011
+Wisconsin,532,2011
+Wyoming,120,2011
+California,2617,2011
+Colorado,407,2011
+Connecticut,208,2011
+Alabama,792,2010
+Delaware,92,2010
+District of Columbia,24,2010
+Florida,2261,2010
+Georgia,1150,2010
+Hawaii,109,2010
+Idaho,185,2010
+Illinois,858,2010
+Indiana,701,2010
+Iowa,348,2010
+Alaska,52,2010
+Kansas,376,2010
+Kentucky,694,2010
+Lousiana,644,2010
+Maine,144,2010
+Maryland,463,2010
+Massachusetts,330,2010
+Michigan,873,2010
+Minnesota,364,2010
+Mississippi,581,2010
+Missouri,778,2010
+Montana,161,2010
+Nebraska,166,2010
+Nevada,235,2010
+New Hampsire,120,2010
+New Jersey,530,2010
+New Mexico,317,2010
+New York,1128,2010
+North Carolina,1218,2010
+North Dakota,92,2010
+Ohio,984,2010
+Arizona,695,2010
+Oklahoma,616,2010
+Oregon,292,2010
+Pennsylvania,1208,2010
+Rhode Island,65,2010
+South Carolina,750,2010
+South Dakota,124,2010
+Tennessee,958,2010
+Texas,2746,2010
+Utah,218,2010
+Arkansas,517,2010
+Vermont,63,2010
+Virginia,689,2010
+Washington,422,2010
+West Virginia,282,2010
+Wisconsin,528,2010
+Wyoming,139,2010
+California,2504,2010
+Colorado,411,2010
+Connecticut,299,2010
+Alabama,1010,2007
+Delaware,105,2007
+District of Columbia,36,2007
+Florida,2943,2007
+Georgia,1492,2007
+Hawaii,125,2007
+Idaho,218,2007
+Illinois,1126,2007
+Indiana,804,2007
+Iowa,393,2007
+Alaska,75,2007
+Kansas,379,2007
+Kentucky,803,2007
+Lousiana,900,2007
+Maine,170,2007
+Maryland,558,2007
+Massachusetts,408,2007
+Michigan,990,2007
+Minnesota,463,2007
+Mississippi,804,2007
+Missouri,900,2007
+Montana,250,2007
+Nebraska,230,2007
+Nevada,341,2007
+New Hampsire,122,2007
+New Jersey,674,2007
+New Mexico,371,2007
+New York,1237,2007
+North Carolina,1515,2007
+North Dakota,95,2007
+Ohio,1161,2007
+Arizona,952,2007
+Oklahoma,649,2007
+Oregon,411,2007
+Pennsylvania,1393,2007
+Rhode Island,64,2007
+South Carolina,985,2007
+South Dakota,130,2007
+Tennessee,1111,2007
+Texas,3100,2007
+Utah,258,2007
+Arkansas,583,2007
+Vermont,62,2007
+Virginia,941,2007
+Washington,531,2007
+West Virginia,387,2007
+Wisconsin,675,2007
+Wyoming,137,2007
+California,3591,2007
+Colorado,508,2007
+Connecticut,269,2007
+Alabama,1073,2006
+Delaware,133,2006
+District of Columbia,33,2006
+Florida,3080,2006
+Georgia,1557,2006
+Hawaii,144,2006
+Idaho,239,2006
+Illinois,1136,2006
+Indiana,820,2006
+Iowa,386,2006
+Alaska,71,2006
+Kansas,427,2006
+Kentucky,837,2006
+Lousiana,890,2006
+Maine,171,2006
+Maryland,594,2006
+Massachusetts,403,2006
+Michigan,1004,2006
+Minnesota,456,2006
+Mississippi,812,2006
+Missouri,971,2006
+Montana,227,2006
+Nebraska,226,2006
+Nevada,386,2006
+New Hampsire,116,2006
+New Jersey,709,2006
+New Mexico,424,2006
+New York,1349,2006
+North Carolina,1424,2006
+North Dakota,101,2006
+Ohio,1141,2006
+Arizona,1118,2006
+Oklahoma,669,2006
+Oregon,418,2006
+Pennsylvania,1409,2006
+Rhode Island,72,2006
+South Carolina,973,2006
+South Dakota,172,2006
+Tennessee,1161,2006
+Texas,3122,2006
+Utah,249,2006
+Arkansas,596,2006
+Vermont,77,2006
+Virginia,866,2006
+Washington,578,2006
+West Virginia,372,2006
+Wisconsin,670,2006
+Wyoming,169,2006
+California,3839,2006
+Colorado,485,2006
+Connecticut,293,2006
+Alabama,1021,2005
+Delaware,117,2005
+District of Columbia,44,2005
+Florida,3176,2005
+Georgia,1582,2005
+Hawaii,129,2005
+Idaho,243,2005
+Illinois,1233,2005
+Indiana,855,2005
+Iowa,398,2005
+Alaska,66,2005
+Kansas,384,2005
+Kentucky,885,2005
+Lousiana,872,2005
+Maine,151,2005
+Maryland,577,2005
+Massachusetts,417,2005
+Michigan,1030,2005
+Minnesota,500,2005
+Mississippi,840,2005
+Missouri,1117,2005
+Montana,224,2005
+Nebraska,238,2005
+Nevada,379,2005
+New Hampsire,156,2005
+New Jersey,690,2005
+New Mexico,420,2005
+New York,1332,2005
+North Carolina,1418,2005
+North Dakota,105,2005
+Ohio,1223,2005
+Arizona,1038,2005
+Oklahoma,711,2005
+Oregon,443,2005
+Pennsylvania,1497,2005
+Rhode Island,80,2005
+South Carolina,981,2005
+South Dakota,158,2005
+Tennessee,1161,2005
+Texas,3133,2005
+Utah,235,2005
+Arkansas,596,2005
+Vermont,68,2005
+Virginia,876,2005
+Washington,580,2005
+West Virginia,347,2005
+Wisconsin,714,2005
+Wyoming,147,2005
+California,3849,2005
+Colorado,554,2005
+Connecticut,262,2005
+Alabama,1032,2004
+Delaware,125,2004
+District of Columbia,41,2004
+Florida,2927,2004
+Georgia,1463,2004
+Hawaii,128,2004
+Idaho,240,2004
+Illinois,1224,2004
+Indiana,857,2004
+Iowa,354,2004
+Alaska,96,2004
+Kansas,390,2004
+Kentucky,854,2004
+Lousiana,826,2004
+Maine,178,2004
+Maryland,576,2004
+Massachusetts,447,2004
+Michigan,1055,2004
+Minnesota,520,2004
+Mississippi,786,2004
+Missouri,1006,2004
+Montana,209,2004
+Nebraska,229,2004
+Nevada,360,2004
+New Hampsire,158,2004
+New Jersey,684,2004
+New Mexico,439,2004
+New York,1372,2004
+North Carolina,1417,2004
+North Dakota,95,2004
+Ohio,1163,2004
+Arizona,990,2004
+Oklahoma,664,2004
+Oregon,388,2004
+Pennsylvania,1362,2004
+Rhode Island,78,2004
+South Carolina,946,2004
+South Dakota,166,2004
+Tennessee,1191,2004
+Texas,3266,2004
+Utah,260,2004
+Arkansas,604,2004
+Vermont,84,2004
+Virginia,838,2004
+Washington,509,2004
+West Virginia,380,2004
+Wisconsin,722,2004
+Wyoming,142,2004
+California,3727,2004
+Colorado,596,2004
+Connecticut,280,2004
+Alabama,902,2003
+Delaware,133,2003
+District of Columbia,63,2003
+Florida,2874,2003
+Georgia,1463,2003
+Hawaii,115,2003
+Idaho,261,2003
+Illinois,1308,2003
+Indiana,753,2003
+Iowa,383,2003
+Alaska,87,2003
+Kansas,419,2003
+Kentucky,845,2003
+Lousiana,826,2003
+Maine,186,2003
+Maryland,594,2003
+Massachusetts,434,2003
+Michigan,1172,2003
+Minnesota,583,2003
+Mississippi,786,2003
+Missouri,1095,2003
+Montana,239,2003
+Nebraska,257,2003
+Nevada,335,2003
+New Hampsire,116,2003
+New Jersey,664,2003
+New Mexico,367,2003
+New York,1368,2003
+North Carolina,1396,2003
+North Dakota,95,2003
+Ohio,1165,2003
+Arizona,973,2003
+Oklahoma,595,2003
+Oregon,429,2003
+Pennsylvania,1433,2003
+Rhode Island,96,2003
+South Carolina,905,2003
+South Dakota,173,2003
+Tennessee,1091,2003
+Texas,3368,2003
+Utah,262,2003
+Arkansas,563,2003
+Vermont,63,2003
+Virginia,861,2003
+Washington,539,2003
+West Virginia,362,2003
+Wisconsin,761,2003
+Wyoming,141,2003
+California,3731,2003
+Colorado,570,2003
+Connecticut,277,2003
+Alabama,931,2002
+Delaware,114,2002
+District of Columbia,43,2002
+Florida,2810,2002
+Georgia,1362,2002
+Hawaii,115,2002
+Idaho,230,2002
+Illinois,1273,2002
+Indiana,714,2002
+Iowa,372,2002
+Alaska,78,2002
+Kansas,445,2002
+Kentucky,810,2002
+Lousiana,816,2002
+Maine,186,2002
+Maryland,604,2002
+Massachusetts,433,2002
+Michigan,1173,2002
+Minnesota,590,2002
+Mississippi,769,2002
+Missouri,1082,2002
+Montana,232,2002
+Nebraska,272,2002
+Nevada,330,2002
+New Hampsire,117,2002
+New Jersey,698,2002
+New Mexico,398,2002
+New York,1411,2002
+North Carolina,1427,2002
+North Dakota,84,2002
+Ohio,1285,2002
+Arizona,984,2002
+Oklahoma,639,2002
+Oregon,388,2002
+Pennsylvania,1462,2002
+Rhode Island,81,2002
+South Carolina,949,2002
+South Dakota,159,2002
+Tennessee,1058,2002
+Texas,3348,2002
+Utah,274,2002
+Arkansas,556,2002
+Vermont,69,2002
+Virginia,830,2002
+Washington,586,2002
+West Virginia,400,2002
+Wisconsin,721,2002
+Wyoming,151,2002
+California,3654,2002
+Colorado,677,2002
+Connecticut,301,2002
+Alabama,900,2001
+Delaware,117,2001
+District of Columbia,58,2001
+Florida,2714,2001
+Georgia,1471,2001
+Hawaii,132,2001
+Idaho,225,2001
+Illinois,1274,2001
+Indiana,825,2001
+Iowa,384,2001
+Alaska,80,2001
+Kansas,432,2001
+Kentucky,762,2001
+Lousiana,860,2001
+Maine,170,2001
+Maryland,600,2001
+Massachusetts,446,2001
+Michigan,1206,2001
+Minnesota,508,2001
+Mississippi,704,2001
+Missouri,973,2001
+Montana,201,2001
+Nebraska,215,2001
+Nevada,285,2001
+New Hampsire,124,2001
+New Jersey,681,2001
+New Mexico,415,2001
+New York,1441,2001
+North Carolina,1360,2001
+North Dakota,96,2001
+Ohio,1257,2001
+Arizona,938,2001
+Oklahoma,588,2001
+Oregon,428,2001
+Pennsylvania,1378,2001
+Rhode Island,78,2001
+South Carolina,962,2001
+South Dakota,154,2001
+Tennessee,1126,2001
+Texas,3318,2001
+Utah,258,2001
+Arkansas,538,2001
+Vermont,84,2001
+Virginia,855,2001
+Washington,568,2001
+West Virginia,355,2001
+Wisconsin,683,2001
+Wyoming,155,2001
+California,3543,2001
+Colorado,647,2001
+Connecticut,290,2001
+Alabama,910,2000
+Delaware,116,2000
+District of Columbia,45,2000
+Florida,2733,2000
+Georgia,1380,2000
+Hawaii,116,2000
+Idaho,241,2000
+Illinois,1274,2000
+Indiana,793,2000
+Iowa,394,2000
+Alaska,93,2000
+Kansas,405,2000
+Kentucky,721,2000
+Lousiana,846,2000
+Maine,157,2000
+Maryland,545,2000
+Massachusetts,410,2000
+Michigan,1237,2000
+Minnesota,557,2000
+Mississippi,846,2000
+Missouri,991,2000
+Montana,203,2000
+Nebraska,242,2000
+Nevada,266,2000
+New Hampsire,117,2000
+New Jersey,659,2000
+New Mexico,386,2000
+New York,1369,2000
+North Carolina,1408,2000
+North Dakota,80,2000
+Ohio,1244,2000
+Arizona,891,2000
+Oklahoma,574,2000
+Oregon,407,2000
+Pennsylvania,1396,2000
+Rhode Island,73,2000
+South Carolina,948,2000
+South Dakota,150,2000
+Tennessee,1177,2000
+Texas,3254,2000
+Utah,318,2000
+Arkansas,578,2000
+Vermont,73,2000
+Virginia,851,2000
+Washington,572,2000
+West Virginia,354,2000
+Wisconsin,716,2000
+Wyoming,132,2000
+California,3348,2000
+Colorado,613,2000
+Connecticut,317,2000
+Alabama,992,1999
+Delaware,91,1999
+District of Columbia,40,1999
+Florida,2629,1999
+Georgia,1314,1999
+Hawaii,90,1999
+Idaho,245,1999
+Illinois,1295,1999
+Indiana,892,1999
+Iowa,428,1999
+Alaska,73,1999
+Kansas,457,1999
+Kentucky,724,1999
+Lousiana,830,1999
+Maine,168,1999
+Maryland,548,1999
+Massachusetts,386,1999
+Michigan,1245,1999
+Minnesota,567,1999
+Mississippi,832,1999
+Missouri,964,1999
+Montana,194,1999
+Nebraska,255,1999
+Nevada,307,1999
+New Hampsire,130,1999
+New Jersey,664,1999
+New Mexico,388,1999
+New York,1473,1999
+North Carolina,1350,1999
+North Dakota,92,1999
+Ohio,1284,1999
+Arizona,907,1999
+Oklahoma,619,1999
+Oregon,367,1999
+Pennsylvania,1382,1999
+Rhode Island,85,1999
+South Carolina,944,1999
+South Dakota,136,1999
+Tennessee,1169,1999
+Texas,3108,1999
+Utah,318,1999
+Arkansas,540,1999
+Vermont,82,1999
+Virginia,795,1999
+Washington,574,1999
+West Virginia,354,1999
+Wisconsin,675,1999
+Wyoming,162,1999
+California,3148,1999
+Colorado,558,1999
+Connecticut,270,1999
+Alabama,958,1998
+Delaware,106,1998
+District of Columbia,50,1998
+Florida,2548,1998
+Georgia,1414,1998
+Hawaii,113,1998
+Idaho,224,1998
+Illinois,1241,1998
+Indiana,884,1998
+Iowa,386,1998
+Alaska,63,1998
+Kansas,440,1998
+Kentucky,766,1998
+Lousiana,807,1998
+Maine,176,1998
+Maryland,549,1998
+Massachusetts,377,1998
+Michigan,1234,1998
+Minnesota,575,1998
+Mississippi,842,1998
+Missouri,1017,1998
+Montana,208,1998
+Nebraska,271,1998
+Nevada,315,1998
+New Hampsire,115,1998
+New Jersey,671,1998
+New Mexico,374,1998
+New York,1404,1998
+North Carolina,1433,1998
+North Dakota,79,1998
+Ohio,1289,1998
+Arizona,858,1998
+Oklahoma,647,1998
+Oregon,485,1998
+Pennsylvania,1354,1998
+Rhode Island,70,1998
+South Carolina,912,1998
+South Dakota,149,1998
+Tennessee,1110,1998
+Texas,3168,1998
+Utah,308,1998
+Arkansas,545,1998
+Vermont,88,1998
+Virginia,834,1998
+Washington,590,1998
+West Virginia,330,1998
+Wisconsin,632,1998
+Wyoming,129,1998
+California,3112,1998
+Colorado,551,1998
+Connecticut,306,1998
+Alabama,1050,1997
+Delaware,120,1997
+District of Columbia,57,1997
+Florida,2528,1997
+Georgia,1405,1997
+Hawaii,117,1997
+Idaho,220,1997
+Illinois,1261,1997
+Indiana,846,1997
+Iowa,411,1997
+Alaska,68,1997
+Kansas,420,1997
+Kentucky,774,1997
+Lousiana,831,1997
+Maine,172,1997
+Maryland,571,1997
+Massachusetts,415,1997
+Michigan,1283,1997
+Minnesota,528,1997
+Mississippi,741,1997
+Missouri,1029,1997
+Montana,223,1997
+Nebraska,261,1997
+Nevada,322,1997
+New Hampsire,120,1997
+New Jersey,700,1997
+New Mexico,400,1997
+New York,1510,1997
+North Carolina,1290,1997
+North Dakota,89,1997
+Ohio,1270,1997
+Arizona,846,1997
+Oklahoma,721,1997
+Oregon,462,1997
+Pennsylvania,1412,1997
+Rhode Island,66,1997
+South Carolina,798,1997
+South Dakota,128,1997
+Tennessee,1104,1997
+Texas,3084,1997
+Utah,309,1997
+Arkansas,564,1997
+Vermont,88,1997
+Virginia,900,1997
+Washington,587,1997
+West Virginia,343,1997
+Wisconsin,635,1997
+Wyoming,117,1997
+California,3279,1997
+Colorado,534,1997
+Connecticut,315,1997
+Alabama,1024,1996
+Delaware,105,1996
+District of Columbia,58,1996
+Florida,2496,1996
+Georgia,1402,1996
+Hawaii,134,1996
+Idaho,228,1996
+Illinois,1312,1996
+Indiana,872,1996
+Iowa,411,1996
+Alaska,72,1996
+Kansas,442,1996
+Kentucky,734,1996
+Lousiana,807,1996
+Maine,157,1996
+Maryland,558,1996
+Massachusetts,392,1996
+Michigan,1339,1996
+Minnesota,503,1996
+Mississippi,695,1996
+Missouri,1006,1996
+Montana,179,1996
+Nebraska,240,1996
+Nevada,315,1996
+New Hampsire,125,1996
+New Jersey,754,1996
+New Mexico,416,1996
+New York,1450,1996
+North Carolina,1329,1996
+North Dakota,80,1996
+Ohio,1244,1996
+Arizona,857,1996
+Oklahoma,670,1996
+Oregon,462,1996
+Pennsylvania,1353,1996
+Rhode Island,65,1996
+South Carolina,821,1996
+South Dakota,142,1996
+Tennessee,1120,1996
+Texas,3249,1996
+Utah,284,1996
+Arkansas,539,1996
+Vermont,74,1996
+Virginia,809,1996
+Washington,643,1996
+West Virginia,321,1996
+Wisconsin,658,1996
+Wyoming,121,1996
+California,3576,1996
+Colorado,555,1996
+Connecticut,296,1996
+Alabama,991,1995
+Delaware,112,1995
+District of Columbia,54,1995
+Florida,2546,1995
+Georgia,1333,1995
+Hawaii,121,1995
+Idaho,233,1995
+Illinois,1402,1995
+Indiana,860,1995
+Iowa,446,1995
+Alaska,75,1995
+Kansas,394,1995
+Kentucky,732,1995
+Lousiana,779,1995
+Maine,170,1995
+Maryland,601,1995
+Massachusetts,418,1995
+Michigan,1379,1995
+Minnesota,515,1995
+Mississippi,738,1995
+Missouri,985,1995
+Montana,186,1995
+Nebraska,226,1995
+Nevada,277,1995
+New Hampsire,107,1995
+New Jersey,719,1995
+New Mexico,425,1995
+New York,1567,1995
+North Carolina,1305,1995
+North Dakota,65,1995
+Ohio,1219,1995
+Arizona,917,1995
+Oklahoma,597,1995
+Oregon,500,1995
+Pennsylvania,1337,1995
+Rhode Island,64,1995
+South Carolina,782,1995
+South Dakota,140,1995
+Tennessee,1130,1995
+Texas,2799,1995
+Utah,285,1995
+Arkansas,538,1995
+Vermont,95,1995
+Virginia,826,1995
+Washington,576,1995
+West Virginia,346,1995
+Wisconsin,663,1995
+Wyoming,138,1995
+California,3669,1995
+Colorado,572,1995
+Connecticut,287,1995
+Alabama,953,1994
+Delaware,105,1994
+District of Columbia,65,1994
+Florida,2419,1994
+Georgia,1281,1994
+Hawaii,110,1994
+Idaho,219,1994
+Illinois,1395,1994
+Indiana,869,1994
+Iowa,415,1994
+Alaska,70,1994
+Kansas,381,1994
+Kentucky,693,1994
+Lousiana,749,1994
+Maine,166,1994
+Maryland,601,1994
+Massachusetts,405,1994
+Michigan,1264,1994
+Minnesota,552,1994
+Mississippi,689,1994
+Missouri,947,1994
+Montana,182,1994
+Nebraska,229,1994
+Nevada,272,1994
+New Hampsire,105,1994
+New Jersey,691,1994
+New Mexico,388,1994
+New York,1537,1994
+North Carolina,1254,1994
+North Dakota,76,1994
+Ohio,1207,1994
+Arizona,795,1994
+Oklahoma,606,1994
+Oregon,443,1994
+Pennsylvania,1320,1994
+Rhode Island,62,1994
+South Carolina,753,1994
+South Dakota,141,1994
+Tennessee,1109,1994
+Texas,2752,1994
+Utah,302,1994
+Arkansas,534,1994
+Vermont,69,1994
+Virginia,828,1994
+Washington,575,1994
+West Virginia,330,1994
+Wisconsin,622,1994
+Wyoming,130,1994
+California,3787,1994
+Colorado,523,1994
+Connecticut,284,1994
+Alabama,914,1993
+Delaware,103,1993
+District of Columbia,55,1993
+Florida,2376,1993
+Georgia,1247,1993
+Hawaii,122,1993
+Idaho,199,1993
+Illinois,1250,1993
+Indiana,791,1993
+Iowa,401,1993
+Alaska,88,1993
+Kansas,375,1993
+Kentucky,761,1993
+Lousiana,767,1993
+Maine,168,1993
+Maryland,599,1993
+Massachusetts,449,1993
+Michigan,1269,1993
+Minnesota,477,1993
+Mississippi,697,1993
+Missouri,841,1993
+Montana,167,1993
+Nebraska,223,1993
+Nevada,234,1993
+New Hampsire,108,1993
+New Jersey,722,1993
+New Mexico,386,1993
+New York,1637,1993
+North Carolina,1228,1993
+North Dakota,81,1993
+Ohio,1327,1993
+Arizona,704,1993
+Oklahoma,583,1993
+Oregon,456,1993
+Pennsylvania,1402,1993
+Rhode Island,70,1993
+South Carolina,776,1993
+South Dakota,118,1993
+Tennessee,1041,1993
+Texas,2698,1993
+Utah,259,1993
+Arkansas,520,1993
+Vermont,101,1993
+Virginia,793,1993
+Washington,579,1993
+West Virginia,370,1993
+Wisconsin,626,1993
+Wyoming,100,1993
+California,3687,1993
+Colorado,511,1993
+Connecticut,324,1993
+Alabama,921,1992
+Delaware,118,1992
+District of Columbia,47,1992
+Florida,2170,1992
+Georgia,1184,1992
+Hawaii,122,1992
+Idaho,207,1992
+Illinois,1249,1992
+Indiana,797,1992
+Iowa,388,1992
+Alaska,89,1992
+Kansas,337,1992
+Kentucky,718,1992
+Lousiana,792,1992
+Maine,189,1992
+Maryland,584,1992
+Massachusetts,460,1992
+Michigan,1179,1992
+Minnesota,494,1992
+Mississippi,649,1992
+Missouri,874,1992
+Montana,172,1992
+Nebraska,222,1992
+Nevada,227,1992
+New Hampsire,110,1992
+New Jersey,694,1992
+New Mexico,398,1992
+New York,1657,1992
+North Carolina,1124,1992
+North Dakota,79,1992
+Ohio,1302,1992
+Arizona,701,1992
+Oklahoma,535,1992
+Oregon,416,1992
+Pennsylvania,1385,1992
+Rhode Island,73,1992
+South Carolina,718,1992
+South Dakota,141,1992
+Tennessee,1027,1992
+Texas,2691,1992
+Utah,235,1992
+Arkansas,512,1992
+Vermont,87,1992
+Virginia,760,1992
+Washington,592,1992
+West Virginia,366,1992
+Wisconsin,586,1992
+Wyoming,99,1992
+California,3722,1992
+Colorado,477,1992
+Connecticut,266,1992
+Alabama,984,1991
+Delaware,90,1991
+District of Columbia,60,1991
+Florida,2217,1991
+Georgia,1226,1991
+Hawaii,119,1991
+Idaho,221,1991
+Illinois,1289,1991
+Indiana,903,1991
+Iowa,423,1991
+Alaska,90,1991
+Kansas,350,1991
+Kentucky,722,1991
+Lousiana,783,1991
+Maine,181,1991
+Maryland,629,1991
+Massachusetts,510,1991
+Michigan,1287,1991
+Minnesota,469,1991
+Mississippi,606,1991
+Missouri,906,1991
+Montana,172,1991
+Nebraska,242,1991
+Nevada,261,1991
+New Hampsire,135,1991
+New Jersey,737,1991
+New Mexico,422,1991
+New York,1827,1991
+North Carolina,1213,1991
+North Dakota,86,1991
+Ohio,1451,1991
+Arizona,727,1991
+Oklahoma,551,1991
+Oregon,423,1991
+Pennsylvania,1510,1991
+Rhode Island,84,1991
+South Carolina,789,1991
+South Dakota,130,1991
+Tennessee,1002,1991
+Texas,2697,1991
+Utah,229,1991
+Arkansas,530,1991
+Vermont,100,1991
+Virginia,845,1991
+Washington,602,1991
+West Virginia,371,1991
+Wisconsin,677,1991
+Wyoming,104,1991
+California,4194,1991
+Colorado,480,1991
+Connecticut,281,1991
+Alabama,983,1990
+Delaware,121,1990
+District of Columbia,46,1990
+Florida,2586,1990
+Georgia,1410,1990
+Hawaii,155,1990
+Idaho,210,1990
+Illinois,1430,1990
+Indiana,928,1990
+Iowa,404,1990
+Alaska,92,1990
+Kansas,391,1990
+Kentucky,753,1990
+Lousiana,834,1990
+Maine,196,1990
+Maryland,661,1990
+Massachusetts,546,1990
+Michigan,1404,1990
+Minnesota,501,1990
+Mississippi,629,1990
+Missouri,943,1990
+Montana,190,1990
+Nebraska,220,1990
+Nevada,300,1990
+New Hampsire,140,1990
+New Jersey,817,1990
+New Mexico,440,1990
+New York,2036,1990
+North Carolina,1250,1990
+North Dakota,104,1990
+Ohio,1479,1990
+Arizona,784,1990
+Oklahoma,558,1990
+Oregon,500,1990
+Pennsylvania,1514,1990
+Rhode Island,79,1990
+South Carolina,884,1990
+South Dakota,139,1990
+Tennessee,1045,1990
+Texas,2889,1990
+Utah,236,1990
+Arkansas,521,1990
+Vermont,84,1990
+Virginia,953,1990
+Washington,726,1990
+West Virginia,407,1990
+Wisconsin,678,1990
+Wyoming,105,1990
+California,4685,1990
+Colorado,492,1990
+Connecticut,358,1990
+Alabama,918,1989
+Delaware,108,1989
+District of Columbia,70,1989
+Florida,2685,1989
+Georgia,1422,1989
+Hawaii,129,1989
+Idaho,212,1989
+Illinois,1545,1989
+Indiana,882,1989
+Iowa,451,1989
+Alaska,79,1989
+Kansas,371,1989
+Kentucky,686,1989
+Lousiana,782,1989
+Maine,179,1989
+Maryland,654,1989
+Massachusetts,634,1989
+Michigan,1471,1989
+Minnesota,538,1989
+Mississippi,621,1989
+Missouri,936,1989
+Montana,163,1989
+Nebraska,257,1989
+Nevada,276,1989
+New Hampsire,165,1989
+New Jersey,814,1989
+New Mexico,469,1989
+New York,2078,1989
+North Carolina,1321,1989
+North Dakota,76,1989
+Ohio,1574,1989
+Arizona,770,1989
+Oklahoma,569,1989
+Oregon,546,1989
+Pennsylvania,1714,1989
+Rhode Island,97,1989
+South Carolina,895,1989
+South Dakota,134,1989
+Tennessee,977,1989
+Texas,2936,1989
+Utah,269,1989
+Arkansas,577,1989
+Vermont,109,1989
+Virginia,918,1989
+Washington,694,1989
+West Virginia,406,1989
+Wisconsin,714,1989
+Wyoming,113,1989
+California,4877,1989
+Colorado,481,1989
+Connecticut,379,1989
+Alabama,922,1988
+Delaware,143,1988
+District of Columbia,56,1988
+Florida,2758,1988
+Georgia,1488,1988
+Hawaii,128,1988
+Idaho,228,1988
+Illinois,1666,1988
+Indiana,957,1988
+Iowa,494,1988
+Alaska,86,1988
+Kansas,406,1988
+Kentucky,717,1988
+Lousiana,822,1988
+Maine,231,1988
+Maryland,710,1988
+Massachusetts,673,1988
+Michigan,1526,1988
+Minnesota,543,1988
+Mississippi,632,1988
+Missouri,978,1988
+Montana,183,1988
+Nebraska,234,1988
+Nevada,256,1988
+New Hampsire,151,1988
+New Jersey,966,1988
+New Mexico,433,1988
+New York,2064,1988
+North Carolina,1400,1988
+North Dakota,92,1988
+Ohio,1586,1988
+Arizona,844,1988
+Oklahoma,561,1988
+Oregon,569,1988
+Pennsylvania,1770,1988
+Rhode Island,118,1988
+South Carolina,908,1988
+South Dakota,127,1988
+Tennessee,1116,1988
+Texas,3001,1988
+Utah,258,1988
+Arkansas,532,1988
+Vermont,117,1988
+Virginia,971,1988
+Washington,700,1988
+West Virginia,405,1988
+Wisconsin,704,1988
+Wyoming,129,1988
+California,4875,1988
+Colorado,450,1988
+Connecticut,446,1988
+Alabama,976,1987
+Delaware,131,1987
+District of Columbia,51,1987
+Florida,2572,1987
+Georgia,1441,1987
+Hawaii,127,1987
+Idaho,242,1987
+Illinois,1483,1987
+Indiana,956,1987
+Iowa,443,1987
+Alaska,70,1987
+Kansas,415,1987
+Kentucky,768,1987
+Lousiana,730,1987
+Maine,212,1987
+Maryland,729,1987
+Massachusetts,642,1987
+Michigan,1425,1987
+Minnesota,466,1987
+Mississippi,657,1987
+Missouri,928,1987
+Montana,198,1987
+Nebraska,255,1987
+Nevada,239,1987
+New Hampsire,162,1987
+New Jersey,929,1987
+New Mexico,493,1987
+New York,2119,1987
+North Carolina,1416,1987
+North Dakota,90,1987
+Ohio,1588,1987
+Arizona,811,1987
+Oklahoma,540,1987
+Oregon,553,1987
+Pennsylvania,1789,1987
+Rhode Island,108,1987
+South Carolina,968,1987
+South Dakota,107,1987
+Tennessee,1101,1987
+Texas,2880,1987
+Utah,271,1987
+Arkansas,550,1987
+Vermont,103,1987
+Virginia,906,1987
+Washington,691,1987
+West Virginia,418,1987
+Wisconsin,711,1987
+Wyoming,111,1987
+California,4935,1987
+Colorado,516,1987
+Connecticut,416,1987
+Alabama,968,1986
+Delaware,119,1986
+District of Columbia,44,1986
+Florida,2541,1986
+Georgia,1378,1986
+Hawaii,111,1986
+Idaho,220,1986
+Illinois,1449,1986
+Indiana,931,1986
+Iowa,388,1986
+Alaska,89,1986
+Kansas,413,1986
+Kentucky,723,1986
+Lousiana,821,1986
+Maine,191,1986
+Maryland,716,1986
+Massachusetts,680,1986
+Michigan,1442,1986
+Minnesota,505,1986
+Mississippi,670,1986
+Missouri,970,1986
+Montana,193,1986
+Nebraska,259,1986
+Nevada,203,1986
+New Hampsire,162,1986
+New Jersey,946,1986
+New Mexico,436,1986
+New York,1949,1986
+North Carolina,1489,1986
+North Dakota,88,1986
+Ohio,1503,1986
+Arizona,889,1986
+Oklahoma,607,1986
+Oregon,544,1986
+Pennsylvania,1710,1986
+Rhode Island,115,1986
+South Carolina,944,1986
+South Dakota,118,1986
+Tennessee,1102,1986
+Texas,3120,1986
+Utah,277,1986
+Arkansas,524,1986
+Vermont,91,1986
+Virginia,1002,1986
+Washington,648,1986
+West Virginia,386,1986
+Wisconsin,651,1986
+Wyoming,146,1986
+California,4683,1986
+Colorado,507,1986
+Connecticut,429,1986
+Alabama,777,1985
+Delaware,94,1985
+District of Columbia,57,1985
+Florida,2547,1985
+Georgia,1223,1985
+Hawaii,119,1985
+Idaho,218,1985
+Illinois,1364,1985
+Indiana,880,1985
+Iowa,416,1985
+Alaska,107,1985
+Kansas,429,1985
+Kentucky,624,1985
+Lousiana,824,1985
+Maine,189,1985
+Maryland,656,1985
+Massachusetts,687,1985
+Michigan,1388,1985
+Minnesota,536,1985
+Mississippi,582,1985
+Missouri,827,1985
+Montana,194,1985
+Nebraska,207,1985
+Nevada,227,1985
+New Hampsire,180,1985
+New Jersey,885,1985
+New Mexico,453,1985
+New York,1852,1985
+North Carolina,1332,1985
+North Dakota,77,1985
+Ohio,1480,1985
+Arizona,782,1985
+Oklahoma,652,1985
+Oregon,510,1985
+Pennsylvania,1580,1985
+Rhode Island,99,1985
+South Carolina,847,1985
+South Dakota,109,1985
+Tennessee,997,1985
+Texas,3267,1985
+Utah,270,1985
+Arkansas,451,1985
+Vermont,101,1985
+Virginia,895,1985
+Washington,645,1985
+West Virginia,368,1985
+Wisconsin,666,1985
+Wyoming,132,1985
+California,4447,1985
+Colorado,526,1985
+Connecticut,421,1985
+Alabama,820,1984
+Delaware,118,1984
+District of Columbia,56,1984
+Florida,2551,1984
+Georgia,1260,1984
+Hawaii,129,1984
+Idaho,215,1984
+Illinois,1385,1984
+Indiana,838,1984
+Iowa,376,1984
+Alaska,120,1984
+Kansas,451,1984
+Kentucky,674,1984
+Lousiana,844,1984
+Maine,211,1984
+Maryland,588,1984
+Massachusetts,608,1984
+Michigan,1368,1984
+Minnesota,517,1984
+Mississippi,594,1984
+Missouri,841,1984
+Montana,204,1984
+Nebraska,250,1984
+Nevada,215,1984
+New Hampsire,172,1984
+New Jersey,859,1984
+New Mexico,426,1984
+New York,1886,1984
+North Carolina,1291,1984
+North Dakota,88,1984
+Ohio,1479,1984
+Arizona,787,1984
+Oklahoma,691,1984
+Oregon,512,1984
+Pennsylvania,1562,1984
+Rhode Island,75,1984
+South Carolina,820,1984
+South Dakota,132,1984
+Tennessee,990,1984
+Texas,3465,1984
+Utah,274,1984
+Arkansas,472,1984
+Vermont,98,1984
+Virginia,921,1984
+Washington,674,1984
+West Virginia,387,1984
+Wisconsin,704,1984
+Wyoming,140,1984
+California,4517,1984
+Colorado,543,1984
+Connecticut,433,1984
+Alabama,806,1983
+Delaware,98,1983
+District of Columbia,58,1983
+Florida,2415,1983
+Georgia,1157,1983
+Hawaii,133,1983
+Idaho,231,1983
+Illinois,1379,1983
+Indiana,876,1983
+Iowa,437,1983
+Alaska,135,1983
+Kansas,361,1983
+Kentucky,690,1983
+Lousiana,836,1983
+Maine,198,1983
+Maryland,607,1983
+Massachusetts,605,1983
+Michigan,1192,1983
+Minnesota,498,1983
+Mississippi,626,1983
+Missouri,810,1983
+Montana,253,1983
+Nebraska,221,1983
+Nevada,220,1983
+New Hampsire,166,1983
+New Jersey,866,1983
+New Mexico,467,1983
+New York,1918,1983
+North Carolina,1083,1983
+North Dakota,105,1983
+Ohio,1416,1983
+Arizona,616,1983
+Oklahoma,720,1983
+Oregon,485,1983
+Pennsylvania,1544,1983
+Rhode Island,96,1983
+South Carolina,739,1983
+South Dakota,147,1983
+Tennessee,919,1983
+Texas,3328,1983
+Utah,253,1983
+Arkansas,485,1983
+Vermont,87,1983
+Virginia,803,1983
+Washington,628,1983
+West Virginia,379,1983
+Wisconsin,648,1983
+Wyoming,152,1983
+California,4089,1983
+Colorado,591,1983
+Connecticut,404,1983
+Alabama,744,1982
+Delaware,115,1982
+District of Columbia,34,1982
+Florida,2396,1982
+Georgia,1097,1982
+Hawaii,145,1982
+Idaho,212,1982
+Illinois,1475,1982
+Indiana,846,1982
+Iowa,431,1982
+Alaska,96,1982
+Kansas,436,1982
+Kentucky,726,1982
+Lousiana,962,1982
+Maine,151,1982
+Maryland,575,1982
+Massachusetts,615,1982
+Michigan,1257,1982
+Minnesota,508,1982
+Mississippi,617,1982
+Missouri,785,1982
+Montana,215,1982
+Nebraska,226,1982
+Nevada,248,1982
+New Hampsire,154,1982
+New Jersey,965,1982
+New Mexico,489,1982
+New York,1965,1982
+North Carolina,1168,1982
+North Dakota,128,1982
+Ohio,1447,1982
+Arizona,636,1982
+Oklahoma,916,1982
+Oregon,464,1982
+Pennsylvania,1611,1982
+Rhode Island,97,1982
+South Carolina,667,1982
+South Dakota,129,1982
+Tennessee,944,1982
+Texas,3699,1982
+Utah,263,1982
+Arkansas,478,1982
+Vermont,92,1982
+Virginia,782,1982
+Washington,671,1982
+West Virginia,392,1982
+Wisconsin,669,1982
+Wyoming,173,1982
+California,4119,1982
+Colorado,598,1982
+Connecticut,464,1982
+Alabama,825,1981
+Delaware,103,1981
+District of Columbia,46,1981
+Florida,2772,1981
+Georgia,1256,1981
+Hawaii,136,1981
+Idaho,256,1981
+Illinois,1642,1981
+Indiana,1000,1981
+Iowa,530,1981
+Alaska,90,1981
+Kansas,510,1981
+Kentucky,720,1981
+Lousiana,1105,1981
+Maine,191,1981
+Maryland,691,1981
+Massachusetts,682,1981
+Michigan,1430,1981
+Minnesota,663,1981
+Mississippi,632,1981
+Missouri,909,1981
+Montana,289,1981
+Nebraska,321,1981
+Nevada,258,1981
+New Hampsire,131,1981
+New Jersey,1043,1981
+New Mexico,480,1981
+New York,2280,1981
+North Carolina,1319,1981
+North Dakota,154,1981
+Ohio,1566,1981
+Arizona,832,1981
+Oklahoma,859,1981
+Oregon,566,1981
+Pennsylvania,1820,1981
+Rhode Island,100,1981
+South Carolina,768,1981
+South Dakota,162,1981
+Tennessee,983,1981
+Texas,4072,1981
+Utah,321,1981
+Arkansas,478,1981
+Vermont,105,1981
+Virginia,907,1981
+Washington,784,1981
+West Virginia,354,1981
+Wisconsin,802,1981
+Wyoming,232,1981
+California,4670,1981
+Colorado,675,1981
+Connecticut,480,1981
+Alabama,835,1980
+Delaware,135,1980
+District of Columbia,38,1980
+Florida,2519,1980
+Georgia,1348,1980
+Hawaii,167,1980
+Idaho,287,1980
+Illinois,1776,1980
+Indiana,1029,1980
+Iowa,541,1980
+Alaska,79,1980
+Kansas,506,1980
+Kentucky,746,1980
+Lousiana,1080,1980
+Maine,236,1980
+Maryland,682,1980
+Massachusetts,813,1980
+Michigan,1561,1980
+Minnesota,742,1980
+Mississippi,603,1980
+Missouri,1025,1980
+Montana,276,1980
+Nebraska,337,1980
+Nevada,302,1980
+New Hampsire,175,1980
+New Jersey,1022,1980
+New Mexico,513,1980
+New York,2374,1980
+North Carolina,1327,1980
+North Dakota,133,1980
+Ohio,1805,1980
+Arizona,833,1980
+Oklahoma,820,1980
+Oregon,585,1980
+Pennsylvania,1882,1980
+Rhode Island,118,1980
+South Carolina,747,1980
+South Dakota,188,1980
+Tennessee,1007,1980
+Texas,3814,1980
+Utah,291,1980
+Arkansas,486,1980
+Vermont,125,1980
+Virginia,938,1980
+Washington,847,1980
+West Virginia,464,1980
+Wisconsin,847,1980
+Wyoming,205,1980
+California,4930,1980
+Colorado,625,1980
+Connecticut,520,1980
+Alabama,885,1979
+Delaware,109,1979
+District of Columbia,42,1979
+Florida,2322,1979
+Georgia,1331,1979
+Hawaii,183,1979
+Idaho,285,1979
+Illinois,1777,1979
+Indiana,1147,1979
+Iowa,566,1979
+Alaska,80,1979
+Kansas,451,1979
+Kentucky,795,1979
+Lousiana,1050,1979
+Maine,200,1979
+Maryland,605,1979
+Massachusetts,855,1979
+Michigan,1638,1979
+Minnesota,776,1979
+Mississippi,630,1979
+Missouri,989,1979
+Montana,275,1979
+Nebraska,277,1979
+Nevada,298,1979
+New Hampsire,159,1979
+New Jersey,1052,1979
+New Mexico,555,1979
+New York,2217,1979
+North Carolina,1352,1979
+North Dakota,114,1979
+Ohio,2010,1979
+Arizona,876,1979
+Oklahoma,733,1979
+Oregon,601,1979
+Pennsylvania,1923,1979
+Rhode Island,105,1979
+South Carolina,795,1979
+South Dakota,169,1979
+Tennessee,1045,1979
+Texas,3628,1979
+Utah,282,1979
+Arkansas,476,1979
+Vermont,130,1979
+Virginia,923,1979
+Washington,894,1979
+West Virginia,446,1979
+Wisconsin,867,1979
+Wyoming,198,1979
+California,4975,1979
+Colorado,618,1979
+Connecticut,514,1979
+Alabama,998,1978
+Delaware,112,1978
+District of Columbia,47,1978
+Florida,2023,1978
+Georgia,1290,1978
+Hawaii,174,1978
+Idaho,277,1978
+Illinois,1877,1978
+Indiana,1108,1978
+Iowa,552,1978
+Alaska,112,1978
+Kansas,498,1978
+Kentucky,772,1978
+Lousiana,956,1978
+Maine,206,1978
+Maryland,644,1978
+Massachusetts,791,1978
+Michigan,1783,1978
+Minnesota,834,1978
+Mississippi,670,1978
+Missouri,1042,1978
+Montana,233,1978
+Nebraska,290,1978
+Nevada,264,1978
+New Hampsire,155,1978
+New Jersey,1017,1978
+New Mexico,588,1978
+New York,2200,1978
+North Carolina,1331,1978
+North Dakota,148,1978
+Ohio,1800,1978
+Arizona,905,1978
+Oklahoma,763,1978
+Oregon,626,1978
+Pennsylvania,1878,1978
+Rhode Island,100,1978
+South Carolina,778,1978
+South Dakota,165,1978
+Tennessee,1099,1978
+Texas,3407,1978
+Utah,310,1978
+Arkansas,493,1978
+Vermont,109,1978
+Virginia,951,1978
+Washington,865,1978
+West Virginia,402,1978
+Wisconsin,839,1978
+Wyoming,205,1978
+California,4724,1978
+Colorado,599,1978
+Connecticut,423,1978
+Alabama,947,1977
+Delaware,103,1977
+District of Columbia,57,1977
+Florida,1807,1977
+Georgia,1188,1977
+Hawaii,134,1977
+Idaho,275,1977
+Illinois,1873,1977
+Indiana,833,1977
+Alaska,127,1977
+Arizona,804,1977
+Arkansas,485,1977
+California,4351,1977
+Colorado,612,1977
+Connecticut,408,1977
+Alabama,831,1976
+Delaware,104,1976
+District of Columbia,52,1976
+Florida,1711,1976
+Georgia,1119,1976
+Hawaii,133,1976
+Idaho,232,1976
+Illinois,1781,1976
+Indiana,1080,1976
+Iowa,657,1976
+Alaska,109,1976
+Kansas,463,1976
+Kentucky,748,1976
+Lousiana,831,1976
+Maine,202,1976
+Maryland,582,1976
+Massachusetts,699,1976
+Michigan,1707,1976
+Minnesota,712,1976
+Mississippi,496,1976
+Missouri,1021,1976
+Montana,248,1976
+Nebraska,331,1976
+Nevada,187,1976
+New Hampsire,146,1976
+New Jersey,920,1976
+New Mexico,461,1976
+New York,2062,1976
+North Carolina,1304,1976
+North Dakota,151,1976
+Ohio,1669,1976
+Arizona,634,1976
+Oklahoma,689,1976
+Oregon,558,1976
+Pennsylvania,1789,1976
+Rhode Island,112,1976
+South Carolina,694,1976
+South Dakota,185,1976
+Tennessee,1013,1976
+Texas,2730,1976
+Utah,221,1976
+Arkansas,446,1976
+Vermont,100,1976
+Virginia,882,1976
+Washington,694,1976
+West Virginia,425,1976
+Wisconsin,808,1976
+Wyoming,208,1976
+California,3895,1976
+Colorado,543,1976
+Connecticut,372,1976

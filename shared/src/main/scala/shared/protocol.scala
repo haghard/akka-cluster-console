@@ -1,0 +1,64 @@
+package shared
+
+import scala.collection.immutable.Seq
+
+object protocol {
+
+  case class SignInResponse(login: String, photo: String)
+
+  case class ClusterInfo(name: String, seeds: Seq[String])
+
+
+  sealed trait Mode {
+    def name: String
+
+    def isActive(m: Mode): Boolean = this == m
+  }
+
+  object Mode {
+    def fromString(s: String) = s match {
+      case Members.name => Members
+      case Roles.name => Roles
+      case Nodes.name => Nodes
+      case _ => Members
+    }
+  }
+
+  case object Members extends Mode {
+    override val name = "Members"
+  }
+
+  case object Roles extends Mode {
+    override val name = "Roles"
+  }
+
+  case object Nodes extends Mode {
+    override val name = "Nodes"
+  }
+
+
+  sealed trait NodeState
+
+  case object Up extends NodeState
+
+  case object Unreachable extends NodeState
+
+  case object Removed extends NodeState
+
+  case object Exited extends NodeState
+
+  case class ClusterMember(address: HostPort, roles: Set[String], state: NodeState) {
+    def label = address.label + s" roles[${roles.mkString(",").map(r => r)}] status[$state]"
+
+    def labelSimple = address.label
+  }
+
+  case class HostPort(host: String, port: Int) {
+    def label = host + ":" + port
+  }
+
+  case class ClusterProfile(system: String, seeds: Set[HostPort],
+                            status: String, members: Set[ClusterMember])
+
+  case class ClusterNode(host: String, port: Int, roles: String, status: String)
+}
