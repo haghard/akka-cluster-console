@@ -27,7 +27,7 @@ trait SslSupport {
   }
 
   def https(keyPass: String, storePass: String): HttpsConnectionContext = {
-    val file = new File("./"  + sslFile)  //  "./linguistic.jks"
+    val file = new File("./"  + sslFile)
     if(file.exists) create(new FileInputStream(file), keyPass, storePass)
     else {
       resource.managed(getClass.getResourceAsStream("/"+ sslFile))
