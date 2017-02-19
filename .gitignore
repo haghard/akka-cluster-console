@@ -23,3 +23,5 @@ logs/
 
 /target
 /server/src/main/resources/linguistic.jks
+/haghard.crt
+/server.log
