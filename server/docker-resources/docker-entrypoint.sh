@@ -19,10 +19,12 @@ APP_OPTS="-d64 \
           -Dakka.remote.netty.tcp.port=${AKKA_PORT} \
           -Dakka.http.port=${HTTP_PORT} \
           -Djava.rmi.server.hostname=${HOSTNAME} \
+          -Dakka.cluster.seed-nodes.0=akka.tcp://cluster-console@${HOSTNAME}:${AKKA_PORT}  \
           -DENV=${ENV} \
           -DHOSTNAME=${HOSTNAME} \
           -DCONFIG="${CONFIG}
 
 #production, development
+#
 
 java ${APP_OPTS} -cp ${APP_BASE}/conf -jar ${APP_BASE}/akka-cluster-console-${VERSION}.jar
