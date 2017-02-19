@@ -2,7 +2,7 @@
 Docker build
 
     sbt docker
-    sbt -DENV="development" && docker
+    sbt -Denv="development"
 
 Initial ubuntu server setup in cloud
 
