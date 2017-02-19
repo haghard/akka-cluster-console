@@ -3,6 +3,24 @@ Docker build
 
     sbt docker
     sbt -DENV="development" && docker
+
+Initial ubuntu server setup in cloud
+
+    https://www.youtube.com/watch?v=EuIYabZS3ow
+
+Initial sbt on ubuntu 
+    
+    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+    sudo apt-get update
+    sudo apt-get install sbt
+
+Initial java on ubuntu
+
+    https://www.digitalocean.com/community/tutorials/java-ubuntu-apt-get-ru
+    sudo apt-get install default-jre
+    sudo apt-get install default-jdk
+    
     
 Generating self-signed certificates
 
