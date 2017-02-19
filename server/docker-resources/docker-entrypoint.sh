@@ -25,4 +25,4 @@ APP_OPTS="-d64 \
 
 #production, development
 
-java ${APP_OPTS} -cp ${APP_BASE}/conf -jar ${APP_BASE}/linguistic-${VERSION}.jar
+java ${APP_OPTS} -cp ${APP_BASE}/conf -jar ${APP_BASE}/akka-cluster-console-${VERSION}.jar

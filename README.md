@@ -49,6 +49,10 @@ Export the haghard.com public certificate as haghard.crt so that it can be used 
          -storepass ... \
          -keystore server/src/main/resources/haghard.jks \
          -rfc`
+
+//-e TZ="Europe/Moscow"
+
+	  `docker run --net=host -it -p 2551:2551 -e HOSTNAME= -e AKKA_PORT=2551 -e HTTP_PORT=9443 -e JMX_PORT=1089 haghard/cluster-console:0.1
 	  
 Links
     
