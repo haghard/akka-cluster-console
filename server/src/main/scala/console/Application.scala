@@ -74,6 +74,13 @@ object Application extends App with AppSupport {
     .append('\n')
     .append(s"★ ★ ★ Server online at https://${config.getString("akka.http.interface")}:${httpPort} ★ ★ ★ ")
     .append('\n')
+    .append("""
+            |  ___
+            | / __|  ___   _ _  __ __  ___   _ _
+            | \__ \ / -_) | '_| \ V / / -_) | '_|
+            | |___/ \___| |_|    \_/  \___| |_|
+            |
+            |""".stripMargin)
     .append("=================================================================================================")
 
   coreSystem.log.info(greeting.toString)
