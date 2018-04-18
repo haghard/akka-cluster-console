@@ -51,7 +51,7 @@ Export the haghard.com public certificate as haghard.crt so that it can be used 
          -rfc`	  
 	  
 How to run
-  `docker run --net=host -it -p 2551:2551 -e HOSTNAME=80.93.177.136 -e AKKA_PORT=2551 -e HTTP_PORT=9443 -e JMX_PORT=1089 -e TZ="Europe/Moscow" haghard/cluster-console:0.0.1`
+  `docker run --net=host -it -p 2551:2551 -e HOSTNAME=192.168.77.69 -e AKKA_PORT=2551 -e HTTP_PORT=9443 -e JMX_PORT=1089 -e TZ="Europe/Moscow" haghard/cluster-console:0.0.1`
 	  
 Links
     
@@ -64,3 +64,5 @@ Links
     http://dimplejs.org        
     http://bl.ocks.org/enjalot/raw/211bd42857358a60a936/
     https://bost.ocks.org/mike/example/
+
+https://blog.csanchez.org/2017/05/31/running-a-jvm-in-a-container-without-getting-killed/

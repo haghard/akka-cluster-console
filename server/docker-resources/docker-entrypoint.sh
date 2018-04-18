@@ -10,6 +10,7 @@ APP_OPTS="-d64 \
           -Xmx1024m \
           -XX:+UseG1GC \
           -XX:ConcGCThreads=4 -XX:ParallelGCThreads=4 \
+          -XshowSettings \
           -Dcom.sun.management.jmxremote.port=${JMX_PORT} \
           -Dcom.sun.management.jmxremote.ssl=false \
           -Dcom.sun.management.jmxremote.authenticate=false \
