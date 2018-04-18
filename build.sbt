@@ -4,18 +4,11 @@ import sbt._
 import com.typesafe.sbt.packager.docker.Dockerfile
 import com.typesafe.sbt.web.SbtWeb
 import sbtdocker.ImageName
+import scala.sys.process.Process
 
-val scalaV = "2.12.1"
-val akkaVersion = "2.4.17"
+val scalaV = "2.12.4"
+val akkaVersion = "2.5.11"
 val version = "0.0.1"
-
-scalaVersion := scalaV
-
-name := "akka-cluster-console"
-
-resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
-
-updateOptions in Global := updateOptions.in(Global).value.withCachedResolution(true)
 
 lazy val server = (project in file("server")).settings(
   resolvers ++= Seq(
@@ -24,35 +17,35 @@ lazy val server = (project in file("server")).settings(
   ),
 
   scalacOptions in(Compile, console) := Seq("-feature", "-Xfatal-warnings", "-deprecation", "-unchecked"),
-  scalaVersion := scalaV,
-  scalaJSProjects := Seq(ui),
+  scalaVersion             := scalaV,
+  scalaJSProjects          := Seq(ui),
   pipelineStages in Assets := Seq(scalaJSPipeline),
-  // triggers scalaJSPipeline when using compile or continuous compilation
-  compile in Compile <<= (compile in Compile).dependsOn(scalaJSPipeline/*, cpCss*/),
+
+  compile in Compile := ((compile in Compile) dependsOn (scalaJSPipeline, cpCss)).value,
 
   name := "server",
 
   //javaOptions in runMain := Seq("ENV=development", "CONFIG=./server/conf"),
 
   fork in runMain := true,
+  fork in run := true,
 
   libraryDependencies ++= Seq(
     //"com.typesafe.play.extras" %% "play-geojson" % "1.4.0",
     "ch.qos.logback"  %   "logback-classic" % "1.1.2",
-    "org.mindrot"     %   "jbcrypt"         % "0.3m",
+    "org.mindrot"     %   "jbcrypt"         % "0.4",
     "org.webjars"     %   "bootstrap"       % "3.3.6",
-    "com.lihaoyi"     %%  "scalatags"       % "0.6.2",
+    "com.lihaoyi"     %%  "scalatags"       % "0.6.5",
     "com.jsuereth"    %%  "scala-arm"       % "2.0",
     "org.scalatest"   %%  "scalatest"       % "3.0.1" % "test"
   ) ++ Seq(
-    "com.softwaremill.akka-http-session" %% "core" % "0.4.0",
+    "com.softwaremill.akka-http-session" %% "core" % "0.5.5",
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
+    "com.typesafe.akka" %% "akka-persistence-cassandra" % "0.83",
+    "com.typesafe.akka" %% "akka-cluster-sharding" % akkaVersion,
     "com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
-    "com.typesafe.akka" %% "akka-persistence-cassandra" % "0.23",
-    //"com.typesafe.akka" %% "akka-cluster-sharding" % akkaVersion,
-    "com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
-    "com.typesafe.akka" %% "akka-cluster-metrics" % akkaVersion
+    //"com.typesafe.akka" %% "akka-cluster-metrics" % akkaVersion
   ),
 
   //javaOptions in runMain += "-DENV=prod",
@@ -138,6 +131,7 @@ lazy val server = (project in file("server")).settings(
 
     new sbtdocker.mutable.Dockerfile {
       from("openjdk:8-jre")
+      //from("openjdk:9-jre")
       maintainer("haghard")
 
       env("VERSION", version)
@@ -213,8 +207,8 @@ def haltOnCmdResultError(result: Int) {
 lazy val ui = (project in file("ui")).settings(
   resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
   scalaVersion := scalaV,
-  persistLauncher := true,
-  persistLauncher in Test := false,
+  //persistLauncher := true,
+  //persistLauncher in Test := false,
 
   libraryDependencies ++= Seq(
     "org.singlespaced" %%% "scalajs-d3" % "0.3.4", //the version for scala 2.12 is 0.3.4
@@ -259,6 +253,7 @@ lazy val sharedJvm = shared.jvm
 lazy val sharedJs = shared.js
 
 // loads the server project at sbt startup
-onLoad in Global := (Command.process("project server", _: State)) compose (onLoad in Global).value
+//onLoad in Global := (Command.process("project server", _: State)) compose (onLoad in Global).value
+onLoad in Global := (onLoad in Global).value andThen {s: State => "project server" :: s}
 
 //cancelable in Global := true

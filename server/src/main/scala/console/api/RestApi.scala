@@ -40,7 +40,7 @@ object RestApi extends shared.ClusterApi with Directives {
     */
   private def sourceAndSink(system: ActorSystem, mat: akka.stream.ActorMaterializer) = {
     MergeHub.source[Message](perProducerBufferSize = bufferSize)
-      .recoverWithRetries(-1, { case ex: Exception => Source.empty })
+      .recoverWithRetries(-1, { case _: Exception => Source.empty })
       .toMat(BroadcastHub.sink[Message](bufferSize))(Keep.both).run()(mat)
   }
 
