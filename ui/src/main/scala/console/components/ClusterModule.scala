@@ -9,7 +9,7 @@ import japgolly.scalajs.react.{BackendScope, ReactComponentB, ReactElement}
 object ClusterModule {
 
   case class Props(proxy: Proxy, r: RouterCtl[Route])
-  case class Cluster(name: String = "", seeds: Seq[String] = Seq.empty[String])
+  case class Cluster(name: String = "", seedNodes: Seq[String] = Seq.empty[String])
   case class State(cluster: Option[Cluster] = None)
 
   class ClusterBackend(scope: BackendScope[Props, State]) {
@@ -18,8 +18,8 @@ object ClusterModule {
     def fetchClusters(p: Props): japgolly.scalajs.react.CallbackTo[Unit] = {
       import autowire._
       react.Callback.future {
-        p.proxy.discoveredCluster().call().map { c =>
-          scope.modState { _.copy(cluster = Some(Cluster(c.name, c.seeds))) }
+        p.proxy.clusterInfo().call().map { c =>
+          scope.modState { _.copy(cluster = Some(Cluster(c.name, c.seedNodes))) }
         }
           /*.recover {
           case e: org.scalajs.dom.ext.AjaxException =>
@@ -31,20 +31,6 @@ object ClusterModule {
     }
 
 
-    /*
-    <.div(
-      for (cluster <- state.clusters) yield {
-        <.div(
-          <.div(cluster.name),
-          <.ul(
-            for (seed <- cluster.seeds) yield {
-              <.li(seed)
-            }
-          )
-        )
-      }
-    )
-    */
     def render(state: State, p: Props): ReactElement = {
       state.cluster.fold(<.div()) { c => <.div(GraphModule(c.name, p.proxy)) }
     }
@@ -53,8 +39,8 @@ object ClusterModule {
   val component = ReactComponentB[Props]("ClusterModule")
     .initialState(State())
     .backend(new ClusterBackend(_))
-    .renderPS { (scope, props, state) => scope.backend.render(state, props) }
-    .componentDidMount { scope => scope.backend.fetchClusters(scope.props) }
+    .renderPS((scope, props, state) => scope.backend.render(state, props))
+    .componentDidMount(scope => scope.backend.fetchClusters(scope.props))
     .build
 
   def apply(r: RouterCtl[Route]) = {

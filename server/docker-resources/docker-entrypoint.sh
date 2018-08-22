@@ -3,8 +3,7 @@
 set -e
 set -x
 
-APP_OPTS="-d64 \
-          -server \
+APP_OPTS="-server \
           -XX:MaxGCPauseMillis=400 \
           -XX:+UseStringDeduplication \
           -Xmx1024m \

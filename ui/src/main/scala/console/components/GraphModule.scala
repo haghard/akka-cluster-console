@@ -14,7 +14,6 @@ import upickle.default._
 import scala.scalajs.js
 import scala.scalajs.js.{Array, Dynamic}
 import scala.util.control.NonFatal
-import scalacss.internal.mutable.GlobalRegistry
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
 
@@ -87,7 +86,7 @@ object GraphModule extends GraphSupport {
     def render(): ReactElement = {
       scope.state.map { s =>
         s.system.fold(<.div()) { system =>
-          val q = quotes(ThreadLocalRandom.current().nextInt(quotes.length))
+          val q = quotes(ThreadLocalRandom.current.nextInt(quotes.length))
           val quoteAndAuthor = q.split("#")
           <.div(
             <.aside(
@@ -111,7 +110,7 @@ object GraphModule extends GraphSupport {
           println(c.members.map(_.label).mkString(","))
           //println(c.members.map(_.labelSimple).mkString(","))
           val location = 10
-          val hosts = c.members.map(_.address.host).toSet[String].zipWithIndex.map { case (address, i) =>
+          val hosts = c.members.map(_.address.host).zipWithIndex.map { case (address, i) =>
               Dynamic.literal("id" -> i, "x" -> location * (i + 1), "y" -> 40, "isHost" -> true,
                 "host" -> address, "port" -> 0, "roles" -> "host", "status" -> "").asInstanceOf[Vertix]
             }
@@ -124,7 +123,8 @@ object GraphModule extends GraphSupport {
           }
 
           val vertices: js.Array[Vertix] = (members ++ hosts).toJsArray
-          val edges: js.Array[Edge] = hosts.flatMap { r => members.filter(_.host == r.host).map(h => Link(r, h)) }.toJsArray
+          val edges: js.Array[Edge] = hosts
+            .flatMap(r => members.filter(_.host == r.host).map(h => Link(r, h))).toJsArray
 
           val svg = d3.select("body")
             .append("svg")
@@ -150,11 +150,11 @@ object GraphModule extends GraphSupport {
             prev.copy(Option(c.system), vertices, edges, Option(svg), Option(force.start))
           } >> start
         }.recover {
-          case e: org.scalajs.dom.ext.AjaxException =>
-            println("Ajax call error")
+          case _: org.scalajs.dom.ext.AjaxException =>
+            //println("Ajax call error")
             scope.modState(s => s.copy(system = Option("cluster-profile error")))
           case NonFatal(e) =>
-            println(e.getMessage + " error")
+            //println(e.getMessage + " error")
             scope.modState(s => s.copy(system = Option("Unexpected cluster-profile error")))
         }
       }
@@ -323,32 +323,3 @@ object GraphModule extends GraphSupport {
     component(GraphProps(system, proxy))
   }
 }
-
-
-/*
-  val root = Dynamic.literal("id" -> 0.0, "x" -> 50, "y" -> 50, "host" -> "192.168.0.1", "port" -> 0,
-    "roles" -> "ws", "status" -> "up").asInstanceOf[Vertix]
-
-  val ms1 = Dynamic.literal("id" -> 1.0, "index" -> 2.0, "name" -> "191",
-    "x" -> 60, "y" -> 60, "host" -> "192.168.0.2", "port" -> 1,
-    "roles" -> "ws", "status" -> "up", "size" -> 1).asInstanceOf[Vertix]
-
-  val ms2 = Dynamic.literal("id" -> 2.0, "index" -> 3.0, "name" -> "192",
-    "x" -> 70, "y" -> 70, "host" -> "192.168.0.3", "port" -> 1,
-    "roles" -> "ws", "status" -> "up", "size" -> 1).asInstanceOf[Vertix]
-
-  val ms3 = Dynamic.literal("id" -> 3.0, "index" -> 4.0, "name" -> "192",
-    "x" -> 70, "y" -> 70, "host" -> "192.168.0.4", "port" -> 1,
-    "roles" -> "ws", "status" -> "up", "size" -> 1).asInstanceOf[Vertix]
-
-  val ms4 = Dynamic.literal("id" -> 4.0, "index" -> 5.0, "name" -> "192",
-    "x" -> 70, "y" -> 70, "host" -> "192.168.0.4", "port" -> 1,
-    "roles" -> "ws", "status" -> "up", "size" -> 1).asInstanceOf[Vertix]
-
-  val ms5 = Dynamic.literal("id" -> 5.0, "index" -> 6.0, "name" -> "192",
-    "x" -> 70, "y" -> 70, "host" -> "192.168.0.4", "port" -> 1,
-    "roles" -> "ws", "status" -> "up", "size" -> 1).asInstanceOf[Vertix]
-
-  val vertices = js.Array[Vertix](root, ms1, ms2, ms3, ms4, ms5)
-  val edges = js.Array[Edge](Link(root, ms1), Link(root, ms2), Link(root, ms3), Link(root, ms4), Link(root, ms5))
-*/

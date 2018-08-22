@@ -10,11 +10,11 @@ export CONFIG=./server/conf
 
 addCommandAlias(
   "console-0",
-  "runMain console.Application " +
+  "server/runMain console.Application " +
   "-DENV=development " +
   "-DCONFIG=./conf " +
   "-Dakka.remote.netty.tcp.port=2551 " +
-  "-Dakka.http.port=9443 " +
+  "-Dakka.http.port=8080 " +
   "-DHOSTNAME=192.168.77.10 " +
   "-Dakka.cluster.roles.0=console " +
   "-Dakka.cluster.seed-nodes.0=akka.tcp://cluster-console@192.168.77.10:2551 " +

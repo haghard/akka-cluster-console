@@ -6,11 +6,13 @@ import com.typesafe.sbt.web.SbtWeb
 import sbtdocker.ImageName
 import scala.sys.process.Process
 
-val scalaV = "2.12.4"
-val akkaVersion = "2.5.11"
-val version = "0.0.1"
+val scalaV = "2.12.6"
+val akkaVersion = "2.5.14"
+val version = "0.0.2"
 
 lazy val server = (project in file("server")).settings(
+  name := "server",
+
   resolvers ++= Seq(
     "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/",
     "isarn project" at "https://dl.bintray.com/isarn/maven/"
@@ -21,9 +23,8 @@ lazy val server = (project in file("server")).settings(
   scalaJSProjects          := Seq(ui),
   pipelineStages in Assets := Seq(scalaJSPipeline),
 
-  compile in Compile := ((compile in Compile) dependsOn (scalaJSPipeline, cpCss)).value,
-
-  name := "server",
+  compile in Compile := ((compile in Compile)
+    .dependsOn(scalaJSPipeline, cpCss)).value,
 
   //javaOptions in runMain := Seq("ENV=development", "CONFIG=./server/conf"),
 
@@ -130,7 +131,7 @@ lazy val server = (project in file("server")).settings(
     val appDevConfTarget = s"$imageAppBaseDir/$configDir/development.conf"
 
     new sbtdocker.mutable.Dockerfile {
-      from("openjdk:8-jre")
+      from("openjdk:10-jre")
       //from("openjdk:9-jre")
       maintainer("haghard")
 
@@ -207,8 +208,6 @@ def haltOnCmdResultError(result: Int) {
 lazy val ui = (project in file("ui")).settings(
   resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
   scalaVersion := scalaV,
-  //persistLauncher := true,
-  //persistLauncher in Test := false,
 
   libraryDependencies ++= Seq(
     "org.singlespaced" %%% "scalajs-d3" % "0.3.4", //the version for scala 2.12 is 0.3.4
@@ -218,7 +217,7 @@ lazy val ui = (project in file("ui")).settings(
   ),
 
   jsDependencies ++= Seq(
-    "org.webjars" % "jquery" % "2.1.3" / "2.1.3/jquery.js",
+    "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js",
 
     "org.webjars.bower" % "react" % "15.4.2"
         /        "react-with-addons.js"
@@ -254,6 +253,6 @@ lazy val sharedJs = shared.js
 
 // loads the server project at sbt startup
 //onLoad in Global := (Command.process("project server", _: State)) compose (onLoad in Global).value
-onLoad in Global := (onLoad in Global).value andThen {s: State => "project server" :: s}
+//onLoad in Global := (onLoad in Global).value andThen {s: State => "project server" :: s}
 
 //cancelable in Global := true

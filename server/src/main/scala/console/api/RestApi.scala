@@ -44,10 +44,12 @@ object RestApi extends shared.ClusterApi with Directives {
       .toMat(BroadcastHub.sink[Message](bufferSize))(Keep.both).run()(mat)
   }
 
+  val pingMsg = TextMessage.Strict("ping")
+
   def route(implicit system: ActorSystem, mat: akka.stream.ActorMaterializer): Route = {
     import scala.concurrent.duration._
     val (sink, source) = sourceAndSink(system, mat)
-    val wsFlow = Flow[Message].via(Flow.fromSinkAndSource(sink, source via heartbeats(25 seconds, TextMessage.Strict("ping"))))
+    val wsFlow = Flow[Message].via(Flow.fromSinkAndSource(sink, source via heartbeats(25.seconds, pingMsg)))
       .watchTermination() { (_, termination) =>
         termination.foreach { _ =>
           system.log.info("ws-flow events has been terminated")
@@ -61,7 +63,7 @@ object RestApi extends shared.ClusterApi with Directives {
       } ~ pathPrefix("assets" / Remaining) { file =>
         encodeResponse(getFromResource("public/" + file))
       } ~ path("images" / Segment) { image =>
-        getFromResource("web/" + image)
+        encodeResponse(getFromResource("web/" + image))
       } ~ post {
         path(shared.Routes.pref / Segments) { s =>
           entity(as[String]) { e =>
@@ -78,7 +80,7 @@ object RestApi extends shared.ClusterApi with Directives {
     }
   }
 
-  override def discoveredCluster(): shared.protocol.ClusterInfo = {
+  override def clusterInfo(): shared.protocol.ClusterInfo = {
     shared.protocol.ClusterInfo("demo-cluster",
       scala.collection.immutable.Seq(
         "akka.tcp://scenter@192.168.0.62:2551",
@@ -86,10 +88,9 @@ object RestApi extends shared.ClusterApi with Directives {
   }
 
   override def clusterProfile(): shared.protocol.ClusterProfile = {
-    shared.protocol.ClusterProfile(
-      "demo-cluster",
-      Set(shared.protocol.HostPort("192.168.0.62", 2551), shared.protocol.HostPort("192.168.0.63", 2551)),
-      "Up", Set(
+    shared.protocol.ClusterProfile("demo-cluster",
+      Set(shared.protocol.HostPort("192.168.0.62", 2551), shared.protocol.HostPort("192.168.0.63", 2551)), "Up",
+      Set(
         shared.protocol.ClusterMember(shared.protocol.HostPort("192.168.0.62", 2551), Set("gateway"), shared.protocol.Up),
         shared.protocol.ClusterMember(shared.protocol.HostPort("192.168.0.63", 2551), Set("gateway"), shared.protocol.Up),
         shared.protocol.ClusterMember(shared.protocol.HostPort("192.168.0.62", 2552), Set("ms-cmd"), shared.protocol.Up),
@@ -99,42 +100,3 @@ object RestApi extends shared.ClusterApi with Directives {
     )
   }
 }
-
-
-/*
-/*~ path("nodelist.csv") {
-        getFromResource("web/nodelist.csv")
-      } ~ path("edgelist.csv") {
-        getFromResource("web/edgelist.csv")
-      } ~ path("ch6_08") {
-        getFromResource("web/ch6_08.html")
-      } ~ path("ch6_21") {
-        getFromResource("web/ch6_21.html")
-      } ~ path("MRD.csv") {
-        getFromResource("web/MRD.csv") //MRD.csv
-      } ~ path("tree") {
-        getFromResource("web/tree.html")
-      } ~ path("linked-charts") {
-        getFromResource("web/linked-charts/linked-charts.html")
-      } ~ path("div9.csv") {
-        getFromResource("web/linked-charts/div9.csv")
-      } ~ path("timeseries_data.csv") {
-        getFromResource("web/accidents/timeseries_data.csv")
-      } ~ path("accidents") {
-        getFromResource("web/accidents/fatal-accidents.html")
-      } ~ path("bump-chart") {
-        getFromResource("web/bump-chart/bump-chart.html")
-      } ~ path("ugo.txt") {
-        getFromResource("web/bump-chart/ugo.txt")
-      } ~ path("senate") {
-        getFromResource("web/senate/senate.html")
-      } ~ path("data.csv") {
-        getFromResource("web/senate/data.csv")
-      } ~ path("hemicycle.json") {
-        getFromResource("web/senate/hemicycle.json")
-      } ~ path("d3.hemicycle.js") {
-        getFromResource("web/senate/d3.hemicycle.js")
-      } ~ path("d3.tip.js") {
-        getFromResource("web/senate/d3.hemicycle.js")
-      }*/
- */

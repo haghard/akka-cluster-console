@@ -6,7 +6,7 @@ object protocol {
 
   case class SignInResponse(login: String, photo: String)
 
-  case class ClusterInfo(name: String, seeds: Seq[String])
+  case class ClusterInfo(name: String, seedNodes: Seq[String])
 
 
   sealed trait Mode {

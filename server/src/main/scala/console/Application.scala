@@ -45,7 +45,8 @@ object Application extends App with AppSupport {
   //for alias
 
   val env = Option(System.getProperty("ENV")).getOrElse(throw new Exception("ENV is expected"))
-  val configFile = new File(s"${confDir.getAbsolutePath}/" + env + ".conf")
+  val configFile = new File(s"${new File(confPath).getAbsolutePath}/" + env + ".conf")
+  //println("-----------------" + configFile.getAbsoluteFile)
 
   val config: Config =
     ConfigFactory.parseString(httpConf1)
@@ -54,10 +55,11 @@ object Application extends App with AppSupport {
 
   val coreSystem: ActorSystem = ActorSystem("cluster-console", config)
 
-  coreSystem.actorOf(Props(new HttpServer(httpPort.toInt, config.getString("akka.http.interface"),
-    config.getString("akka.http.ssl.file"),
-    config.getString("akka.http.ssl.keypass"), config.getString("akka.http.ssl.storepass"))),
-    "http-server")
+  coreSystem.actorOf(
+    Bootstrap.prop(httpPort.toInt,
+      config.getString("akka.http.interface"), config.getString("akka.http.ssl.file"),
+      config.getString("akka.http.ssl.keypass"), config.getString("akka.http.ssl.storepass")
+    ), "bootstrap")
 
   val tz = TimeZone.getDefault.getID
   val greeting = new StringBuilder()
@@ -72,7 +74,7 @@ object Application extends App with AppSupport {
     .append('\n')
     .append(s"★ ★ ★ Cassandra entry points: ${config.getString("cassandra.hosts")}  ★ ★ ★")
     .append('\n')
-    .append(s"★ ★ ★ Server online at https://${config.getString("akka.http.interface")}:${httpPort} ★ ★ ★ ")
+    .append(s"★ ★ ★ Server online at http://${config.getString("akka.http.interface")}:${httpPort} ★ ★ ★ ")
     .append('\n')
     .append("""
             |  ___
