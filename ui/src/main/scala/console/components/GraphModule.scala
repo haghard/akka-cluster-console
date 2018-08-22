@@ -106,16 +106,17 @@ object GraphModule extends GraphSupport {
     def fetchClusterProfile(props: GraphProps): CallbackTo[Unit] = {
       import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
       react.Callback.future {
-        props.proxy.clusterProfile().call().map { c =>
-          println(c.members.map(_.label).mkString(","))
-          //println(c.members.map(_.labelSimple).mkString(","))
+        props.proxy.clusterProfile().call().map { cProfile =>
           val location = 10
-          val hosts = c.members.map(_.address.host).zipWithIndex.map { case (address, i) =>
+          val hosts = cProfile
+            .members.map(_.address.host)
+            .zipWithIndex
+            .map { case (address, i) =>
               Dynamic.literal("id" -> i, "x" -> location * (i + 1), "y" -> 40, "isHost" -> true,
                 "host" -> address, "port" -> 0, "roles" -> "host", "status" -> "").asInstanceOf[Vertix]
             }
 
-          val members = c.members.zipWithIndex.map { case (m, ind) =>
+          val members = cProfile.members.zipWithIndex.map { case (m, ind) =>
             Dynamic.literal("id" -> (hosts.size + ind).toString,
               "x" -> 50, "y" -> 50, "isHost" -> false,
               "host" -> m.address.host, "port" -> m.address.port, "roles" -> m.roles.mkString(","),
@@ -145,10 +146,10 @@ object GraphModule extends GraphSupport {
             .size((svgWidth - 5.0, svgHeight - 5.0))
             .on("tick", { (e: org.scalajs.dom.Event) => onTick(e, svg) })
 
-          scope.modState { prev =>
+          scope.modState { state =>
             onChange(svg, force)
-            prev.copy(Option(c.system), vertices, edges, Option(svg), Option(force.start))
-          } >> start
+            state.copy(Option(cProfile.system), vertices, edges, Option(svg), Option(force.start))
+          } //>> start
         }.recover {
           case _: org.scalajs.dom.ext.AjaxException =>
             //println("Ajax call error")
@@ -307,7 +308,7 @@ object GraphModule extends GraphSupport {
     .initialState(GraphState())
     .backend(new GraphBackend(_))
     .renderPS { (scope, props, state) => scope.backend.render() }
-    .componentDidMount { scope => scope.backend.fetchClusterProfile(scope.props) }
+    .componentDidMount(scope => scope.backend.fetchClusterProfile(scope.props))
     .componentWillUnmount { scope =>
       CallbackTo {
         //remove svg

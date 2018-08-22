@@ -1,7 +1,5 @@
 import _root_.sbtdocker.DockerPlugin.autoImport._
-import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 import sbt._
-import com.typesafe.sbt.packager.docker.Dockerfile
 import com.typesafe.sbt.web.SbtWeb
 import sbtdocker.ImageName
 import scala.sys.process.Process
@@ -168,20 +166,11 @@ lazy val server = (project in file("server")).settings(
       entryPoint(s"${dockerResourcesTargetPath}docker-entrypoint.sh")
     }
   }
-).enablePlugins(SbtWeb, JavaAppPackaging, sbtdocker.DockerPlugin).dependsOn(sharedJvm)
+).enablePlugins(SbtWeb, /*JavaAppPackaging,*/ sbtdocker.DockerPlugin).dependsOn(sharedJvm)
 
 //for debugging
 def cpCss() = (baseDirectory) map { dir =>
   def execute() = {
-    //IO.copyFile(dir / "src" / "main" / "twirl" / "linguistic"/ "main.css", dir / "target" /"web"/"web-modules"/"main"/"webjars"/"lib"/"bootstrap"/"css"/"main.css")
-    //IO.copyFile(dir /"src"/"main"/"resources"/"chat.css", dir/"target"/"web"/"web-modules"/"main"/"webjars"/"lib"/"bootstrap"/"css"/"chat.css")
-
-    //Process(s"cp ${dir}/src/main/resources/nv.d3.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-    //Process(s"cp ${dir}/src/main/resources/nv.d3.css ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css/").!
-    //Process(s"cp ${dir}/src/main/resources/graph/graph.css ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css/").!
-    //Process(s"cp ${dir}/src/main/resources/graph/graph.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-    //Process(s"cp ${dir}/src/main/resources/nv.d3.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-
     Process(s"cp ${dir}/src/main/resources/d3.v3.min.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
     Process(s"cp ${dir}/src/main/resources/d3.v4.min.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
 
@@ -190,11 +179,6 @@ def cpCss() = (baseDirectory) map { dir =>
 
     Process(s"cp ${dir}/src/main/resources/web/linked-charts/area1.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
     Process(s"cp ${dir}/src/main/resources/web/linked-charts/area2.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-
-    //Process(s"cp ${dir}/src/main/resources/wordtree/raphael.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-    //Process(s"cp ${dir}/src/main/resources/wordtree/word-tree-layout.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-    //Process(s"cp ${dir}/src/main/resources/wordtree/wordtree.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-    //Process(s"cp ${dir}/src/main/resources/tree.css ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css/").!
   }
 
   println("Coping resources ...")
@@ -210,7 +194,7 @@ lazy val ui = (project in file("ui")).settings(
   scalaVersion := scalaV,
 
   libraryDependencies ++= Seq(
-    "org.singlespaced" %%% "scalajs-d3" % "0.3.4", //the version for scala 2.12 is 0.3.4
+    "org.singlespaced" %%% "scalajs-d3" %     "0.3.4",
     "com.github.japgolly.scalajs-react" %%%   "core"      % "0.11.3",
     "com.github.japgolly.scalajs-react" %%%   "extra"     % "0.11.3",
     "com.github.japgolly.scalacss"      %%%   "ext-react" % "0.5.1"

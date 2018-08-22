@@ -1,8 +1,8 @@
 
 Docker build
 
-    sbt docker
-    sbt -Denv="development"
+    
+    sbt -Denv=development docker
 
 Initial ubuntu server setup in cloud
 
@@ -51,7 +51,7 @@ Export the haghard.com public certificate as haghard.crt so that it can be used 
          -rfc`	  
 	  
 How to run
-  `docker run --net=host -it -p 2551:2551 -e HOSTNAME=192.168.77.69 -e AKKA_PORT=2551 -e HTTP_PORT=9443 -e JMX_PORT=1089 -e TZ="Europe/Moscow" haghard/cluster-console:0.0.1`
+  `docker run --net=host -it -p 2551:2551 -e HOSTNAME=192.168.77.85 -e AKKA_PORT=2551 -e HTTP_PORT=9443 -e JMX_PORT=1089 -e TZ="Europe/Moscow" -m 500MB haghard/cluster-console:0.0.2`
 	  
 Links
     
