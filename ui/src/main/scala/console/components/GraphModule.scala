@@ -16,6 +16,7 @@ import scala.scalajs.js.{Array, Dynamic}
 import scala.util.control.NonFatal
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
+import Dynamic.{ literal => lit }
 
 object GraphModule extends GraphSupport {
 
@@ -27,8 +28,6 @@ object GraphModule extends GraphSupport {
                         force: Option[forceModule.Force[Vertix, Edge]] = None)
 
   class GraphBackend(scope: BackendScope[GraphProps, GraphState]) {
-    //val gStyle = GlobalRegistry[console.style.GraphStyles].get.graph
-
     val quotes = Vector(
       "The natural state in a distributed system is partial order.#Distributed systems for fun and profit",
       "If a tree falls in a forest and no one is around to hear it, does it make a sound ?#Philosopher George Berkeley",
@@ -83,7 +82,7 @@ object GraphModule extends GraphSupport {
       interval = js.undefined
     }
 
-    def render(): ReactElement = {
+    def render(): ReactElement =
       scope.state.map { s =>
         s.system.fold(<.div()) { system =>
           val q = quotes(ThreadLocalRandom.current.nextInt(quotes.length))
@@ -101,7 +100,6 @@ object GraphModule extends GraphSupport {
           )
         }
       }.runNow()
-    }
 
     def fetchClusterProfile(props: GraphProps): CallbackTo[Unit] = {
       import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
@@ -112,12 +110,14 @@ object GraphModule extends GraphSupport {
             .members.map(_.address.host)
             .zipWithIndex
             .map { case (address, i) =>
-              Dynamic.literal("id" -> i, "x" -> location * (i + 1), "y" -> 40, "isHost" -> true,
+              lit(
+                "id" -> i, "x" -> location * (i + 1), "y" -> 40, "isHost" -> true,
                 "host" -> address, "port" -> 0, "roles" -> "host", "status" -> "").asInstanceOf[Vertix]
             }
 
           val members = cProfile.members.zipWithIndex.map { case (m, ind) =>
-            Dynamic.literal("id" -> (hosts.size + ind).toString,
+            lit(
+              "id" -> (hosts.size + ind).toString,
               "x" -> 50, "y" -> 50, "isHost" -> false,
               "host" -> m.address.host, "port" -> m.address.port, "roles" -> m.roles.mkString(","),
               "status" -> m.state.toString).asInstanceOf[Vertix]
@@ -293,7 +293,8 @@ object GraphModule extends GraphSupport {
     def onClick(n: Vertix): Unit = println(s"${n.id}")
 
     def onTick(e: org.scalajs.dom.Event, s: Selection[org.scalajs.dom.EventTarget]): Unit = {
-      s.selectAll[Edge]("line.link").style("stroke-width", 1)
+      s.selectAll[Edge]("line.link")
+        .style("stroke-width", 1)
         .attr("x1", { (link: Edge) => link.source.x })
         .attr("y1", { (link: Edge) => link.source.y })
         .attr("x2", { (link: Edge) => link.target.x })
