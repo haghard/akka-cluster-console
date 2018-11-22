@@ -30,7 +30,7 @@ The first step is to create a certificate authority that will sign the haghard.c
     
     `keytool -genkeypair -v \
         -alias haghard.com \
-        -dname "CN=haghard.com, O=Haghard ent, L=Erlangen, ST=Erlangen, C=En" \
+        -dname "CN=haghard.com, O=Haghard ent, C=En" \
         -keystore server/src/main/resources/haghard.jks  \
         -keypass ...  \
         -storepass ... \
