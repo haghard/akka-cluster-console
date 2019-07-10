@@ -12,6 +12,8 @@ object AppScript {
       body(
         script(`type` := "text/javascript", src := "/assets/lib/jquery/jquery.js"),
         script(`type` := "text/javascript", src := "/assets/lib/bootstrap/js/bootstrap.js"),
+        //script(`type` := "text/javascript", src := "/assets/lib/bootstrap/js/d3.v3.min.js"),
+        script(`type` := "text/javascript", src := "/assets/lib/bootstrap/js/d3.v4.min.js"),
         script(`type` := "text/javascript", src := "/assets/ui-jsdeps.min.js"),
         script(`type` := "text/javascript", src := "/assets/ui-opt.js"),
         script(`type` := "text/javascript", src := "/assets/ui-launcher.js"),

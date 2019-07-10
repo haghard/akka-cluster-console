@@ -24,6 +24,8 @@ object MainMenu {
 
   class MainMenuBackend(t: BackendScope[Props, Unit]) extends OnUnmount {
 
+    //"Metrics"
+    //VdomNode("Clusters")
     private val menuItems = Seq(
       MenuItem(_ ⇒ japgolly.scalajs.react.vdom.VdomNode("Metrics"), Icon.dashboard, DashboardRoute),
       MenuItem(_ ⇒ japgolly.scalajs.react.vdom.VdomNode("Clusters"), Icon.circle, ClusterMapRoute)
@@ -35,7 +37,7 @@ object MainMenu {
           <.li(
             //(if (props.currentRoute == item.location) className := "active"  else
             props.ctl
-              .link(item.location)(item.icon, japgolly.scalajs.react.vdom.VdomNode(" "), item.label(props))
+              .link(item.location)(item.icon, japgolly.scalajs.react.vdom.TagMod.empty, item.label(props))
             //: japgolly.scalajs.react.vdom.all.TagMod
           )
         }

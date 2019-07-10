@@ -21,6 +21,9 @@ import Dynamic.{literal ⇒ lit}
 
 object GraphModule extends GraphSupport {
 
+  @inline def toJsArray[T](as: Seq[T]): js.Array[T] =
+    js.Array(as: _*)
+
   case class GraphProps(system: String, proxy: ClientProxy[shared.ClusterApi, Js.Value, Reader, Writer])
 
   case class GraphState(
@@ -44,6 +47,8 @@ object GraphModule extends GraphSupport {
     val p         = 10
     val svgWidth  = 1200
     val svgHeight = 700
+
+    d3.select("#body")
 
     val tooltip = d3
       .select("body")
@@ -155,12 +160,13 @@ object GraphModule extends GraphSupport {
             val a = (members ++ hosts).toSeq
             val b = hosts.flatMap(r ⇒ members.filter(_.host == r.host).map(h ⇒ Link(r, h))).toSeq
 
-            val vertices = js.Array[Vertix]()
-            val edges    = js.Array[Edge]()
+            val vertices = toJsArray[Vertix](a) //js.Array[Vertix]()
+            val edges    = toJsArray[Edge](b)   //js.Array[Edge]()
 
             dom.console.log(a.size + "" + b.size)
-            vertices.push(a: _*)
-            edges.push(b: _*)
+
+            //vertices.push(a: _*)
+            //edges.push(b: _*)
 
             /*(members ++ hosts).foreach { el ⇒
               dom.console.log(el.toString)
@@ -331,17 +337,6 @@ object GraphModule extends GraphSupport {
         .on("mouseover", onMouseover(_))
         .on("mouseout", onMouseout(_))
 
-      /*
-            nodeEnter.insert("image", "text")
-              .attr("xlink:href", { (n: Vertix) =>
-                if (js.isUndefined(n.parent)) "" else {
-                  if (n.id % 2 == 0) "images/ms.png" else "images/ms2.png"
-                }
-              })
-              .attr("width", "60px")
-              .attr("height", "40px")
-       */
-
       nodeEnter
         .append("text")
         .style("text-anchor", "middle") //start |  middle |  end
@@ -397,7 +392,8 @@ object GraphModule extends GraphSupport {
     .renderPS { (scope, props, state) ⇒
       scope.backend.render()
     }
-    .componentDidMount(scope ⇒ scope.backend.fetchClusterProfile(scope.props))
+
+    /*.componentDidMount(scope ⇒ scope.backend.fetchClusterProfile(scope.props))
     .componentWillUnmount { scope ⇒
       CallbackTo {
         //remove svg
@@ -406,7 +402,7 @@ object GraphModule extends GraphSupport {
         val svg = dom.document.getElementsByTagName("svg")
         b(0).removeChild(svg(0))
       }
-    }
+    }*/
     .build
 
   def apply(system: String, proxy: ClientProxy[shared.ClusterApi, Js.Value, Reader, Writer]) =
