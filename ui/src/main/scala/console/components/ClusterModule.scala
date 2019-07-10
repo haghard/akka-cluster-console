@@ -18,6 +18,7 @@ object ClusterModule {
     def fetchClusters(p: Props): japgolly.scalajs.react.CallbackTo[Unit] = {
       import autowire._
       react.Callback.future {
+
         p.proxy.clusterInfo().call().map { c =>
           scope.modState { _.copy(cluster = Some(Cluster(c.name, c.seedNodes))) }
         }

@@ -4,7 +4,8 @@ import java.io.File
 import java.util.TimeZone
 import java.time.LocalDateTime
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializerSettings
 import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.collection._
@@ -53,13 +54,18 @@ object Application extends App with AppSupport {
     .withFallback(ConfigFactory.parseFile(configFile).resolve())
     .withFallback(ConfigFactory.load()) //for read seeds from env vars
 
-  val coreSystem: ActorSystem = ActorSystem("cluster-console", config)
+  implicit val coreSystem: ActorSystem = ActorSystem("cluster-console", config)
+  implicit val mat = akka.stream.ActorMaterializer(
+    ActorMaterializerSettings.create(coreSystem)
+      .withDispatcher(Bootstrap.HttpDispatcher))(coreSystem)
 
-  coreSystem.actorOf(
-    Bootstrap.prop(httpPort.toInt,
-      config.getString("akka.http.interface"), config.getString("akka.http.ssl.file"),
-      config.getString("akka.http.ssl.keypass"), config.getString("akka.http.ssl.storepass")
-    ), "bootstrap")
+  /*coreSystem.actorOf(
+      Bootstrap.prop(httpPort.toInt,
+        config.getString("akka.http.interface"), config.getString("akka.http.ssl.file"),
+        config.getString("akka.http.ssl.keypass"), config.getString("akka.http.ssl.storepass")
+      ), "bootstrap")*/
+
+  Bootstrap(config.getString("akka.http.interface"), httpPort.toInt)
 
   val tz = TimeZone.getDefault.getID
   val greeting = new StringBuilder()

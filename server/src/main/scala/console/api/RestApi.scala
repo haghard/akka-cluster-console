@@ -6,7 +6,7 @@ import akka.http.scaladsl.model.HttpEntity.Strict
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.http.scaladsl.model.{ContentTypes, HttpResponse}
 import akka.http.scaladsl.server.{Directives, Route}
-import akka.stream.{FlowShape, OverflowStrategy}
+import akka.stream.{FlowShape, Materializer, OverflowStrategy}
 import akka.stream.scaladsl.{BroadcastHub, Flow, GraphDSL, Keep, MergeHub, MergePreferred, Source}
 import akka.util.ByteString
 import console.scripts.AppScript
@@ -16,7 +16,8 @@ import scala.concurrent.duration.FiniteDuration
 
 object RestApi extends shared.ClusterApi with Directives {
 
-  val bufferSize = 1 << 8
+  val bufferSize = 1 << 5
+  val pingMsg = TextMessage.Strict("ping")
 
   private def heartbeats[T](interval: FiniteDuration, zero: T): Flow[T, T, akka.NotUsed] = {
     Flow.fromGraph(GraphDSL.create() { implicit builder ⇒
@@ -38,15 +39,13 @@ object RestApi extends shared.ClusterApi with Directives {
     * Source has been materialized (started). This is ensured by the fact that we only get the corresponding Sink as a materialized value.
     * Usage might look like this:
     */
-  private def sourceAndSink(system: ActorSystem, mat: akka.stream.ActorMaterializer) = {
+  private def sourceAndSink(system: ActorSystem, mat: Materializer) = {
     MergeHub.source[Message](perProducerBufferSize = bufferSize)
       .recoverWithRetries(-1, { case _: Exception => Source.empty })
       .toMat(BroadcastHub.sink[Message](bufferSize))(Keep.both).run()(mat)
   }
 
-  val pingMsg = TextMessage.Strict("ping")
-
-  def route(implicit system: ActorSystem, mat: akka.stream.ActorMaterializer): Route = {
+  def route(implicit system: ActorSystem, mat: Materializer): Route = {
     import scala.concurrent.duration._
     val (sink, source) = sourceAndSink(system, mat)
     val wsFlow = Flow[Message].via(Flow.fromSinkAndSource(sink, source via heartbeats(25.seconds, pingMsg)))

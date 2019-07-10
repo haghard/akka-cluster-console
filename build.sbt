@@ -1,11 +1,10 @@
-import _root_.sbtdocker.DockerPlugin.autoImport._
 import sbt._
 import com.typesafe.sbt.web.SbtWeb
 import sbtdocker.ImageName
 import scala.sys.process.Process
 
-val scalaV = "2.12.6"
-val akkaVersion = "2.5.14"
+val scalaV = "2.12.8"
+val akkaVersion = "2.5.23"
 val version = "0.0.2"
 
 lazy val server = (project in file("server")).settings(
@@ -21,8 +20,7 @@ lazy val server = (project in file("server")).settings(
   scalaJSProjects          := Seq(ui),
   pipelineStages in Assets := Seq(scalaJSPipeline),
 
-  compile in Compile := ((compile in Compile)
-    .dependsOn(scalaJSPipeline, cpCss)).value,
+  compile in Compile := (compile in Compile).dependsOn(scalaJSPipeline, cpCss).value,
 
   //javaOptions in runMain := Seq("ENV=development", "CONFIG=./server/conf"),
 
@@ -36,15 +34,15 @@ lazy val server = (project in file("server")).settings(
     "org.webjars"     %   "bootstrap"       % "3.3.6",
     "com.lihaoyi"     %%  "scalatags"       % "0.6.5",
     "com.jsuereth"    %%  "scala-arm"       % "2.0",
-    "org.scalatest"   %%  "scalatest"       % "3.0.1" % "test"
+    "org.scalatest"   %%  "scalatest"       % "3.0.8" % "test"
   ) ++ Seq(
-    "com.softwaremill.akka-http-session" %% "core" % "0.5.5",
+    "com.softwaremill.akka-http-session" %% "core" % "0.5.6",
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
-    "com.typesafe.akka" %% "akka-persistence-cassandra" % "0.83",
     "com.typesafe.akka" %% "akka-cluster-sharding" % akkaVersion,
     "com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
-    //"com.typesafe.akka" %% "akka-cluster-metrics" % akkaVersion
+    //"com.typesafe.akka" %% "akka-cluster-metrics" % akkaVersion,
+    //"com.typesafe.akka" %% "akka-persistence-cassandra" % "0.98"
   ),
 
   //javaOptions in runMain += "-DENV=prod",
@@ -129,7 +127,8 @@ lazy val server = (project in file("server")).settings(
     val appDevConfTarget = s"$imageAppBaseDir/$configDir/development.conf"
 
     new sbtdocker.mutable.Dockerfile {
-      from("openjdk:10-jre")
+      from("adoptopenjdk/openjdk12")
+      //from("openjdk:10-jre")
       //from("openjdk:9-jre")
       maintainer("haghard")
 
@@ -166,7 +165,8 @@ lazy val server = (project in file("server")).settings(
       entryPoint(s"${dockerResourcesTargetPath}docker-entrypoint.sh")
     }
   }
-).enablePlugins(SbtWeb, /*JavaAppPackaging,*/ sbtdocker.DockerPlugin).dependsOn(sharedJvm)
+).enablePlugins(SbtWeb, sbtdocker.DockerPlugin, BuildInfoPlugin)
+  .dependsOn(sharedJvm)
 
 //for debugging
 def cpCss() = (baseDirectory) map { dir =>
@@ -219,17 +219,28 @@ lazy val ui = (project in file("ui")).settings(
         minified  "react-dom-server.min.js"
         dependsOn "react-dom.js"
         commonJSName "ReactDOMServer"
-  )
+  ),
+
+  assemblyMergeStrategy in assembly := {
+    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+    case x => MergeStrategy.first
+  }
+
 ).enablePlugins(ScalaJSPlugin, ScalaJSWeb).dependsOn(sharedJs)
 
-lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared")).
-  settings(
+lazy val shared = sbtcrossproject.CrossPlugin.autoImport.crossProject(JSPlatform, JVMPlatform)
+  .crossType(sbtcrossproject.CrossType.Pure)
+  .settings(
     scalaVersion := scalaV,
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "upickle" % "0.4.4",
+      "com.lihaoyi" %%% "upickle" % "0.6.6",
       "com.lihaoyi" %%% "autowire" % "0.2.6",
       "me.chrons" %%% "boopickle" % "1.2.5"
-    )
+    ),
+    assemblyMergeStrategy in assembly := {
+      case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+      case x => MergeStrategy.first
+    }
   ).jsConfigure(_ enablePlugins ScalaJSWeb)
 
 lazy val sharedJvm = shared.jvm

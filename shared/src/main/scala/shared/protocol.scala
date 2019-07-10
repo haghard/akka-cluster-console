@@ -2,11 +2,17 @@ package shared
 
 import scala.collection.immutable.Seq
 
+import upickle.default.{ReadWriter => RW, macroRW}
+
 object protocol {
 
   case class SignInResponse(login: String, photo: String)
 
   case class ClusterInfo(name: String, seedNodes: Seq[String])
+
+  object ClusterInfo {
+    implicit val rw: RW[ClusterInfo] = macroRW
+  }
 
 
   sealed trait Mode {
@@ -47,18 +53,36 @@ object protocol {
 
   case object Exited extends NodeState
 
+  object NodeState {
+    implicit val rw: RW[NodeState] = macroRW
+  }
+
   case class ClusterMember(address: HostPort, roles: Set[String], state: NodeState) {
     def label = address.label + s" roles[${roles.mkString(",").map(r => r)}] status[$state]"
 
     def labelSimple = address.label
   }
 
+  object ClusterMember {
+    implicit val rw: RW[ClusterMember] = macroRW
+  }
+
+
   case class HostPort(host: String, port: Int) {
     def label = host + ":" + port
   }
 
+  object HostPort {
+    implicit val rw: RW[HostPort] = macroRW
+  }
+
   case class ClusterProfile(system: String, seeds: Set[HostPort],
-                            status: String, members: Set[ClusterMember])
+    status: String, members: Set[ClusterMember])
+
+  object ClusterProfile {
+    implicit val rw: RW[ClusterProfile] = macroRW
+  }
+
 
   case class ClusterNode(host: String, port: Int, roles: String, status: String)
 }

@@ -1,45 +1,46 @@
 package console
 
-import akka.stream.ActorMaterializerSettings
-import akka.http.scaladsl.Http.ServerBinding
-import akka.actor.{Actor, ActorLogging, Props, Status}
+import Bootstrap._
+import akka.http.scaladsl.server.RouteResult._
+import akka.actor.{ActorSystem, CoordinatedShutdown}
+import akka.stream.Materializer
+import akka.Done
+import akka.actor.CoordinatedShutdown.{PhaseServiceRequestsDone, PhaseServiceUnbind, Reason}
+import akka.http.scaladsl.Http
+
+import scala.concurrent.ExecutionContext
+import scala.util.{Failure, Success}
+import scala.concurrent.duration._
 
 object Bootstrap {
   val HttpDispatcher = "akka.http.dispatcher"
-
-  def prop(port: Int, address: String, keypass: String, storepass: String, sslFile: String) =
-    Props(new Bootstrap(port, address, keypass, storepass, sslFile))
-      .withDispatcher(HttpDispatcher)
+  final private case object BindFailure extends Reason
 }
 
-class Bootstrap(port: Int, address: String, keypass: String, storepass: String,
-  override val sslFile: String) extends Actor with ActorLogging
-  with SslSupport {
-
-  import Bootstrap._
-  import akka.http.scaladsl.Http
-  import akka.pattern.pipe
-  import akka.http.scaladsl.server.RouteResult._
-
-  implicit val system = context.system
+case class Bootstrap(interface: String, port: Int)(implicit system: ActorSystem, m: Materializer) {
+  val termDeadline = 2.seconds
   implicit val ex = system.dispatchers.lookup(HttpDispatcher)
-  implicit val mat = akka.stream.ActorMaterializer(
-    ActorMaterializerSettings.create(system)
-      .withDispatcher(HttpDispatcher))(system)
+  val shutdown     = CoordinatedShutdown(system)
 
-  override def preStart() =
-    Http()
-      .bindAndHandle(api.RestApi.route(system, mat), address, port)
-      .pipeTo(self)
+  Http()
+    .bindAndHandle(api.RestApi.route(system, m), interface, port)
+    .onComplete {
+      case Failure(ex) ⇒
+        system.log.error(ex, "Critical error during bootstrap")
+        shutdown.run(BindFailure)
+      case Success(binding) ⇒
+        system.log.info(s"Listening for HTTP connections on ${binding.localAddress}")
+        shutdown.addTask(PhaseServiceUnbind, "api.unbind") { () ⇒
+          system.log.info("api.unbind")
+          // No new connections are accepted
+          // Existing connections are still allowed to perform request/response cycles
+          binding.unbind()
+        }
 
-  def awaitHttpBinding(): Receive = {
-    case b: ServerBinding =>
-      log.info("Bind on {}", b.localAddress)
-
-    case Status.Failure(ex) =>
-      log.error(ex, s"Can't bind to $address:$port")
-      context stop self
-  }
-
-  override def receive = awaitHttpBinding
+        shutdown.addTask(PhaseServiceRequestsDone, "api.terminate") { () ⇒
+          system.log.info("api.terminate")
+          //graceful termination request being handled on this connection
+          binding.terminate(termDeadline).map(_ ⇒ Done)(ExecutionContext.global)
+        }
+    }(ExecutionContext.global)
 }

@@ -6,8 +6,10 @@ import console.components.{ClusterModule, MainMenu, MetricsModule}
 import japgolly.scalajs.react.extra.router.{BaseUrl, Redirect, Resolution, Router, RouterConfigDsl, RouterCtl}
 import org.scalajs.dom
 import japgolly.scalajs.react.vdom.prefix_<^._
-import scala.scalajs.js.annotation.JSExport
 
+import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
+
+//@JSExportTopLevel("JsApplication")
 @JSExport
 object JsApplication {
   sealed trait Route
