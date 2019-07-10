@@ -23,7 +23,7 @@ object Bootstrap {
   object CommonStyle extends Enumeration {
     val default, primary, success, info, warning, danger = Value
   }
-
+  /*
   object Button {
 
     case class Props(onClick: Callback, style: CommonStyle.Value = CommonStyle.default, addStyles: Seq[StyleA] = Seq())
@@ -104,5 +104,6 @@ object Bootstrap {
 
     def apply(props: Props, children: ReactElement*) = component(props, children: _*)
     def apply()                                      = component
-  }
+
+  }*/
 }

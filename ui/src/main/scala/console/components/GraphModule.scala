@@ -4,7 +4,7 @@ import java.util.concurrent.ThreadLocalRandom
 
 import autowire.{ClientProxy, _}
 import japgolly.scalajs.react
-import japgolly.scalajs.react.{BackendScope, CallbackTo, ReactComponentB}
+import japgolly.scalajs.react.{BackendScope, CallbackTo}
 import org.scalajs.dom
 import org.singlespaced.d3js.Ops._
 import org.singlespaced.d3js.{Selection, d3, forceModule}
@@ -15,7 +15,8 @@ import scala.scalajs.js
 import scala.scalajs.js.{Array, Dynamic}
 import scala.util.control.NonFatal
 import japgolly.scalajs.react._
-import japgolly.scalajs.react.vdom.prefix_<^._
+import japgolly.scalajs.react.vdom.html_<^._
+
 import Dynamic.{literal ⇒ lit}
 
 object GraphModule extends GraphSupport {
@@ -87,7 +88,7 @@ object GraphModule extends GraphSupport {
       interval = js.undefined
     }
 
-    def render(): ReactElement =
+    def render(): VdomElement =
       scope.state
         .map { s ⇒
           s.system.fold(<.div()) { system ⇒
@@ -116,6 +117,8 @@ object GraphModule extends GraphSupport {
           .call()
           .map { cProfile ⇒
             dom.console.log("fetchClusterProfile: " + cProfile.toString)
+
+            //cProfile
 
             val location = 10
             val hosts = cProfile.members
@@ -372,7 +375,8 @@ object GraphModule extends GraphSupport {
     }
   }
 
-  private val component = ReactComponentB[GraphProps]("GraphComponent")
+  private val component = ScalaComponent
+    .builder[GraphProps]("GraphComponent")
     .initialState(GraphState())
     .backend(new GraphBackend(_))
     .renderPS { (scope, props, state) ⇒

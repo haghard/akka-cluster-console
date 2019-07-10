@@ -16,7 +16,7 @@ object AppScript {
         script(`type` := "text/javascript", src := "/assets/ui-opt.js"),
         script(`type` := "text/javascript", src := "/assets/ui-launcher.js"),
         div(id := "scene"),
-        script(s"console.JsApplication().main()")
+        script(s"console.JsAppModule().main()")
         //script("console.components.Graph4().main()")
       )
     )

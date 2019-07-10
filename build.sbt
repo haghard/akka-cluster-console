@@ -6,6 +6,7 @@ import scala.sys.process.Process
 val scalaV = "2.12.8"
 val akkaVersion = "2.5.23"
 val version = "0.0.2"
+val ReactJs = "16.2.0"
 
 lazy val server = (project in file("server")).settings(
   name := "server",
@@ -197,12 +198,17 @@ lazy val ui = (project in file("ui")).settings(
 
   libraryDependencies ++= Seq(
     "org.singlespaced" %%% "scalajs-d3" %     "0.3.4",
-    "com.github.japgolly.scalajs-react" %%%   "core"      % "0.11.3",
-    "com.github.japgolly.scalajs-react" %%%   "extra"     % "0.11.3",
-    "com.github.japgolly.scalacss"      %%%   "ext-react" % "0.5.1"
+
+    /*"com.github.japgolly.scalajs-react" %%%   "core"      % "0.11.3",
+    "com.github.japgolly.scalajs-react" %%%   "extra"     % "0.11.3",*/
+
+    "com.github.japgolly.scalajs-react" %%% "core" % "1.4.2",
+    "com.github.japgolly.scalajs-react" %%% "extra" % "1.4.2",
+
+    "com.github.japgolly.scalacss"      %%%   "ext-react" % "0.5.6"
   ),
 
-  jsDependencies ++= Seq(
+  /*jsDependencies ++= Seq(
     "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js",
 
     "org.webjars.bower" % "react" % "15.4.2"
@@ -221,7 +227,38 @@ lazy val ui = (project in file("ui")).settings(
         minified  "react-dom-server.min.js"
         dependsOn "react-dom.js"
         commonJSName "ReactDOMServer"
-  ),
+  ),*/
+
+
+  jsDependencies ++= Seq(
+      "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js",
+
+      "org.webjars.npm" % "react" % ReactJs
+        / "umd/react.development.js"
+        minified "umd/react.production.min.js"
+        commonJSName "React",
+
+      "org.webjars.npm" % "react-dom" % ReactJs
+        / "umd/react-dom.development.js"
+        minified "umd/react-dom.production.min.js"
+        dependsOn "umd/react.development.js"
+        commonJSName "ReactDOM",
+
+      "org.webjars.npm" % "react-dom" % ReactJs
+        / "umd/react-dom-test-utils.development.js"
+        minified "umd/react-dom-test-utils.production.min.js"
+        dependsOn "umd/react-dom.development.js"
+        commonJSName "ReactTestUtils",
+
+      "org.webjars.npm" % "react-dom" % ReactJs
+        / "umd/react-dom-server.browser.development.js"
+        minified "umd/react-dom-server.browser.production.min.js"
+        dependsOn "umd/react-dom.development.js"
+        commonJSName "ReactDOMServer"
+    ),
+
+    dependencyOverrides += "org.webjars.npm" % "js-tokens" % "3.0.2",
+
 
   assemblyMergeStrategy in assembly := {
     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
