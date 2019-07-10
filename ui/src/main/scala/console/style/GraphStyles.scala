@@ -5,7 +5,7 @@ import scalacss.defaults.Exports.StyleSheet
 
 class GraphStyles extends StyleSheet.Inline {
   import dsl._
-  
+
   val graph = style(
     width(1200.px),
     height(700.px),

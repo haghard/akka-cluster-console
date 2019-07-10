@@ -12,19 +12,18 @@ trait GraphSupport {
   }
 
   type Vertix = AkkaClusterNode
-  type Edge = NodeLink[Vertix]
+  type Edge   = NodeLink[Vertix]
 
   object Link {
     def apply(x: Vertix, y: Vertix): Edge = NodeLink(x, y)
   }
 
   def inflate(n: CgraphNode) = {
-    def loop[T <: GraphNode](n: T): Unit = {
+    def loop[T <: GraphNode](n: T): Unit =
       if (!js.isUndefined(n.parent)) {
         n.parent.size = n.parent.size + 1
         loop(n.parent)
       } else ()
-    }
 
     loop(n)
   }

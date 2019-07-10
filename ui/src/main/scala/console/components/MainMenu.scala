@@ -19,23 +19,23 @@ object MainMenu {
 
   case class Props(ctl: RouterCtl[Route], currentRoute: Route)
 
-  case class MenuItem(label: (Props) => ReactNode, icon: Icon, location: Route)
+  case class MenuItem(label: (Props) ⇒ ReactNode, icon: Icon, location: Route)
 
   class MainMenuBackend(t: BackendScope[Props, Unit]) extends OnUnmount {
     val menuItems = Seq(
-      MenuItem(_ => "Metrics", Icon.dashboard, DashboardRoute),
-      MenuItem(_ => "Clusters", Icon.circle, ClusterMapRoute))
+      MenuItem(_ ⇒ "Metrics", Icon.dashboard, DashboardRoute),
+      MenuItem(_ ⇒ "Clusters", Icon.circle, ClusterMapRoute)
+    )
 
-    def render(props: Props) = {
+    def render(props: Props) =
       <.ul(style.navbar)(
-        for (item <- menuItems) yield {
+        for (item ← menuItems) yield {
           <.li(
             (props.currentRoute == item.location) ?= (className := "active"),
             props.ctl.link(item.location)(item.icon, " ", item.label(props))
           )
         }
       )
-    }
   }
 
   private val MainMenu = ReactComponentB[Props]("MainMenu")

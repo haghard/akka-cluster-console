@@ -1,5 +1,7 @@
 package console.api
 
+import java.util.concurrent.ThreadLocalRandom
+
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.HttpEntity.Strict
@@ -17,19 +19,20 @@ import scala.concurrent.duration.FiniteDuration
 object RestApi extends shared.ClusterApi with Directives {
 
   val bufferSize = 1 << 5
-  val pingMsg = TextMessage.Strict("ping")
+  val pingMsg    = TextMessage.Strict("ping")
 
-  private def heartbeats[T](interval: FiniteDuration, zero: T): Flow[T, T, akka.NotUsed] = {
-    Flow.fromGraph(GraphDSL.create() { implicit builder ⇒
-      import GraphDSL.Implicits._
-      val heartbeats = builder.add(Source.repeat(zero).delay(interval, OverflowStrategy.dropBuffer))
-      //0 - preferred port
-      //1 - secondary port
-      val merge = builder.add(MergePreferred[T](1))
-      heartbeats ~> merge.in(0)//heartbeats is not preferred port
-      FlowShape(merge.preferred, merge.out)
-    })
-  }
+  private def heartbeats[T](interval: FiniteDuration, zero: T): Flow[T, T, akka.NotUsed] =
+    Flow.fromGraph(
+      GraphDSL.create() { implicit builder ⇒
+        import GraphDSL.Implicits._
+        val heartbeats = builder.add(Source.repeat(zero).delay(interval, OverflowStrategy.dropBuffer))
+        //0 - preferred port
+        //1 - secondary port
+        val merge = builder.add(MergePreferred[T](1))
+        heartbeats ~> merge.in(0) //heartbeats is not preferred port
+        FlowShape(merge.preferred, merge.out)
+      }
+    )
 
   //http://doc.akka.io/docs/akka/current/scala/stream/stream-dynamic.html#Dynamic_fan-in_and_fan-out_with_MergeHub_and_BroadcastHub
   /**
@@ -39,37 +42,41 @@ object RestApi extends shared.ClusterApi with Directives {
     * Source has been materialized (started). This is ensured by the fact that we only get the corresponding Sink as a materialized value.
     * Usage might look like this:
     */
-  private def sourceAndSink(system: ActorSystem, mat: Materializer) = {
-    MergeHub.source[Message](perProducerBufferSize = bufferSize)
-      .recoverWithRetries(-1, { case _: Exception => Source.empty })
-      .toMat(BroadcastHub.sink[Message](bufferSize))(Keep.both).run()(mat)
-  }
+  private def sourceAndSink(system: ActorSystem, mat: Materializer) =
+    MergeHub
+      .source[Message](perProducerBufferSize = bufferSize)
+      .recoverWithRetries(-1, { case _: Exception ⇒ Source.empty })
+      .toMat(BroadcastHub.sink[Message](bufferSize))(Keep.both)
+      .run()(mat)
 
   def route(implicit system: ActorSystem, mat: Materializer): Route = {
     import scala.concurrent.duration._
     val (sink, source) = sourceAndSink(system, mat)
-    val wsFlow = Flow[Message].via(Flow.fromSinkAndSource(sink, source via heartbeats(25.seconds, pingMsg)))
-      .watchTermination() { (_, termination) =>
-        termination.foreach { _ =>
+    val wsFlow = Flow[Message]
+      .via(Flow.fromSinkAndSource(sink, source via heartbeats(25.seconds, pingMsg)))
+      .watchTermination() { (_, termination) ⇒
+        termination.foreach { _ ⇒
           system.log.info("ws-flow events has been terminated")
         }(mat.executionContext)
         NotUsed
       }
 
-    extractExecutionContext { implicit ec =>
+    extractExecutionContext { implicit ec ⇒
       pathSingleSlash {
         complete(HttpResponse(entity = Strict(ContentTypes.`text/html(UTF-8)`, ByteString(AppScript().render))))
-      } ~ pathPrefix("assets" / Remaining) { file =>
+      } ~ pathPrefix("assets" / Remaining) { file ⇒
         encodeResponse(getFromResource("public/" + file))
-      } ~ path("images" / Segment) { image =>
+      } ~ path("images" / Segment) { image ⇒
         encodeResponse(getFromResource("web/" + image))
       } ~ post {
-        path(shared.Routes.pref / Segments) { s =>
-          entity(as[String]) { e =>
+        path(shared.Routes.pref / Segments) { s ⇒
+          entity(as[String]) { e ⇒
             complete {
-              AutowireServer.route[shared.ClusterApi](RestApi)(
-                autowire.Core.Request(s, upickle.json.read(e).asInstanceOf[Js.Obj].value.toMap)
-              ).map(upickle.json.write(_))
+              AutowireServer
+                .route[shared.ClusterApi](RestApi)(
+                  autowire.Core.Request(s, upickle.json.read(e).asInstanceOf[Js.Obj].value.toMap)
+                )
+                .map(upickle.json.write(_))
             }
           }
         }
@@ -79,23 +86,44 @@ object RestApi extends shared.ClusterApi with Directives {
     }
   }
 
-  override def clusterInfo(): shared.protocol.ClusterInfo = {
-    shared.protocol.ClusterInfo("demo-cluster",
-      scala.collection.immutable.Seq(
-        "akka.tcp://scenter@192.168.0.62:2551",
-        "akka.tcp://scenter@192.168.0.62:2552"))
-  }
-
-  override def clusterProfile(): shared.protocol.ClusterProfile = {
-    shared.protocol.ClusterProfile("demo-cluster",
-      Set(shared.protocol.HostPort("192.168.0.62", 2551), shared.protocol.HostPort("192.168.0.63", 2551)), "Up",
-      Set(
-        shared.protocol.ClusterMember(shared.protocol.HostPort("192.168.0.62", 2551), Set("gateway"), shared.protocol.Up),
-        shared.protocol.ClusterMember(shared.protocol.HostPort("192.168.0.63", 2551), Set("gateway"), shared.protocol.Up),
-        shared.protocol.ClusterMember(shared.protocol.HostPort("192.168.0.62", 2552), Set("ms-cmd"), shared.protocol.Up),
-        shared.protocol.ClusterMember(shared.protocol.HostPort("192.168.0.63", 2552), Set("ms-view"), shared.protocol.Up),
-        shared.protocol.ClusterMember(shared.protocol.HostPort("192.168.0.64", 2551), Set("ms-view"), shared.protocol.Up)
-      )
+  override def clusterInfo(): shared.protocol.ClusterInfo =
+    shared.protocol.ClusterInfo(
+      "demo-cluster",
+      scala.collection.immutable.Seq("akka.tcp://scenter@192.168.0.62:2551", "akka.tcp://scenter@192.168.0.62:2552")
     )
-  }
+
+  override def clusterProfile(): shared.protocol.ClusterProfile =
+    if (ThreadLocalRandom.current().nextBoolean)
+      shared.protocol.ClusterProfile(
+        "demo-cluster",
+        Set(shared.protocol.HostPort("192.168.0.62", 2551), shared.protocol.HostPort("192.168.0.63", 2551)),
+        "Up",
+        Set(
+          shared.protocol
+            .ClusterMember(shared.protocol.HostPort("192.168.0.62", 2551), Set("gateway"), shared.protocol.Up),
+          shared.protocol
+            .ClusterMember(shared.protocol.HostPort("192.168.0.63", 2551), Set("gateway"), shared.protocol.Up),
+          shared.protocol
+            .ClusterMember(shared.protocol.HostPort("192.168.0.62", 2552), Set("ms-cmd"), shared.protocol.Up),
+          shared.protocol
+            .ClusterMember(shared.protocol.HostPort("192.168.0.63", 2552), Set("ms-view"), shared.protocol.Up),
+          shared.protocol
+            .ClusterMember(shared.protocol.HostPort("192.168.0.64", 2551), Set("ms-view"), shared.protocol.Up)
+        )
+      )
+    else
+      shared.protocol.ClusterProfile(
+        "demo-cluster",
+        Set(shared.protocol.HostPort("192.168.0.62", 2551), shared.protocol.HostPort("192.168.0.63", 2551)),
+        "Up",
+        Set(
+          shared.protocol
+            .ClusterMember(shared.protocol.HostPort("192.168.0.62", 2551), Set("gateway"), shared.protocol.Up),
+          shared.protocol
+            .ClusterMember(shared.protocol.HostPort("192.168.0.62", 2552), Set("ms-cmd"), shared.protocol.Up),
+          shared.protocol
+            .ClusterMember(shared.protocol.HostPort("192.168.0.63", 2552), Set("ms-view"), shared.protocol.Up)
+        )
+      )
+
 }

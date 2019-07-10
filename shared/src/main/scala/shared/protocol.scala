@@ -2,7 +2,7 @@ package shared
 
 import scala.collection.immutable.Seq
 
-import upickle.default.{ReadWriter => RW, macroRW}
+import upickle.default.{ReadWriter ⇒ RW, macroRW}
 
 object protocol {
 
@@ -14,7 +14,6 @@ object protocol {
     implicit val rw: RW[ClusterInfo] = macroRW
   }
 
-
   sealed trait Mode {
     def name: String
 
@@ -23,10 +22,10 @@ object protocol {
 
   object Mode {
     def fromString(s: String) = s match {
-      case Members.name => Members
-      case Roles.name => Roles
-      case Nodes.name => Nodes
-      case _ => Members
+      case Members.name ⇒ Members
+      case Roles.name   ⇒ Roles
+      case Nodes.name   ⇒ Nodes
+      case _            ⇒ Members
     }
   }
 
@@ -41,7 +40,6 @@ object protocol {
   case object Nodes extends Mode {
     override val name = "Nodes"
   }
-
 
   sealed trait NodeState
 
@@ -58,7 +56,7 @@ object protocol {
   }
 
   case class ClusterMember(address: HostPort, roles: Set[String], state: NodeState) {
-    def label = address.label + s" roles[${roles.mkString(",").map(r => r)}] status[$state]"
+    def label = address.label + s" roles[${roles.mkString(",").map(r ⇒ r)}] status[$state]"
 
     def labelSimple = address.label
   }
@@ -66,7 +64,6 @@ object protocol {
   object ClusterMember {
     implicit val rw: RW[ClusterMember] = macroRW
   }
-
 
   case class HostPort(host: String, port: Int) {
     def label = host + ":" + port
@@ -76,13 +73,11 @@ object protocol {
     implicit val rw: RW[HostPort] = macroRW
   }
 
-  case class ClusterProfile(system: String, seeds: Set[HostPort],
-    status: String, members: Set[ClusterMember])
+  case class ClusterProfile(system: String, seeds: Set[HostPort], status: String, members: Set[ClusterMember])
 
   object ClusterProfile {
     implicit val rw: RW[ClusterProfile] = macroRW
   }
-
 
   case class ClusterNode(host: String, port: Int, roles: String, status: String)
 }

@@ -17,7 +17,7 @@ object Application extends App with AppSupport {
   val opts: Map[String, String] = argsToOpts(args.toList)
   applySystemProperties(opts)
 
-  val tcpPort = System.getProperty("akka.remote.netty.tcp.port")
+  val tcpPort  = System.getProperty("akka.remote.netty.tcp.port")
   val httpPort = System.getProperty("akka.http.port")
   val hostName = System.getProperty("HOSTNAME")
   val confPath = System.getProperty("CONFIG")
@@ -38,26 +38,32 @@ object Application extends App with AppSupport {
        |
     """.stripMargin
 
-  val httpConf1 = httpConf.replaceAll("%port%", tcpPort).replaceAll("%httpP%", httpPort)
-    .replaceAll("%hostName%", hostName).replaceAll("%interface%", hostName)
+  val httpConf1 = httpConf
+    .replaceAll("%port%", tcpPort)
+    .replaceAll("%httpP%", httpPort)
+    .replaceAll("%hostName%", hostName)
+    .replaceAll("%interface%", hostName)
 
   val confDir = new File(confPath)
   //for re~start
   //for alias
 
-  val env = Option(System.getProperty("ENV")).getOrElse(throw new Exception("ENV is expected"))
+  val env        = Option(System.getProperty("ENV")).getOrElse(throw new Exception("ENV is expected"))
   val configFile = new File(s"${new File(confPath).getAbsolutePath}/" + env + ".conf")
   //println("-----------------" + configFile.getAbsoluteFile)
 
   val config: Config =
-    ConfigFactory.parseString(httpConf1)
-    .withFallback(ConfigFactory.parseFile(configFile).resolve())
-    .withFallback(ConfigFactory.load()) //for read seeds from env vars
+    ConfigFactory
+      .parseString(httpConf1)
+      .withFallback(ConfigFactory.parseFile(configFile).resolve())
+      .withFallback(ConfigFactory.load()) //for read seeds from env vars
 
   implicit val coreSystem: ActorSystem = ActorSystem("cluster-console", config)
   implicit val mat = akka.stream.ActorMaterializer(
-    ActorMaterializerSettings.create(coreSystem)
-      .withDispatcher(Bootstrap.HttpDispatcher))(coreSystem)
+    ActorMaterializerSettings
+      .create(coreSystem)
+      .withDispatcher(Bootstrap.HttpDispatcher)
+  )(coreSystem)
 
   /*coreSystem.actorOf(
       Bootstrap.prop(httpPort.toInt,
@@ -76,19 +82,23 @@ object Application extends App with AppSupport {
     .append('\n')
     .append(s"★ ★ ★ Akka seeds: ${config.getStringList("akka.cluster.seed-nodes")} ★ ★ ★")
     .append('\n')
-    .append(s"★ ★ ★ Environment: ${env} Config: ${configFile.getAbsolutePath} TimeZone: $tz Started at ${LocalDateTime.now} ★ ★ ★")
+    .append(
+      s"★ ★ ★ Environment: ${env} Config: ${configFile.getAbsolutePath} TimeZone: $tz Started at ${LocalDateTime.now} ★ ★ ★"
+    )
     .append('\n')
     .append(s"★ ★ ★ Cassandra entry points: ${config.getString("cassandra.hosts")}  ★ ★ ★")
     .append('\n')
     .append(s"★ ★ ★ Server online at http://${config.getString("akka.http.interface")}:${httpPort} ★ ★ ★ ")
     .append('\n')
-    .append("""
+    .append(
+      """
             |  ___
             | / __|  ___   _ _  __ __  ___   _ _
             | \__ \ / -_) | '_| \ V / / -_) | '_|
             | |___/ \___| |_|    \_/  \___| |_|
             |
-            |""".stripMargin)
+            |""".stripMargin
+    )
     .append("=================================================================================================")
 
   coreSystem.log.info(greeting.toString)

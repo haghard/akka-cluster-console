@@ -21,6 +21,7 @@ lazy val server = (project in file("server")).settings(
   pipelineStages in Assets := Seq(scalaJSPipeline),
 
   compile in Compile := (compile in Compile).dependsOn(scalaJSPipeline, cpCss).value,
+  scalafmtOnCompile := true,
 
   //javaOptions in runMain := Seq("ENV=development", "CONFIG=./server/conf"),
 
@@ -192,6 +193,7 @@ def haltOnCmdResultError(result: Int) {
 lazy val ui = (project in file("ui")).settings(
   resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
   scalaVersion := scalaV,
+  scalafmtOnCompile := true,
 
   libraryDependencies ++= Seq(
     "org.singlespaced" %%% "scalajs-d3" %     "0.3.4",
@@ -232,6 +234,7 @@ lazy val shared = sbtcrossproject.CrossPlugin.autoImport.crossProject(JSPlatform
   .crossType(sbtcrossproject.CrossType.Pure)
   .settings(
     scalaVersion := scalaV,
+    scalafmtOnCompile := true,
     libraryDependencies ++= Seq(
       "com.lihaoyi" %%% "upickle" % "0.6.6",
       "com.lihaoyi" %%% "autowire" % "0.2.6",

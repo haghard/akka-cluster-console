@@ -27,11 +27,14 @@ trait SslSupport {
   }
 
   def https(keyPass: String, storePass: String): HttpsConnectionContext = {
-    val file = new File("./"  + sslFile)
-    if(file.exists) create(new FileInputStream(file), keyPass, storePass)
+    val file = new File("./" + sslFile)
+    if (file.exists) create(new FileInputStream(file), keyPass, storePass)
     else {
-      resource.managed(getClass.getResourceAsStream("/"+ sslFile))
-        .map { in => create(in, keyPass, storePass) }
+      resource
+        .managed(getClass.getResourceAsStream("/" + sslFile))
+        .map { in ⇒
+          create(in, keyPass, storePass)
+        }
         .opt
         .fold(throw new Exception("jks file hasn't been found"))(identity)
     }

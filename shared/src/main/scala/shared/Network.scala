@@ -5,12 +5,11 @@ import java.net.InetAddress
 object Network {
 
   def toNum(ip: InetAddress): Int = {
-    def read(bytes: scala.Array[Byte]): Int = {
+    def read(bytes: scala.Array[Byte]): Int =
       (bytes(0) << 24) |
-        (bytes(1) & 0xff) << 16 |
-        (bytes(2) & 0xff) << 8 |
-        (bytes(3) & 0xff)
-    }
+      (bytes(1) & 0xff) << 16 |
+      (bytes(2) & 0xff) << 8 |
+      (bytes(3) & 0xff)
     read(ip.getAddress)
   }
 

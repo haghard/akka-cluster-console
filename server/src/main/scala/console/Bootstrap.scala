@@ -19,7 +19,7 @@ object Bootstrap {
 
 case class Bootstrap(interface: String, port: Int)(implicit system: ActorSystem, m: Materializer) {
   val termDeadline = 2.seconds
-  implicit val ex = system.dispatchers.lookup(HttpDispatcher)
+  implicit val ex  = system.dispatchers.lookup(HttpDispatcher)
   val shutdown     = CoordinatedShutdown(system)
 
   Http()

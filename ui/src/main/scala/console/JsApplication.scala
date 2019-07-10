@@ -13,18 +13,20 @@ import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 @JSExport
 object JsApplication {
   sealed trait Route
-  case object DashboardRoute extends Route
+  case object DashboardRoute  extends Route
   case object ClusterMapRoute extends Route
-  
-  // configure the router
-  val routerConfig = RouterConfigDsl[Route].buildConfig { dsl =>
-    import dsl._
-    (staticRoute(root, DashboardRoute) ~> renderR(ctl => MetricsModule(ctl))
-      | staticRoute("#cluster", ClusterMapRoute) ~> renderR(ctl => ClusterModule(ctl))
-    ).notFound(redirectToPage(DashboardRoute)(Redirect.Replace))
-  }.renderWith(layout)
 
-  def layout(c: RouterCtl[Route], r: Resolution[Route]) = {
+  // configure the router
+  val routerConfig = RouterConfigDsl[Route]
+    .buildConfig { dsl ⇒
+      import dsl._
+      (staticRoute(root, DashboardRoute) ~> renderR(ctl ⇒ MetricsModule(ctl))
+      | staticRoute("#cluster", ClusterMapRoute) ~> renderR(ctl ⇒ ClusterModule(ctl)))
+        .notFound(redirectToPage(DashboardRoute)(Redirect.Replace))
+    }
+    .renderWith(layout)
+
+  def layout(c: RouterCtl[Route], r: Resolution[Route]) =
     <.div(
       // here we use plain Bootstrap class names as these are specific to the top level layout defined here
       <.nav(^.className := "navbar navbar-inverse navbar-fixed-top")(
@@ -36,16 +38,15 @@ object JsApplication {
       // currently active module is shown in this container
       <.div(^.className := "container-fluid")(r.render())
     )
-  }
 
   @JSExport
   def main(): Unit = {
     import scalacss.Defaults._
-    scalacss.internal.mutable.GlobalRegistry.onRegistration { s =>
+    scalacss.internal.mutable.GlobalRegistry.onRegistration { s ⇒
       val style: StyleA = s.styles.head
       //println(style.render[String])
       println(style.className.value)
-      //println(new GraphStyles().render[String])
+    //println(new GraphStyles().render[String])
     }
 
     GlobalStyles.addToDocument()

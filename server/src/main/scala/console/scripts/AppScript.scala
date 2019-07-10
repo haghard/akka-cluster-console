@@ -3,7 +3,7 @@ package console.scripts
 import scalatags.Text.all._
 
 object AppScript {
-  def apply() = {
+  def apply() =
     html(
       head(
         link(rel := "stylesheet", href := "/assets/lib/bootstrap/css/bootstrap.css")
@@ -12,15 +12,12 @@ object AppScript {
       body(
         script(`type` := "text/javascript", src := "/assets/lib/jquery/jquery.js"),
         script(`type` := "text/javascript", src := "/assets/lib/bootstrap/js/bootstrap.js"),
-
         script(`type` := "text/javascript", src := "/assets/ui-jsdeps.min.js"),
         script(`type` := "text/javascript", src := "/assets/ui-opt.js"),
         script(`type` := "text/javascript", src := "/assets/ui-launcher.js"),
-
         div(id := "scene"),
         script(s"console.JsApplication().main()")
         //script("console.components.Graph4().main()")
       )
     )
-  }
 }
