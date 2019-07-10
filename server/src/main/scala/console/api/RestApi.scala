@@ -49,7 +49,7 @@ object RestApi extends shared.ClusterApi with Directives {
       .toMat(BroadcastHub.sink[Message](bufferSize))(Keep.both)
       .run()(mat)
 
-  def route(implicit system: ActorSystem, mat: Materializer): Route = {
+  def route(implicit system: ActorSystem, mat: Materializer): Route =
     /*import scala.concurrent.duration._
     val (sink, source) = sourceAndSink(system, mat)
     val wsFlow = Flow[Message]
@@ -81,11 +81,10 @@ object RestApi extends shared.ClusterApi with Directives {
           }
         }
       }
-      /*~ path("events") {
+    /*~ path("events") {
         handleWebSocketMessages(wsFlow)
       }*/
     }
-  }
 
   override def clusterInfo(): shared.protocol.ClusterInfo =
     shared.protocol.ClusterInfo(
@@ -97,9 +96,8 @@ object RestApi extends shared.ClusterApi with Directives {
     if (ThreadLocalRandom.current.nextBoolean)
       shared.protocol.ClusterProfile(
         "demo-cluster",
-        /*
         Set(shared.protocol.HostPort("192.168.0.62", 2551), shared.protocol.HostPort("192.168.0.63", 2551)),
-        "Up",*/
+        "Up",
         Set(
           shared.protocol
             .ClusterMember(shared.protocol.HostPort("192.168.0.62", 2551), Set("gateway"), shared.protocol.Up),
@@ -116,8 +114,8 @@ object RestApi extends shared.ClusterApi with Directives {
     else
       shared.protocol.ClusterProfile(
         "demo-cluster",
-        /*Set(shared.protocol.HostPort("192.168.0.62", 2551), shared.protocol.HostPort("192.168.0.63", 2551)),
-        "Up",*/
+        Set(shared.protocol.HostPort("192.168.0.62", 2551), shared.protocol.HostPort("192.168.0.63", 2551)),
+        "Up",
         Set(
           shared.protocol
             .ClusterMember(shared.protocol.HostPort("192.168.0.62", 2551), Set("gateway"), shared.protocol.Up),

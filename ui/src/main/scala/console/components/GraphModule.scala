@@ -46,7 +46,7 @@ object GraphModule extends GraphSupport {
     val svgHeight = 700
 
     val tooltip = d3
-      .select("body") //body
+      .select("body")
       .append("div")
       .attr("class", "tooltip")
       .style("opacity", 0)
@@ -118,8 +118,6 @@ object GraphModule extends GraphSupport {
           .map { cProfile ⇒
             dom.console.log("fetchClusterProfile: " + cProfile.toString)
 
-            //cProfile
-
             val location = 10
             val hosts = cProfile.members
               .map(_.address.host)
@@ -137,6 +135,7 @@ object GraphModule extends GraphSupport {
                     "status" → ""
                   ).asInstanceOf[Vertix]
               }
+            dom.console.log("hosts: " + hosts.size)
 
             val members = cProfile.members.zipWithIndex.map {
               case (m, ind) ⇒
@@ -151,11 +150,27 @@ object GraphModule extends GraphSupport {
                   "status" → m.state.toString
                 ).asInstanceOf[Vertix]
             }
+            dom.console.log("members: " + members.size)
 
-            val vertices: js.Array[Vertix] = (members ++ hosts).toJsArray
-            val edges: js.Array[Edge] = hosts
-              .flatMap(r ⇒ members.filter(_.host == r.host).map(h ⇒ Link(r, h)))
-              .toJsArray
+            val a = (members ++ hosts).toSeq
+            val b = hosts.flatMap(r ⇒ members.filter(_.host == r.host).map(h ⇒ Link(r, h))).toSeq
+
+            val vertices = js.Array[Vertix]()
+            val edges    = js.Array[Edge]()
+
+            dom.console.log(a.size + "" + b.size)
+            vertices.push(a: _*)
+            edges.push(b: _*)
+
+            /*(members ++ hosts).foreach { el ⇒
+              dom.console.log(el.toString)
+              vertices.push(el)
+            }*/
+
+            /*hosts.flatMap(r ⇒ members.filter(_.host == r.host).map(h ⇒ Link(r, h))).foreach { el ⇒
+              dom.console.log(el.toString)
+              edges.push(el)
+            }*/
 
             val svg = d3
               .select("body")

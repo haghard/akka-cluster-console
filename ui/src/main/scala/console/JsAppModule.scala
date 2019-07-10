@@ -1,16 +1,13 @@
 package console
 
 import console.style.{GlobalStyles, GraphStyles}
-
-import japgolly.scalajs.react.ReactDOM
 import console.components.{ClusterModule, MainMenu, MetricsModule}
 import japgolly.scalajs.react.extra.router.{BaseUrl, Redirect, Resolution, Router, RouterConfigDsl, RouterCtl}
 import org.scalajs.dom
 import japgolly.scalajs.react.vdom.html_<^._
 
-import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
+import scala.scalajs.js.annotation.JSExport
 
-//@JSExportTopLevel("JsApplication")
 @JSExport
 object JsAppModule {
 
@@ -53,9 +50,7 @@ object JsAppModule {
     GlobalStyles.addToDocument()
     scalacss.internal.mutable.GlobalRegistry.register(new GraphStyles)
 
-    //ReactApp().renderIntoDOM(org.scalajs.dom.document.getElementById("scene"))
-
-    val router = Router(BaseUrl.until_#, routerConfig)
-    ReactDOM.render(router(), dom.document.getElementById("scene"))
+    val router = japgolly.scalajs.react.extra.router.Router(BaseUrl.until_#, routerConfig)
+    router().renderIntoDOM(dom.document.getElementById("scene"))
   }
 }
