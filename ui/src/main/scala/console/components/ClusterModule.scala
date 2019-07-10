@@ -20,7 +20,7 @@ object ClusterModule {
       import autowire._
       react.Callback.future {
         p.proxy.clusterInfo().call().map { c ⇒
-          dom.console.log("fetchClusters: " + c.toString)
+          dom.console.log("fetch-clusters: " + c.toString)
           scope.modState { _.copy(cluster = Some(Cluster(c.name, c.seedNodes))) }
         }
 
@@ -34,9 +34,7 @@ object ClusterModule {
     }
 
     def render(state: State, p: Props): VdomElement =
-      state.cluster.fold(<.div()) { c ⇒
-        <.div(GraphModule(c.name, p.proxy))
-      }
+      state.cluster.fold(<.div())(c ⇒ <.div(GraphModule(c.name, p.proxy)))
   }
 
   val component = ScalaComponent
