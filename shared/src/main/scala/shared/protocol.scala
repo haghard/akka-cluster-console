@@ -73,7 +73,7 @@ object protocol {
     implicit val rw: RW[HostPort] = macroRW
   }
 
-  case class ClusterProfile(system: String, seeds: Set[HostPort], status: String, members: Set[ClusterMember])
+  case class ClusterProfile(system: String, members: Set[ClusterMember])
 
   object ClusterProfile {
     implicit val rw: RW[ClusterProfile] = macroRW

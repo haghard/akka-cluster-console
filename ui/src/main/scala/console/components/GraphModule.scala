@@ -2,25 +2,29 @@ package console.components
 
 import java.util.concurrent.ThreadLocalRandom
 
-import autowire.{ClientProxy, _}
 import japgolly.scalajs.react
 import japgolly.scalajs.react.{BackendScope, CallbackTo, ReactComponentB}
 import org.scalajs.dom
 import org.singlespaced.d3js.Ops._
 import org.singlespaced.d3js.{Selection, d3, forceModule}
-import upickle.Js
-import upickle.default._
 
 import scala.scalajs.js
 import scala.scalajs.js.{Array, Dynamic}
-import scala.util.control.NonFatal
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
+import shared.protocol.{ClusterMember, ClusterProfile, HostPort, Up}
+
 import Dynamic.{literal ⇒ lit}
+import scala.concurrent.Future
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 
 object GraphModule extends GraphSupport {
 
-  case class GraphProps(system: String, proxy: ClientProxy[shared.ClusterApi, Js.Value, Reader, Writer])
+  case class GraphProps(
+    system: String,
+    password: String
+    //proxy: ClientProxy[shared.ClusterApi, Js.Value, Reader, Writer]
+  )
 
   case class GraphState(
     system: Option[String] = None,
@@ -102,15 +106,128 @@ object GraphModule extends GraphSupport {
                   <.footer(quoteAndAuthor(1))
                 )
               ),
-              <.h4(s"System name: $system")
+              <.h4(s"System: $system")
             )
           }
         }
         .runNow()
 
-    def fetchClusterProfile(props: GraphProps): CallbackTo[Unit] = {
-      import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
+    val Exp      = """akka.tcp://(\w+)@(\d{1,4}).(\d{1,4}).(\d{1,4}).(\d{1,4}):(\d{1,4})""".r
+    val AeronExp = """akka://(\w+)@(\d{1,4}).(\d{1,4}).(\d{1,4}).(\d{1,4}):(\d{1,4})""".r
+
+    def parse(m: scala.scalajs.js.Dictionary[scala.scalajs.js.Any]): Option[ClusterMember] = {
+      val n = m("node").toString
+      //val st = m("status").toString
+      val roles = m("roles").asInstanceOf[scala.scalajs.js.Array[scala.scalajs.js.Any]]
+      val rs    = roles.filter(_.toString != "dc-default").map(_.toString).toSet
+
+      //dom.console.log(s"${sn} - $n - $st")
+      n match {
+        case Exp(sysName, a, b, c, d, port) ⇒
+          Some(ClusterMember(HostPort(s"${a}:${b}:${c}:${d}", port.toInt), rs, Up))
+        case _ ⇒
+          None
+      }
+    }
+
+    def fetchClusterProfile(props: GraphProps): CallbackTo[Unit] =
       react.Callback.future {
+        dom.console.log("fetch-cluster-profile")
+
+        org.scalajs.dom.ext.Ajax
+          .get(s"https://codelfsolutions.com/cluster/members?password=${props.password}")
+          .map { resp ⇒
+            //dom.console.log(resp.responseText)
+            val parsedJson = scala.scalajs.js.JSON.parse(resp.responseText)
+            val json       = parsedJson.asInstanceOf[scala.scalajs.js.Dictionary[scala.scalajs.js.Any]]
+            val members =
+              json("members").asInstanceOf[scala.scalajs.js.Array[scala.scalajs.js.Dictionary[scala.scalajs.js.Any]]]
+            //val m = members(0).asInstanceOf[scala.scalajs.js.Dictionary[scala.scalajs.js.Any]]
+
+            (json("leader").toString match {
+              case Exp(name, a, b, c, d, port) ⇒ Some(name)
+              case _                           ⇒ None
+            }).map(sn ⇒ ClusterProfile(sn, members.map(parse(_)).flatten.toSet))
+              .fold({
+                scope.modState(s ⇒ s.copy(system = Option("cluster-profile json parse error")))
+              }) { cProfile ⇒
+                dom.console.log(s"parsed: ${cProfile}")
+
+                val location = 10
+                val hosts = cProfile.members
+                  .map(_.address.host)
+                  .zipWithIndex
+                  .map {
+                    case (address, i) ⇒
+                      lit(
+                        "id"     → i,
+                        "x"      → (location * (i + 1)),
+                        "y"      → 40,
+                        "isHost" → true,
+                        "host"   → address,
+                        "port"   → 0,
+                        "roles"  → "host",
+                        "status" → ""
+                      ).asInstanceOf[Vertix]
+                  }
+
+                val members = cProfile.members.zipWithIndex.map {
+                  case (m, ind) ⇒
+                    lit(
+                      "id"     → (hosts.size + ind).toString,
+                      "x"      → 50,
+                      "y"      → 50,
+                      "isHost" → false,
+                      "host"   → m.address.host,
+                      "port"   → m.address.port,
+                      "roles"  → m.roles.mkString(","),
+                      "status" → m.state.toString
+                    ).asInstanceOf[Vertix]
+                }
+
+                val vertices: js.Array[Vertix] = (members ++ hosts).toJsArray
+                val edges: js.Array[Edge] = hosts
+                  .flatMap(r ⇒ members.filter(_.host == r.host).map(h ⇒ Link(r, h)))
+                  .toJsArray
+
+                val svg = d3
+                  .select("body")
+                  .append("svg")
+                  .attr("width", svgWidth)
+                  .attr("height", svgHeight)
+                  .style("margin", "25px auto 25px 25px")
+                  .style("padding", "50px 50px 50px 50px")
+                  .style("background-color", "white")
+                  .style("box-shadow", "0px 0px 20px #ccc")
+
+                val force = d3.layout
+                  .force[Vertix, Edge]()
+                  .charge(-400)
+                  .alpha(0.2)
+                  .linkDistance(350)
+                  .gravity(.5)
+                  .nodes(vertices)
+                  .links(edges)
+                  .size((svgWidth - 5.0, svgHeight - 5.0))
+                  .on("tick", { (e: org.scalajs.dom.Event) ⇒
+                    onTick(e, svg)
+                  })
+
+                scope.modState { state ⇒
+                  onChange(svg, force)
+                  state.copy(Option(cProfile.system), vertices, edges, Option(svg), Option(force.start))
+                }
+              }
+          }
+          .recoverWith {
+            case ex: org.scalajs.dom.ext.AjaxException ⇒
+              Future.successful {
+                dom.console.log(s"text=${ex.xhr.responseText},http_code:${ex.xhr.status}")
+                scope.modState(s ⇒ s.copy(system = Option("cluster-profile error")))
+              }
+          }
+
+        /*
         props.proxy
           .clusterProfile()
           .call()
@@ -189,9 +306,8 @@ object GraphModule extends GraphSupport {
             case NonFatal(e) ⇒
               //println(e.getMessage + " error")
               scope.modState(s ⇒ s.copy(system = Option(s"Unexpected cluster-profile error: ${e.getMessage}")))
-          }
+          }*/
       }
-    }
 
     def onDelete(
       s: Selection[org.scalajs.dom.EventTarget],
@@ -347,7 +463,8 @@ object GraphModule extends GraphSupport {
         .style("top", (n.y - 20) + "px")
     }
 
-    def onClick(n: Vertix): Unit = println(s"${n.id}")
+    def onClick(n: Vertix): Unit =
+      println(s"${n.id}")
 
     def onTick(e: org.scalajs.dom.Event, s: Selection[org.scalajs.dom.EventTarget]): Unit = {
       s.selectAll[Edge]("line.link")
@@ -372,7 +489,7 @@ object GraphModule extends GraphSupport {
     }
   }
 
-  private val component = ReactComponentB[GraphProps]("GraphComponent")
+  private val component = ReactComponentB[GraphProps]("Graph-Component")
     .initialState(GraphState())
     .backend(new GraphBackend(_))
     .renderPS { (scope, props, state) ⇒
@@ -390,6 +507,6 @@ object GraphModule extends GraphSupport {
     }
     .build
 
-  def apply(system: String, proxy: ClientProxy[shared.ClusterApi, Js.Value, Reader, Writer]) =
-    component(GraphProps(system, proxy))
+  def apply(system: String, psw: String /*, proxy: ClientProxy[shared.ClusterApi, Js.Value, Reader, Writer]*/ ) =
+    component(GraphProps(system, psw /*, proxy*/ ))
 }

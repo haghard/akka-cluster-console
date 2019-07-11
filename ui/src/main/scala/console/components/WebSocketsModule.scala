@@ -16,7 +16,7 @@ object WebSocketsModule {
       copy(logLines = logLines :+ line)
   }
 
-  class WsBackend(scope: BackendScope[Unit, WsState]) {
+  class WsBackend(scope: BackendScope[_, WsState]) {
 
     def render(s: WsState): ReactElement = {
       // Can only send if WebSocket is connected and user has entered text

@@ -11,19 +11,19 @@ import japgolly.scalajs.react._
 object Bootstrap {
   @inline private def bss = GlobalStyles.bootstrapStyles
 
-  @js.native
+  /*@js.native
   trait BootstrapJQuery extends JQuery {
     def modal(action: String): BootstrapJQuery  = js.native
     def modal(options: js.Any): BootstrapJQuery = js.native
-  }
+  }*/
 
-  implicit def jq2bootstrap(jq: JQuery): BootstrapJQuery = jq.asInstanceOf[BootstrapJQuery]
+  //implicit def jq2bootstrap(jq: JQuery): BootstrapJQuery = jq.asInstanceOf[BootstrapJQuery]
 
   // Common Bootstrap contextual styles
   object CommonStyle extends Enumeration {
     val default, primary, success, info, warning, danger = Value
   }
-
+  /*
   object Button {
 
     case class Props(onClick: Callback, style: CommonStyle.Value = CommonStyle.default, addStyles: Seq[StyleA] = Seq())
@@ -104,5 +104,5 @@ object Bootstrap {
 
     def apply(props: Props, children: ReactElement*) = component(props, children: _*)
     def apply()                                      = component
-  }
+  }*/
 }

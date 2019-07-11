@@ -5,7 +5,7 @@ import scala.sys.process.Process
 
 val scalaV = "2.12.8"
 val akkaVersion = "2.5.23"
-val version = "0.0.2"
+val version = "0.1.0"
 
 lazy val server = (project in file("server")).settings(
   name := "server",
@@ -20,7 +20,7 @@ lazy val server = (project in file("server")).settings(
   scalaJSProjects          := Seq(ui),
   pipelineStages in Assets := Seq(scalaJSPipeline),
 
-  compile in Compile := (compile in Compile).dependsOn(scalaJSPipeline, cpCss).value,
+  compile in Compile := (compile in Compile).dependsOn(scalaJSPipeline/*, cpCss*/).value,
   scalafmtOnCompile := true,
 
   //javaOptions in runMain := Seq("ENV=development", "CONFIG=./server/conf"),
@@ -29,26 +29,16 @@ lazy val server = (project in file("server")).settings(
   fork in run := true,
 
   libraryDependencies ++= Seq(
-    //"com.typesafe.play.extras" %% "play-geojson" % "1.4.0",
     "ch.qos.logback"  %   "logback-classic" % "1.1.2",
-    "org.mindrot"     %   "jbcrypt"         % "0.4",
     "org.webjars"     %   "bootstrap"       % "3.3.6",
-    "com.lihaoyi"     %%  "scalatags"       % "0.6.5",
-    "com.jsuereth"    %%  "scala-arm"       % "2.0",
-    "org.scalatest"   %%  "scalatest"       % "3.0.8" % "test"
+    "com.lihaoyi"     %%  "scalatags"       % "0.6.5"
   ) ++ Seq(
-    "com.softwaremill.akka-http-session" %% "core" % "0.5.6",
+    "com.typesafe.akka" %% "akka-http" % "10.1.8",
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-    "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
-    "com.typesafe.akka" %% "akka-cluster-sharding" % akkaVersion,
-    "com.typesafe.akka" %% "akka-cluster-tools" % akkaVersion,
-    //"com.typesafe.akka" %% "akka-cluster-metrics" % akkaVersion,
-    //"com.typesafe.akka" %% "akka-persistence-cassandra" % "0.98"
+    "com.typesafe.akka" %% "akka-stream" % akkaVersion
   ),
 
   //javaOptions in runMain += "-DENV=prod",
-
-  //exclude("com.typesafe.akka", "akka-http")
 
   /*
   javaOptions in Universal ++= Seq(
@@ -115,10 +105,6 @@ lazy val server = (project in file("server")).settings(
     val dockerResourcesDir = baseDir / "docker-resources"
     val dockerResourcesTargetPath = s"$imageAppBaseDir/"
 
-    val jks = baseDir / "ssl" / "haghard.jks"
-
-    //val prodConfigSrc = baseDir / "src" / "main" / "resources" / "production.conf"
-
     val prodConfigSrc = baseDir / "conf" / "production.conf"
     val devConfigSrc =  baseDir / "conf" / "development.conf"
 
@@ -146,7 +132,6 @@ lazy val server = (project in file("server")).settings(
 
       copy(artifact, artifactTargetPath)
       copy(dockerResourcesDir, dockerResourcesTargetPath)
-      copy(jks, jksTargetPath)
 
       if(prodConfigSrc.exists)
         copy(prodConfigSrc, appProdConfTarget) //Copy the prod config
@@ -170,6 +155,7 @@ lazy val server = (project in file("server")).settings(
   .dependsOn(sharedJvm)
 
 //for debugging
+/*
 def cpCss() = (baseDirectory) map { dir =>
   def execute() = {
     Process(s"cp ${dir}/src/main/resources/d3.v3.min.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
@@ -184,7 +170,7 @@ def cpCss() = (baseDirectory) map { dir =>
 
   println("Coping resources ...")
   haltOnCmdResultError(execute())
-}
+}*/
 
 def haltOnCmdResultError(result: Int) {
   if (result != 0) throw new Exception("Build failed")
@@ -237,8 +223,6 @@ lazy val shared = sbtcrossproject.CrossPlugin.autoImport.crossProject(JSPlatform
     scalafmtOnCompile := true,
     libraryDependencies ++= Seq(
       "com.lihaoyi" %%% "upickle" % "0.6.6",
-      "com.lihaoyi" %%% "autowire" % "0.2.6",
-      "me.chrons" %%% "boopickle" % "1.2.5"
     ),
     assemblyMergeStrategy in assembly := {
       case PathList("META-INF", xs @ _*) => MergeStrategy.discard
@@ -248,9 +232,5 @@ lazy val shared = sbtcrossproject.CrossPlugin.autoImport.crossProject(JSPlatform
 
 lazy val sharedJvm = shared.jvm
 lazy val sharedJs = shared.js
-
-// loads the server project at sbt startup
-//onLoad in Global := (Command.process("project server", _: State)) compose (onLoad in Global).value
-//onLoad in Global := (onLoad in Global).value andThen {s: State => "project server" :: s}
 
 //cancelable in Global := true

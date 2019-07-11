@@ -7,24 +7,27 @@ import japgolly.scalajs.react.extra.router.{BaseUrl, Redirect, Resolution, Route
 import org.scalajs.dom
 import japgolly.scalajs.react.vdom.prefix_<^._
 
-import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
+import scala.scalajs.js.annotation.JSExport
 
-//@JSExportTopLevel("JsApplication")
+//https://github.com/japgolly/scalajs-react/blob/0e984d1fd57fb35106bc8c3ec5d2566800a7e9a8/gh-pages/src/main/scala/ghpages/ExtrasExamples.scala
+
 @JSExport
 object JsApplication {
+
   sealed trait Route
   case object DashboardRoute  extends Route
   case object ClusterMapRoute extends Route
 
-  // configure the router
-  val routerConfig = RouterConfigDsl[Route]
-    .buildConfig { dsl ⇒
-      import dsl._
-      (staticRoute(root, DashboardRoute) ~> renderR(ctl ⇒ MetricsModule(ctl))
-      | staticRoute("#cluster", ClusterMapRoute) ~> renderR(ctl ⇒ ClusterModule(ctl)))
-        .notFound(redirectToPage(DashboardRoute)(Redirect.Replace))
-    }
-    .renderWith(layout)
+  def routerConfig(pws: String) =
+    RouterConfigDsl[Route]
+      .buildConfig { dsl ⇒
+        import dsl._
+
+        (staticRoute(root, DashboardRoute) ~> renderR(ctl ⇒ MetricsModule(ctl))
+        | staticRoute("#cluster", ClusterMapRoute) ~> renderR(ctl ⇒ ClusterModule(pws, ctl)))
+          .notFound(redirectToPage(DashboardRoute)(Redirect.Replace))
+      }
+      .renderWith(layout)
 
   def layout(c: RouterCtl[Route], r: Resolution[Route]) =
     <.div(
@@ -40,19 +43,19 @@ object JsApplication {
     )
 
   @JSExport
-  def main(): Unit = {
+  def main(pws: String): Unit = {
     import scalacss.Defaults._
     scalacss.internal.mutable.GlobalRegistry.onRegistration { s ⇒
       val style: StyleA = s.styles.head
-      //println(style.render[String])
-      println(style.className.value)
+    //println(style.render[String])
     //println(new GraphStyles().render[String])
+    //println(style.className.value)
     }
 
     GlobalStyles.addToDocument()
     scalacss.internal.mutable.GlobalRegistry.register(new GraphStyles)
 
-    val router = Router(BaseUrl.until_#, routerConfig)
+    val router = Router(BaseUrl.until_#, routerConfig(pws))
     ReactDOM.render(router(), dom.document.getElementById("scene"))
   }
 }

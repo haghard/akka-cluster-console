@@ -1,3 +1,5 @@
+/*
+
 package shared
 
 trait ClusterApi {
@@ -6,3 +8,4 @@ trait ClusterApi {
 
   def clusterProfile(): shared.protocol.ClusterProfile
 }
+ */

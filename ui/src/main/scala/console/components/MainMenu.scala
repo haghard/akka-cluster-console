@@ -42,5 +42,6 @@ object MainMenu {
     .renderBackend[MainMenuBackend]
     .build
 
-  def apply(props: Props) = MainMenu(props)
+  def apply(props: Props) =
+    MainMenu(props)
 }
