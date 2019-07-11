@@ -15,6 +15,7 @@ APP_OPTS="-server \
           -Dakka.http.port=${HTTP_PORT} \
           -DENV=${ENV} \
           -DHOSTNAME=${HOSTNAME} \
+          -DPASSWORD=${PASSWORD} \
           -DCONFIG="${CONFIG}
 
 #production, development

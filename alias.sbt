@@ -9,10 +9,11 @@ export CONFIG=./server/conf
 */
 
 addCommandAlias(
-  "console-0",
+  "cons",
   "server/runMain console.Application " +
   "-DENV=development " +
   "-DCONFIG=./conf " +
   "-Dakka.http.port=8080 " +
-  "-DHOSTNAME=192.168.77.10"
+  "-DHOSTNAME=192.168.77.10 " +
+  "-DPASSWORD=..."
 )

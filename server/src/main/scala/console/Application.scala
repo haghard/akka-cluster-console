@@ -17,6 +17,7 @@ object Application extends App with AppSupport {
 
   val confPath = System.getProperty("CONFIG")
   val hostname = System.getProperty("HOSTNAME")
+  val password = System.getProperty("PASSWORD")
   val httpPort = System.getProperty("akka.http.port")
 
   val confDir = new File(confPath)
@@ -37,7 +38,7 @@ object Application extends App with AppSupport {
       .withDispatcher(Bootstrap.HttpDispatcher)
   )(system)
 
-  Bootstrap(hostname, httpPort.toInt, config.getString("psw"))
+  Bootstrap(hostname, httpPort.toInt, password)
 
   val tz = TimeZone.getDefault.getID
   val greeting = new StringBuilder()

@@ -23,11 +23,10 @@ Initial java on ubuntu
 	  
 How to run on YC 
   
-  `docker run --net=host -d -p 8081:8081 -e HOSTNAME=192.168.0.13 -e HTTP_PORT=8081 -m 250MB haghard/cluster-console:0.1.0`
-  `docker run --net=host -d -p 8081:8081 -e HOSTNAME=192.168.0.21 -e HTTP_PORT=8081 -m 250MB haghard/cluster-console:0.1.0`
+  `docker run --net=host -d -p 8081:8081 -e HOSTNAME=192.168.0.13 -e HTTP_PORT=8081 -e PASSWORD=... -m 250MB haghard/cluster-console:0.1.0`
+  `docker run --net=host -d -p 8081:8081 -e HOSTNAME=192.168.0.21 -e HTTP_PORT=8081 -e PASSWORD=... -m 250MB haghard/cluster-console:0.1.0`
  
-  https://codelfsolutions.com/console
-  
+  https://codelfsolutions.com/console  
 	  
 Links
     
