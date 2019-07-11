@@ -13,7 +13,7 @@ addCommandAlias(
   "server/runMain console.Application " +
   "-DENV=development " +
   "-DCONFIG=./conf " +
-  "-Dakka.http.port=8080 " +
+  "-DHTTP_PORT=8080 " +
   "-DHOSTNAME=192.168.77.10 " +
   "-DPASSWORD=..."
 )

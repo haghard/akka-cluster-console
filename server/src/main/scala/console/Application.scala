@@ -18,7 +18,7 @@ object Application extends App with AppSupport {
   val confPath = System.getProperty("CONFIG")
   val hostname = System.getProperty("HOSTNAME")
   val password = System.getProperty("PASSWORD")
-  val httpPort = System.getProperty("akka.http.port")
+  val httpPort = System.getProperty("HTTP_PORT")
 
   val confDir = new File(confPath)
 
@@ -45,9 +45,9 @@ object Application extends App with AppSupport {
     .append('\n')
     .append("=================================================================================================")
     .append('\n')
-    .append(
-      s"★ ★ ★ Environment: ${env} Config: ${configFile.getAbsolutePath} TimeZone: $tz Started at ${LocalDateTime.now} ★ ★ ★"
-    )
+    .append(s"★ ★ ★  Environment: ${env} Config: ${configFile.getAbsolutePath}  ★ ★ ★")
+    .append('\n')
+    .append(s"★ ★ ★  TimeZone: $tz Started at ${LocalDateTime.now}  ★ ★ ★")
     .append('\n')
     .append(
       """

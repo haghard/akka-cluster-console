@@ -12,7 +12,7 @@ APP_OPTS="-server \
           -XX:+PreferContainerQuotaForCPUCount \
           -XX:MaxRAMFraction=1 \
           -XshowSettings \
-          -Dakka.http.port=${HTTP_PORT} \
+          -DHTTP_PORT=${HTTP_PORT} \
           -DENV=${ENV} \
           -DHOSTNAME=${HOSTNAME} \
           -DPASSWORD=${PASSWORD} \
