@@ -15,7 +15,8 @@ APP_OPTS="-server \
           -DHTTP_PORT=${HTTP_PORT} \
           -DENV=${ENV} \
           -DHOSTNAME=${HOSTNAME} \
-          -DPASSWORD=${PASSWORD} \
+          -DURL=${URL} \
+          -DPSW=${PSW} \
           -DCONFIG="${CONFIG}
 
 #production, development

@@ -16,10 +16,11 @@ object Application extends App with AppSupport {
   val opts: Map[String, String] = argsToOpts(args.toList)
   applySystemProperties(opts)
 
-  val confPath = System.getProperty("CONFIG")
-  val hostname = System.getProperty("HOSTNAME")
-  val password = System.getProperty("PASSWORD")
-  val httpPort = System.getProperty("HTTP_PORT")
+  val confPath = Option(System.getProperty("CONFIG")).getOrElse(throw new Exception("CONFIG is expected"))
+  val hostname = Option(System.getProperty("HOSTNAME")).getOrElse(throw new Exception("HOSTNAME is expected"))
+  val url      = Option(System.getProperty("URL")).getOrElse(throw new Exception("URL is expected"))
+  val pws      = Option(System.getProperty("PSW")).getOrElse(throw new Exception("PSW is expected"))
+  val httpPort = Option(System.getProperty("HTTP_PORT")).getOrElse(throw new Exception("HTTP_PORT is expected"))
 
   val confDir = new File(confPath)
 
@@ -39,7 +40,7 @@ object Application extends App with AppSupport {
       .withDispatcher(Bootstrap.HttpDispatcher)
   )(system)
 
-  Bootstrap(hostname, httpPort.toInt, password)
+  Bootstrap(hostname, httpPort.toInt, url + "?password=" + pws)
 
   val memorySize = ManagementFactory.getOperatingSystemMXBean
     .asInstanceOf[com.sun.management.OperatingSystemMXBean]

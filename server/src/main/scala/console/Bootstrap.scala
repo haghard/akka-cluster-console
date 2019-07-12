@@ -25,18 +25,19 @@ object Bootstrap {
   final private case object BindFailure extends Reason
 }
 
-case class Bootstrap(interface: String, port: Int, pws: String)(implicit system: ActorSystem, m: Materializer) {
+case class Bootstrap(interface: String, port: Int, url: String)(implicit system: ActorSystem, m: Materializer) {
   val termDeadline = 2.seconds
   val shutdown     = CoordinatedShutdown(system)
   implicit val ex  = system.dispatchers.lookup(HttpDispatcher)
 
-  val corsAllowedMethods = immutable.Seq(GET, POST, HEAD, OPTIONS, PATCH, PUT, DELETE)
+  //This will ensure that only Javascript running on the {interface} domain can talk to the webserver
+  val corsAllowedMethods = immutable.Seq(GET) //, POST, HEAD, OPTIONS, PATCH, PUT, DELETE
   val corsSettings = CorsSettings(system)
     .withAllowedMethods(corsAllowedMethods)
     .withAllowedOrigins(HttpOriginMatcher(HttpOrigin(s"http://${interface}:${port}")))
 
   val corsRoute: Route =
-    handleRejections(corsRejectionHandler)(cors(corsSettings)(api.RestApi.route(pws)))
+    handleRejections(corsRejectionHandler)(cors(corsSettings)(api.RestApi.route(url)))
 
   Http()
     .bindAndHandle(corsRoute, interface, port)

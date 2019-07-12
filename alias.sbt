@@ -15,5 +15,6 @@ addCommandAlias(
   "-DCONFIG=./conf " +
   "-DHTTP_PORT=8080 " +
   "-DHOSTNAME=192.168.77.10 " +
-  "-DPASSWORD=..."
+  "-DURL=https://codelfsolutions.com/cluster/members " +
+  "-DPSW=..."
 )

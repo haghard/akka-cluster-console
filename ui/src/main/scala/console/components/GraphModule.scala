@@ -21,7 +21,7 @@ import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 
 object GraphModule extends GraphSupport {
 
-  case class GraphProps(system: String, password: String, refreshTimeout: Long)
+  case class GraphProps(system: String, url: String, refreshTimeout: Long)
 
   case class GraphState(
     system: Option[String] = None,
@@ -139,7 +139,7 @@ object GraphModule extends GraphSupport {
         //dom.console.log("fetch-cluster-profile")
 
         org.scalajs.dom.ext.Ajax
-          .get(s"https://codelfsolutions.com/cluster/members?password=${props.password}")
+          .get(props.url)
           .map { resp ⇒
             //scala.scalajs.js.JSON.stringify()
             val parsedJson = scala.scalajs.js.JSON.parse(resp.responseText)
@@ -431,6 +431,6 @@ object GraphModule extends GraphSupport {
     .configure(OnUnmount.install)
     .build
 
-  def apply(system: String, psw: String) =
-    component(GraphProps(system, psw, 10000))
+  def apply(system: String, url: String) =
+    component(GraphProps(system, url, 10000))
 }

@@ -18,13 +18,13 @@ object JsApplication {
   case object DashboardRoute  extends Route
   case object ClusterMapRoute extends Route
 
-  def routerConfig(pws: String) =
+  def routerConfig(url: String) =
     RouterConfigDsl[Route]
       .buildConfig { dsl ⇒
         import dsl._
 
         (staticRoute(root, DashboardRoute) ~> renderR(ctl ⇒ MetricsModule(ctl))
-        | staticRoute("#cluster", ClusterMapRoute) ~> renderR(ctl ⇒ ClusterModule(pws, ctl)))
+        | staticRoute("#cluster", ClusterMapRoute) ~> renderR(ctl ⇒ ClusterModule(url, ctl)))
           .notFound(redirectToPage(DashboardRoute)(Redirect.Replace))
       }
       .renderWith(layout)
@@ -43,7 +43,7 @@ object JsApplication {
     )
 
   @JSExport
-  def main(pws: String): Unit = {
+  def main(url: String): Unit = {
     import scalacss.Defaults._
     scalacss.internal.mutable.GlobalRegistry.onRegistration { s ⇒
       val style: StyleA = s.styles.head
@@ -55,7 +55,7 @@ object JsApplication {
     GlobalStyles.addToDocument()
     scalacss.internal.mutable.GlobalRegistry.register(new GraphStyles)
 
-    val router = Router(BaseUrl.until_#, routerConfig(pws))
+    val router = Router(BaseUrl.until_#, routerConfig(url))
     ReactDOM.render(router(), dom.document.getElementById("scene"))
   }
 }
