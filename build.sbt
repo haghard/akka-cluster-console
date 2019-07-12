@@ -34,6 +34,7 @@ lazy val server = (project in file("server")).settings(
     "com.lihaoyi"     %%  "scalatags"       % "0.6.5"
   ) ++ Seq(
     "com.typesafe.akka" %% "akka-http" % "10.1.8",
+    "ch.megard"         %% "akka-http-cors" % "0.4.1",
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "com.typesafe.akka" %% "akka-stream" % akkaVersion
   ),

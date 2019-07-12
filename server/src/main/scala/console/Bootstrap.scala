@@ -7,7 +7,15 @@ import akka.stream.Materializer
 import akka.Done
 import akka.actor.CoordinatedShutdown.{PhaseServiceRequestsDone, PhaseServiceUnbind, Reason}
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.HttpMethods.{DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT}
+import akka.http.scaladsl.model.headers.HttpOrigin
+import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.server.directives.ExecutionDirectives._
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
+import ch.megard.akka.http.cors.scaladsl.model.HttpOriginMatcher
+import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
 
+import scala.collection.immutable
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 import scala.concurrent.duration._
@@ -19,11 +27,19 @@ object Bootstrap {
 
 case class Bootstrap(interface: String, port: Int, pws: String)(implicit system: ActorSystem, m: Materializer) {
   val termDeadline = 2.seconds
-  implicit val ex  = system.dispatchers.lookup(HttpDispatcher)
   val shutdown     = CoordinatedShutdown(system)
+  implicit val ex  = system.dispatchers.lookup(HttpDispatcher)
+
+  val corsAllowedMethods = immutable.Seq(GET, POST, HEAD, OPTIONS, PATCH, PUT, DELETE)
+  val corsSettings = CorsSettings(system)
+    .withAllowedMethods(corsAllowedMethods)
+    .withAllowedOrigins(HttpOriginMatcher(HttpOrigin(s"http://${interface}:${port}")))
+
+  val corsRoute: Route =
+    handleRejections(corsRejectionHandler)(cors(corsSettings)(api.RestApi.route(pws)))
 
   Http()
-    .bindAndHandle(api.RestApi.route(pws), interface, port)
+    .bindAndHandle(corsRoute, interface, port)
     .onComplete {
       case Failure(ex) ⇒
         system.log.error(ex, "Critical error during bootstrap")

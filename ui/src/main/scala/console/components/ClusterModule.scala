@@ -5,13 +5,12 @@ import japgolly.scalajs.react
 import japgolly.scalajs.react.extra.router.RouterCtl
 import japgolly.scalajs.react.vdom.prefix_<^._
 import japgolly.scalajs.react.{BackendScope, ReactComponentB, ReactElement}
-import org.scalajs.dom
 
 import scala.concurrent.Future
 
 object ClusterModule {
 
-  case class Props( /*proxy: Proxy,*/ psw: String, r: RouterCtl[Route])
+  case class Props(psw: String, r: RouterCtl[Route])
   case class Cluster(name: String = "", leader: String)
   case class State(cluster: Option[Cluster] = None)
 
@@ -34,7 +33,7 @@ object ClusterModule {
      */
 
     def render(state: State, p: Props): ReactElement =
-      state.cluster.fold(<.div())(c ⇒ <.div(GraphModule(c.name, p.psw /*, p.proxy*/ )))
+      state.cluster.fold(<.div())(c ⇒ <.div(GraphModule(c.name, p.psw)))
     //state.cluster.fold(<.div())(c ⇒ <.div(WebSocketsModule(c.name)()))
   }
 
@@ -46,6 +45,5 @@ object ClusterModule {
     .build
 
   def apply(psw: String, r: RouterCtl[Route]) =
-    //val clientProxy: Proxy = AjaxClient[shared.ClusterApi]
-    component(Props( /*clientProxy,*/ psw, r))
+    component(Props(psw, r))
 }

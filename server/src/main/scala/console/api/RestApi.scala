@@ -11,18 +11,18 @@ object RestApi extends Directives {
 
   //pathSingleSlash {
   def route(pws: String): Route =
-    path("console") {
-      (optionalHeaderValueByType[`X-Real-Ip`]() & optionalHeaderValueByType[Host]() & optionalHeaderValueByType[
-        `X-Forwarded-For`
-      ]()) { (ip, host, ipFor) ⇒
-        extractLog { log ⇒
+    extractLog { log ⇒
+      path("console") {
+        (optionalHeaderValueByType[`X-Real-Ip`]() & optionalHeaderValueByType[Host]() & optionalHeaderValueByType[
+          `X-Forwarded-For`
+        ]()) { (ip, host, ipFor) ⇒
           complete {
             log.info("GET from: {}/{}/{}", ip, host, ipFor)
             HttpResponse(entity = Strict(ContentTypes.`text/html(UTF-8)`, ByteString(AppScript(pws).render)))
           }
         }
+      } ~ pathPrefix("console-assets" / Remaining) { file ⇒
+        encodeResponse(getFromResource("public/" + file))
       }
-    } ~ pathPrefix("console-assets" / Remaining) { file ⇒
-      encodeResponse(getFromResource("public/" + file))
     }
 }
