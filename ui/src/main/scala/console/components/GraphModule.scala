@@ -11,21 +11,17 @@ import org.singlespaced.d3js.{Selection, d3, forceModule}
 import scala.scalajs.js
 import scala.scalajs.js.{Array, Dynamic}
 import japgolly.scalajs.react._
+import japgolly.scalajs.react.extra.OnUnmount
 import japgolly.scalajs.react.vdom.prefix_<^._
 import shared.protocol.{ClusterMember, ClusterProfile, HostPort, Up}
 
 import Dynamic.{literal ⇒ lit}
 import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
-import scala.util.{Failure, Success}
 
 object GraphModule extends GraphSupport {
 
-  case class GraphProps(
-    system: String,
-    password: String
-    //proxy: ClientProxy[shared.ClusterApi, Js.Value, Reader, Writer]
-  )
+  case class GraphProps(system: String, password: String, refreshTimeout: Long)
 
   case class GraphState(
     system: Option[String] = None,
@@ -35,7 +31,7 @@ object GraphModule extends GraphSupport {
     force: Option[forceModule.Force[Vertix, Edge]] = None
   )
 
-  class GraphBackend(scope: BackendScope[GraphProps, GraphState]) {
+  class GraphBackend(scope: BackendScope[GraphProps, GraphState]) extends OnUnmount {
     val quotes = Vector(
       "The natural state in a distributed system is partial order.#Distributed systems for fun and profit",
       "If a tree falls in a forest and no one is around to hear it, does it make a sound ?#Philosopher George Berkeley",
@@ -48,6 +44,10 @@ object GraphModule extends GraphSupport {
     val p         = 10
     val svgWidth  = 1200
     val svgHeight = 700
+
+    val Exp         = """akka.tcp://(\w+)@(\d{1,4}).(\d{1,4}).(\d{1,4}).(\d{1,4}):(\d{1,4})""".r
+    val ipExtractor = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)".r
+    //val AeronExp = """akka://(\w+)@(\d{1,4}).(\d{1,4}).(\d{1,4}).(\d{1,4}):(\d{1,4})""".r
 
     val tooltip = d3
       .select("body") //body
@@ -75,14 +75,13 @@ object GraphModule extends GraphSupport {
           val influentialLinks = links.filter { l ⇒
             nodes.indexOf(l.sourceNode) > -1 && nodes.indexOf(l.targetNode) > -1
           }
-          println("nodes.length:  " + influentialNodes.length)
-          println("nodes.length:  " + influentialLinks.length)
+          dom.console.log(s"tick: nodes.length: ${influentialNodes.length} - nodes.links: ${influentialLinks.length}")
           onDelete(prev.selection.get, f, influentialNodes, influentialLinks)
         }
         prev.copy(force = nextForce)
       }
 
-    def start = Callback {
+    /*def start = Callback {
       //to delete links for a search session
       interval = js.timers.setInterval(5000)(tick.runNow())
     }
@@ -90,7 +89,7 @@ object GraphModule extends GraphSupport {
     def clear = Callback {
       interval foreach js.timers.clearInterval
       interval = js.undefined
-    }
+    }*/
 
     def render(): ReactElement =
       scope.state
@@ -113,11 +112,7 @@ object GraphModule extends GraphSupport {
         }
         .runNow()
 
-    val Exp         = """akka.tcp://(\w+)@(\d{1,4}).(\d{1,4}).(\d{1,4}).(\d{1,4}):(\d{1,4})""".r
-    val ipExtractor = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)".r
-    //val AeronExp = """akka://(\w+)@(\d{1,4}).(\d{1,4}).(\d{1,4}).(\d{1,4}):(\d{1,4})""".r
-
-    def parse(m: scala.scalajs.js.Dictionary[scala.scalajs.js.Any]): Option[ClusterMember] = {
+    private def parse(m: scala.scalajs.js.Dictionary[scala.scalajs.js.Any]): Option[ClusterMember] = {
       val n = m("node").toString
       //val st = m("status").toString
       val roles = m("roles").asInstanceOf[scala.scalajs.js.Array[scala.scalajs.js.Any]]
@@ -131,20 +126,26 @@ object GraphModule extends GraphSupport {
       }
     }
 
-    def fetchClusterProfile(props: GraphProps): CallbackTo[Unit] =
+    def reload(props: GraphProps): Callback =
+      for {
+        _ ← fetchClusterProfile(props)
+        i ← CallbackTo(js.timers.setInterval(props.refreshTimeout)(fetchClusterProfile(props).runNow()))
+        c = Callback(js.timers.clearInterval(i))
+        _ ← onUnmount(c)
+      } yield ()
+
+    private def fetchClusterProfile(props: GraphProps): CallbackTo[Unit] =
       react.Callback.future {
-        dom.console.log("fetch-cluster-profile")
+        //dom.console.log("fetch-cluster-profile")
 
         org.scalajs.dom.ext.Ajax
           .get(s"https://codelfsolutions.com/cluster/members?password=${props.password}")
           .map { resp ⇒
             //scala.scalajs.js.JSON.stringify()
-
             val parsedJson = scala.scalajs.js.JSON.parse(resp.responseText)
             val json       = parsedJson.asInstanceOf[scala.scalajs.js.Dictionary[scala.scalajs.js.Any]]
             val members =
               json("members").asInstanceOf[scala.scalajs.js.Array[scala.scalajs.js.Dictionary[scala.scalajs.js.Any]]]
-            //val m = members(0).asInstanceOf[scala.scalajs.js.Dictionary[scala.scalajs.js.Any]]
 
             (json("leader").toString match {
               case Exp(name, a, b, c, d, port) ⇒ Some(name)
@@ -153,25 +154,22 @@ object GraphModule extends GraphSupport {
               .fold({
                 scope.modState(s ⇒ s.copy(system = Option("cluster-profile json parse error")))
               }) { cProfile ⇒
-                dom.console.log(s"parsed: ${cProfile}")
+                //dom.console.log(s"parsed: ${cProfile}")
 
                 val location = 10
-                val hosts = cProfile.members
-                  .map(_.address.host)
-                  .zipWithIndex
-                  .map {
-                    case (address, i) ⇒
-                      lit(
-                        "id"     → i,
-                        "x"      → (location * (i + 1)),
-                        "y"      → 40,
-                        "isHost" → true,
-                        "host"   → address,
-                        "port"   → 0,
-                        "roles"  → "host",
-                        "status" → ""
-                      ).asInstanceOf[Vertix]
-                  }
+                val hosts = cProfile.members.map(_.address.host).zipWithIndex.map {
+                  case (address, i) ⇒
+                    lit(
+                      "id"     → i,
+                      "x"      → (location * (i + 1)),
+                      "y"      → 40,
+                      "isHost" → true,
+                      "host"   → address,
+                      "port"   → 0,
+                      "roles"  → "host",
+                      "status" → ""
+                    ).asInstanceOf[Vertix]
+                }
 
                 val members = cProfile.members.zipWithIndex.map {
                   case (m, ind) ⇒
@@ -191,6 +189,9 @@ object GraphModule extends GraphSupport {
                 val edges: js.Array[Edge] = hosts
                   .flatMap(r ⇒ members.filter(_.host == r.host).map(h ⇒ Link(r, h)))
                   .toJsArray
+
+                //delete if exists
+                d3.select("body").select("svg").remove()
 
                 val svg = d3
                   .select("body")
@@ -416,7 +417,8 @@ object GraphModule extends GraphSupport {
     .renderPS { (scope, props, state) ⇒
       scope.backend.render()
     }
-    .componentDidMount(scope ⇒ scope.backend.fetchClusterProfile(scope.props))
+    //.componentDidMount(scope ⇒ scope.backend.fetchClusterProfile(scope.props))
+    .componentDidMount(scope ⇒ scope.backend.reload(scope.props))
     .componentWillUnmount { scope ⇒
       CallbackTo {
         //remove svg
@@ -426,8 +428,9 @@ object GraphModule extends GraphSupport {
         b(0).removeChild(svg(0))
       }
     }
+    .configure(OnUnmount.install)
     .build
 
   def apply(system: String, psw: String) =
-    component(GraphProps(system, psw))
+    component(GraphProps(system, psw, 10000))
 }
