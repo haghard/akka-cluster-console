@@ -31,7 +31,7 @@ case class Bootstrap(interface: String, port: Int, url: String)(implicit system:
   implicit val ex  = system.dispatchers.lookup(HttpDispatcher)
 
   //This will ensure that only Javascript running on the {interface} domain can talk to the webserver
-  val corsAllowedMethods = immutable.Seq(GET) //, POST, HEAD, OPTIONS, PATCH, PUT, DELETE
+  val corsAllowedMethods = immutable.Seq(GET, POST, HEAD, OPTIONS, PATCH, PUT, DELETE)
   val corsSettings = CorsSettings(system)
     .withAllowedMethods(corsAllowedMethods)
     .withAllowedOrigins(HttpOriginMatcher(HttpOrigin(s"http://${interface}:${port}")))

@@ -9,8 +9,6 @@ import japgolly.scalajs.react.vdom.prefix_<^._
 
 import scala.scalajs.js.annotation.JSExport
 
-//https://github.com/japgolly/scalajs-react/blob/0e984d1fd57fb35106bc8c3ec5d2566800a7e9a8/gh-pages/src/main/scala/ghpages/ExtrasExamples.scala
-
 @JSExport
 object JsApplication {
 

@@ -33,10 +33,18 @@ object GraphModule extends GraphSupport {
 
   class GraphBackend(scope: BackendScope[GraphProps, GraphState]) extends OnUnmount {
     val quotes = Vector(
+      """
+        |The Dynamo system design principals: a) consistent hashing to determine key placement b) partial quorums for reading and writing
+        |c) conflict detection and read repair via vector clocks d) gossip for replica synchronization.#Distributed systems for fun and profit
+        |""".stripMargin,
       "The natural state in a distributed system is partial order.#Distributed systems for fun and profit",
+      "Two-phase commit is the anti-availability protocol.#Pat Helland",
+      "Developers simply do not implement large scalable applications assuming distributed transactions.#Pat Helland",
       "If a tree falls in a forest and no one is around to hear it, does it make a sound ?#Philosopher George Berkeley",
+      "The truth is the log. The database is a cache of a subset of the log.#Pat Helland",
       "Linearizable consistency: Under linearizable consistency, all operations appear to have executed atomically in an order that is consistent with the global real-time ordering of operations.#Herlihy & Wing, 1991",
-      "Sequential consistency: Under sequential consistency, all operations appear to have executed atomically in some order that is consistent with the order seen at individual nodes and that is equal at all nodes.#Lamport, 1979"
+      "Sequential consistency: Under sequential consistency, all operations appear to have executed atomically in some order that is consistent with the order seen at individual nodes and that is equal at all nodes.#Lamport, 1979",
+      "Developers simply do not implement large scalable applications assuming distributed transactions#Pat Helland"
     )
 
     var interval: js.UndefOr[js.timers.SetIntervalHandle] = js.undefined

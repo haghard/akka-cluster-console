@@ -23,15 +23,14 @@ lazy val server = (project in file("server")).settings(
   compile in Compile := (compile in Compile).dependsOn(scalaJSPipeline/*, cpCss*/).value,
   scalafmtOnCompile := true,
 
-  //javaOptions in runMain := Seq("ENV=development", "CONFIG=./server/conf"),
-
   fork in runMain := true,
   fork in run := true,
 
   libraryDependencies ++= Seq(
     "ch.qos.logback"  %   "logback-classic" % "1.1.2",
     "org.webjars"     %   "bootstrap"       % "3.3.6",
-    "com.lihaoyi"     %%  "scalatags"       % "0.6.5"
+    "com.lihaoyi"     %%  "scalatags"       % "0.7.0",
+    "pl.setblack"     %%  "cryptotpyrc"     % "0.4.3",
   ) ++ Seq(
     "com.typesafe.akka" %% "akka-http" % "10.1.8",
     "ch.megard"         %% "akka-http-cors" % "0.4.1",
@@ -84,13 +83,9 @@ lazy val server = (project in file("server")).settings(
   ),
   */
 
-  //sbt docker
-  //sbt -Denv="development" && docker
   dockerfile in docker := {
     //development | production
     val appEnv = sys.props.getOrElse("env", "production")
-    //Option(System.getenv("env")).getOrElse("production")
-    //sys.props.getOrElse("env", "production")
     println(s"★ ★ ★ ★ ★ ★ Build Docker image for Env:$appEnv ★ ★ ★ ★ ★ ★")
 
     //val appConfig = "/app/conf"
@@ -101,7 +96,6 @@ lazy val server = (project in file("server")).settings(
     val configDir = "conf"
     val artifactTargetPath = s"$imageAppBaseDir/${artifact.name}"
     val artifactTargetPath_ln = s"$imageAppBaseDir/${appEnv}-${name.value}.jar"
-    val jksTargetPath = s"$imageAppBaseDir/haghard.jks"
 
     val dockerResourcesDir = baseDir / "docker-resources"
     val dockerResourcesTargetPath = s"$imageAppBaseDir/"

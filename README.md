@@ -19,8 +19,7 @@ Initial java on ubuntu
     https://www.digitalocean.com/community/tutorials/java-ubuntu-apt-get-ru
     sudo apt-get install default-jre
     sudo apt-get install default-jdk
-   	  
-	  
+
 How to run on YC 
   
   `docker run --net=host -d -p 8081:8081 -e HOSTNAME=192.168.0.13 -e HTTP_PORT=8081 -e PASSWORD=... -m 250MB haghard/cluster-console:0.1.0`
@@ -40,3 +39,4 @@ Links
     http://bl.ocks.org/enjalot/raw/211bd42857358a60a936/
     https://bost.ocks.org/mike/example/
     https://blog.csanchez.org/2017/05/31/running-a-jvm-in-a-container-without-getting-killed/
+    https://github.com/japgolly/scalajs-react/blob/0e984d1fd57fb35106bc8c3ec5d2566800a7e9a8/gh-pages/src/main/scala/ghpages/ExtrasExamples.scala
