@@ -37,6 +37,8 @@ object GraphModule extends GraphSupport {
         |The Dynamo system design principals: a) consistent hashing to determine key placement b) partial quorums for reading and writing
         |c) conflict detection and read repair via vector clocks d) gossip for replica synchronization.#Distributed systems for fun and profit
         |""".stripMargin,
+      "Eventual consistency(EC) guarantees that if no new updates are made to the object, eventually all accesses will return the last updated value.#Werner Vogels",
+      "Causal consistency guarantees that write operations that are causally related must be seen in the same order by all processes, but no ordering is defined for causally unrelated operations",
       "The natural state in a distributed system is partial order.#Distributed systems for fun and profit",
       "Two-phase commit is the anti-availability protocol.#Pat Helland",
       "Developers simply do not implement large scalable applications assuming distributed transactions.#Pat Helland",
@@ -73,7 +75,7 @@ object GraphModule extends GraphSupport {
       .style("border-radius", "8px")
       .style("pointer-events", "none")
 
-    def tick =
+    private def tick =
       scope.modState { prev ⇒
         val nextForce = prev.force.map { f ⇒
           f.stop()
@@ -239,7 +241,7 @@ object GraphModule extends GraphSupport {
           }
       }
 
-    def onDelete(
+    private def onDelete(
       s: Selection[org.scalajs.dom.EventTarget],
       force: forceModule.Force[Vertix, Edge],
       newNodes: js.Array[Vertix],
@@ -319,7 +321,7 @@ object GraphModule extends GraphSupport {
     }
      */
 
-    def onChange(s: Selection[org.scalajs.dom.EventTarget], force: forceModule.Force[Vertix, Edge]): Unit = {
+    private def onChange(s: Selection[org.scalajs.dom.EventTarget], force: forceModule.Force[Vertix, Edge]): Unit = {
       s.selectAll[Edge]("line.link")
         .data[Edge](force.links(), { (d: Edge, i: Int) ⇒
           d.source.id + "-" + d.target.id
@@ -379,13 +381,13 @@ object GraphModule extends GraphSupport {
         .text((n: Vertix) ⇒ if (n.isHost) n.host else s"${n.roles}@${n.host}:${n.port}")
     }
 
-    def onMouseout(n: Vertix): Unit =
+    private def onMouseout(n: Vertix): Unit =
       tooltip
         .transition()
         .duration(500)
         .style("opacity", 0)
 
-    def onMouseover(n: Vertix): Unit = {
+    private def onMouseover(n: Vertix): Unit = {
       tooltip.transition().duration(200).style("opacity", .9)
       tooltip
         .html(s"id: ${n.id} <br/>\naddress: ${n.host}:${n.port} <br/>\n role: ${n.roles}")
@@ -393,10 +395,10 @@ object GraphModule extends GraphSupport {
         .style("top", (n.y - 20) + "px")
     }
 
-    def onClick(n: Vertix): Unit =
+    private def onClick(n: Vertix): Unit =
       println(s"${n.id}")
 
-    def onTick(e: org.scalajs.dom.Event, s: Selection[org.scalajs.dom.EventTarget]): Unit = {
+    private def onTick(e: org.scalajs.dom.Event, s: Selection[org.scalajs.dom.EventTarget]): Unit = {
       s.selectAll[Edge]("line.link")
         .style("stroke-width", 1)
         .attr("x1", { (link: Edge) ⇒

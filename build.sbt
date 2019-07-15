@@ -23,8 +23,9 @@ lazy val server = (project in file("server")).settings(
   compile in Compile := (compile in Compile).dependsOn(scalaJSPipeline/*, cpCss*/).value,
   scalafmtOnCompile := true,
 
-  fork in runMain := true,
-  fork in run := true,
+  //For ammonite project server;test:run to work
+  //fork in runMain := true,
+  //fork in run := true,
 
   libraryDependencies ++= Seq(
     "ch.qos.logback"  %   "logback-classic" % "1.1.2",
@@ -35,10 +36,9 @@ lazy val server = (project in file("server")).settings(
     "com.typesafe.akka" %% "akka-http" % "10.1.8",
     "ch.megard"         %% "akka-http-cors" % "0.4.1",
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-    "com.typesafe.akka" %% "akka-stream" % akkaVersion
+    "com.typesafe.akka" %% "akka-stream" % akkaVersion,
+    ("com.lihaoyi" % "ammonite" % "1.6.9" % "test").cross(CrossVersion.full)
   ),
-
-  //javaOptions in runMain += "-DENV=prod",
 
   /*
   javaOptions in Universal ++= Seq(
@@ -49,7 +49,7 @@ lazy val server = (project in file("server")).settings(
     // others will be added as app parameters
     "-Dlog4j.configurationFile=conf/log4j2.xml"
   ),
-*/
+  */
 
   WebKeys.packagePrefix in Assets := "public/",
 
@@ -73,15 +73,12 @@ lazy val server = (project in file("server")).settings(
     removeIntermediateContainers = BuildOptions.Remove.Always,
     pullBaseImage = BuildOptions.Pull.Always),
 
-  //envVars := Map("-DENV" -> "development", "-DCONFIG" -> "./server/conf"),
-
-  //sbt -Denv=...  -Dconfig=...
-  /*
-  envVars in runMain := Map(
-    "ENV" -> sys.props.getOrElse("env", "development"),
-    "CONFIG" -> sys.props.getOrElse("config", "./server/conf")
-  ),
-  */
+  //test:run
+  sourceGenerators in Test += Def.task {
+    val file = (sourceManaged in Test).value / "amm.scala"
+    IO.write(file, """object amm extends App { ammonite.Main().run() }""")
+    Seq(file)
+  }.taskValue,
 
   dockerfile in docker := {
     //development | production
@@ -180,7 +177,8 @@ lazy val ui = (project in file("ui")).settings(
     "org.singlespaced" %%% "scalajs-d3" %     "0.3.4",
     "com.github.japgolly.scalajs-react" %%%   "core"      % "0.11.3",
     "com.github.japgolly.scalajs-react" %%%   "extra"     % "0.11.3",
-    "com.github.japgolly.scalacss"      %%%   "ext-react" % "0.5.1"
+    "com.github.japgolly.scalacss"      %%%   "ext-react" % "0.5.1",
+    "pl.setblack"                       %%%   "cryptotpyrc" % "0.4.3",
   ),
 
   jsDependencies ++= Seq(
@@ -206,7 +204,7 @@ lazy val ui = (project in file("ui")).settings(
 
   assemblyMergeStrategy in assembly := {
     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-    case x => MergeStrategy.first
+    case _ => MergeStrategy.first
   }
 
 ).enablePlugins(ScalaJSPlugin, ScalaJSWeb).dependsOn(sharedJs)
@@ -221,7 +219,7 @@ lazy val shared = sbtcrossproject.CrossPlugin.autoImport.crossProject(JSPlatform
     ),
     assemblyMergeStrategy in assembly := {
       case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-      case x => MergeStrategy.first
+      case _ => MergeStrategy.first
     }
   ).jsConfigure(_ enablePlugins ScalaJSWeb)
 

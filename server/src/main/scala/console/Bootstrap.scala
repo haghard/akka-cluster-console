@@ -21,14 +21,13 @@ import scala.util.{Failure, Success}
 import scala.concurrent.duration._
 
 object Bootstrap {
-  val HttpDispatcher = "akka.http.dispatcher"
   final private case object BindFailure extends Reason
 }
 
 case class Bootstrap(interface: String, port: Int, url: String)(implicit system: ActorSystem, m: Materializer) {
   val termDeadline = 2.seconds
   val shutdown     = CoordinatedShutdown(system)
-  implicit val ex  = system.dispatchers.lookup(HttpDispatcher)
+  implicit val ex  = system.dispatchers.lookup(Application.HttpDispatcher)
 
   //This will ensure that only Javascript running on the {interface} domain can talk to the webserver
   val corsAllowedMethods = immutable.Seq(GET, POST, HEAD, OPTIONS, PATCH, PUT, DELETE)

@@ -12,7 +12,7 @@ addCommandAlias(
   "cons",
   "server/runMain console.Application " +
   "-DENV=development " +
-  "-DCONFIG=./conf " +
+  "-DCONFIG=./server/conf " +
   "-DHTTP_PORT=8080 " +
   "-DHOSTNAME=192.168.77.10 " +
   "-DURL=https://codelfsolutions.com/cluster/members " +

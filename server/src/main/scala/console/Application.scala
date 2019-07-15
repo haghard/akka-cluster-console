@@ -13,6 +13,8 @@ import scala.collection._
 
 object Application extends App with AppSupport {
 
+  val HttpDispatcher = "akka.http.dispatcher"
+
   val opts: Map[String, String] = argsToOpts(args.toList)
   applySystemProperties(opts)
 
@@ -22,10 +24,11 @@ object Application extends App with AppSupport {
   val pws      = Option(System.getProperty("PSW")).getOrElse(throw new Exception("PSW is expected"))
   val httpPort = Option(System.getProperty("HTTP_PORT")).getOrElse(throw new Exception("HTTP_PORT is expected"))
 
-  val confDir = new File(confPath)
-
   val env        = Option(System.getProperty("ENV")).getOrElse(throw new Exception("ENV is expected"))
   val configFile = new File(s"${new File(confPath).getAbsolutePath}/" + env + ".conf")
+  val confDir    = new File(confPath)
+
+  println(configFile.getAbsolutePath)
 
   val config: Config =
     ConfigFactory
@@ -33,14 +36,14 @@ object Application extends App with AppSupport {
       .resolve()
       .withFallback(ConfigFactory.load())
 
-  implicit val system: ActorSystem = ActorSystem("cluster-console", config)
+  config.getConfig(HttpDispatcher)
+
+  implicit val system = ActorSystem("cluster-console", config)
   implicit val mat = akka.stream.ActorMaterializer(
     ActorMaterializerSettings
       .create(system)
-      .withDispatcher(Bootstrap.HttpDispatcher)
+      .withDispatcher(HttpDispatcher)
   )(system)
-
-  Bootstrap(hostname, httpPort.toInt, url + "?password=" + pws)
 
   val memorySize = ManagementFactory.getOperatingSystemMXBean
     .asInstanceOf[com.sun.management.OperatingSystemMXBean]
@@ -76,4 +79,6 @@ object Application extends App with AppSupport {
 
   system.log.info(greeting.toString)
   system.log.info(runtimeInfo.toString())
+
+  Bootstrap(hostname, httpPort.toInt, url + "?password=" + pws)
 }

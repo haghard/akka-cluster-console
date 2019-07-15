@@ -69,8 +69,8 @@ object WebSocketsModule {
         def onMessage(e: MessageEvent): Unit =
           direct.modState(_.log(s"Echo: ${e.data.toString}"))
 
-        def onError(e: ErrorEvent): Unit =
-          direct.modState(_.log(s"Error: ${e.message}"))
+        def onError(e: org.scalajs.dom.raw.Event): Unit =
+          direct.modState(_.log(s"Error: ${e}"))
 
         def onClose(e: CloseEvent): Unit =
           direct.modState(_.copy(ws = None).log(s"Closed: ${e.reason}"))
