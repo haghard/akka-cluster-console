@@ -2,7 +2,7 @@ package console
 
 import console.style.{GlobalStyles, GraphStyles}
 import japgolly.scalajs.react.ReactDOM
-import console.components.{ClusterModule, MainMenu, MetricsModule}
+import console.components.{ClusterViewModule, MainMenu, MetricsModule}
 import japgolly.scalajs.react.extra.router.{BaseUrl, Redirect, Resolution, Router, RouterConfigDsl, RouterCtl}
 import org.scalajs.dom
 import japgolly.scalajs.react.vdom.prefix_<^._
@@ -21,8 +21,8 @@ object JsApplication {
       .buildConfig { dsl ⇒
         import dsl._
 
-        (staticRoute(root, DashboardRoute) ~> renderR(ctl ⇒ MetricsModule(ctl))
-        | staticRoute("#cluster", ClusterMapRoute) ~> renderR(ctl ⇒ ClusterModule(url, ctl)))
+        (staticRoute(root, DashboardRoute) ~> renderR(router ⇒ MetricsModule(router))
+        | staticRoute("#cluster", ClusterMapRoute) ~> renderR(router ⇒ <.div(ClusterViewModule("none", url))))
           .notFound(redirectToPage(DashboardRoute)(Redirect.Replace))
       }
       .renderWith(layout)

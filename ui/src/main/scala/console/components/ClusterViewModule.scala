@@ -19,7 +19,7 @@ import Dynamic.{literal ⇒ lit}
 import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 
-object GraphModule extends GraphSupport {
+object ClusterViewModule extends GraphSupport {
 
   case class GraphProps(system: String, url: String, refreshTimeout: Long)
 
@@ -35,10 +35,10 @@ object GraphModule extends GraphSupport {
     val quotes = Vector(
       """
         |The Dynamo system design principals: a) consistent hashing to determine key placement b) partial quorums for reading and writing
-        |c) conflict detection and read repair via vector clocks d) gossip for replica synchronization.#Distributed systems for fun and profit
+        |c) conflict detection and read repair via vector clocks d) gossip for replica synchronization.#Distributed systems for fun and profit.#unknown
         |""".stripMargin,
       "Eventual consistency(EC) guarantees that if no new updates are made to the object, eventually all accesses will return the last updated value.#Werner Vogels",
-      "Causal consistency guarantees that write operations that are causally related must be seen in the same order by all processes, but no ordering is defined for causally unrelated operations",
+      "Causal consistency guarantees that write operations that are causally related must be seen in the same order by all processes, but no ordering is defined for causally unrelated operations.#unknown",
       "The natural state in a distributed system is partial order.#Distributed systems for fun and profit",
       "Two-phase commit is the anti-availability protocol.#Pat Helland",
       "Developers simply do not implement large scalable applications assuming distributed transactions.#Pat Helland",
@@ -147,7 +147,6 @@ object GraphModule extends GraphSupport {
     private def fetchClusterProfile(props: GraphProps): CallbackTo[Unit] =
       react.Callback.future {
         //dom.console.log("fetch-cluster-profile")
-
         org.scalajs.dom.ext.Ajax
           .get(props.url)
           .map { resp ⇒
