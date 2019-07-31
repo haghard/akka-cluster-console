@@ -20,7 +20,7 @@ lazy val server = (project in file("server")).settings(
   scalaJSProjects          := Seq(ui),
   pipelineStages in Assets := Seq(scalaJSPipeline),
 
-  compile in Compile := (compile in Compile).dependsOn(scalaJSPipeline/*, cpCss*/).value,
+  compile in Compile := (compile in Compile).dependsOn(scalaJSPipeline).value,
   scalafmtOnCompile := true,
 
   //For ammonite project server;test:run to work
@@ -31,7 +31,7 @@ lazy val server = (project in file("server")).settings(
     "ch.qos.logback"  %   "logback-classic" % "1.1.2",
     "org.webjars"     %   "bootstrap"       % "3.3.6",
     "com.lihaoyi"     %%  "scalatags"       % "0.7.0",
-    "pl.setblack"     %%  "cryptotpyrc"     % "0.4.3",
+    //"pl.setblack"     %%  "cryptotpyrc"     % "0.4.3",
   ) ++ Seq(
     "com.typesafe.akka" %% "akka-http" % "10.1.8",
     "ch.megard"         %% "akka-http-cors" % "0.4.1",
@@ -57,7 +57,7 @@ lazy val server = (project in file("server")).settings(
 
   mainClass in assembly := Some("console.Application"),
 
-  assemblyJarName in assembly := s"akka-cluster-console-${version}.jar",
+  assemblyJarName in assembly := s"akka-cluster-console-$version.jar",
 
   // Resolve duplicates for Sbt Assembly
   assemblyMergeStrategy in assembly := {
@@ -146,24 +146,6 @@ lazy val server = (project in file("server")).settings(
 ).enablePlugins(SbtWeb, sbtdocker.DockerPlugin, BuildInfoPlugin)
   .dependsOn(sharedJvm)
 
-//for debugging
-/*
-def cpCss() = (baseDirectory) map { dir =>
-  def execute() = {
-    Process(s"cp ${dir}/src/main/resources/d3.v3.min.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-    Process(s"cp ${dir}/src/main/resources/d3.v4.min.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-
-    Process(s"cp ${dir}/src/main/resources/queue.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-    Process(s"cp ${dir}/src/main/resources/colorbrewer.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-
-    Process(s"cp ${dir}/src/main/resources/web/linked-charts/area1.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-    Process(s"cp ${dir}/src/main/resources/web/linked-charts/area2.js ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
-  }
-
-  println("Coping resources ...")
-  haltOnCmdResultError(execute())
-}*/
-
 def haltOnCmdResultError(result: Int) {
   if (result != 0) throw new Exception("Build failed")
 }
@@ -178,7 +160,7 @@ lazy val ui = (project in file("ui")).settings(
     "com.github.japgolly.scalajs-react" %%%   "core"      % "0.11.3",
     "com.github.japgolly.scalajs-react" %%%   "extra"     % "0.11.3",
     "com.github.japgolly.scalacss"      %%%   "ext-react" % "0.5.1",
-    "pl.setblack"                       %%%   "cryptotpyrc" % "0.4.3",
+    //"pl.setblack"                       %%%   "cryptotpyrc" % "0.4.3",
   ),
 
   jsDependencies ++= Seq(

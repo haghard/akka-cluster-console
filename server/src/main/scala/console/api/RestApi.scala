@@ -9,8 +9,16 @@ import console.scripts.AppScript
 
 object RestApi extends Directives {
 
-  //pathSingleSlash {
+  private val folderName = "public"
+  //private val folderName = "public/lib/bootstrap/js/"
+
+  /*pathSingleSlash {
+    //get(encodeResponse(getFromDirectory(folderName + "/" + chartHtml)))
+    //encodeResponse(getFromResource(folderName + "/monitor3.html"))
+  } ~*/
+
   def route(url: String): Route =
+    //route ~
     extractLog { log ⇒
       path("console") {
         (optionalHeaderValueByType[Host]() & optionalHeaderValueByType[`X-Real-Ip`]() & optionalHeaderValueByType[
@@ -22,7 +30,7 @@ object RestApi extends Directives {
           }
         }
       } ~ pathPrefix("console-assets" / Remaining) { file ⇒
-        encodeResponse(getFromResource("public/" + file))
+        encodeResponse(getFromResource(folderName + "/" + file))
       }
     }
 }

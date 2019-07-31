@@ -28,8 +28,6 @@ object Application extends App with AppSupport {
   val configFile = new File(s"${new File(confPath).getAbsolutePath}/" + env + ".conf")
   val confDir    = new File(confPath)
 
-  println(configFile.getAbsolutePath)
-
   val config: Config =
     ConfigFactory
       .parseFile(configFile)
@@ -62,9 +60,11 @@ object Application extends App with AppSupport {
     .append('\n')
     .append("=================================================================================================")
     .append('\n')
-    .append(s"★ ★ ★  Environment: ${env} Config: ${configFile.getAbsolutePath}  ★ ★ ★")
+    .append(s"★ ★ ★  Environment: $env Config: ${configFile.getAbsolutePath}  ★ ★ ★")
     .append('\n')
     .append(s"★ ★ ★  TimeZone: ${TimeZone.getDefault.getID} Started at ${LocalDateTime.now}  ★ ★ ★")
+    .append('\n')
+    .append(s"★ ★ ★  ${hostname}:${httpPort} - ${url} ★ ★ ★")
     .append('\n')
     .append(
       """

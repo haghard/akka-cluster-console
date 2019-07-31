@@ -24,22 +24,24 @@ object Bootstrap {
   final private case object BindFailure extends Reason
 }
 
-case class Bootstrap(interface: String, port: Int, url: String)(implicit system: ActorSystem, m: Materializer) {
-  val termDeadline = 2.seconds
-  val shutdown     = CoordinatedShutdown(system)
-  implicit val ex  = system.dispatchers.lookup(Application.HttpDispatcher)
+case class Bootstrap(host: String, port: Int, clusterUrl: String)(implicit system: ActorSystem, m: Materializer) {
+  val terminationDeadline = 2.seconds
+  val shutdown            = CoordinatedShutdown(system)
+  implicit val ex         = system.dispatchers.lookup(Application.HttpDispatcher)
 
-  //This will ensure that only Javascript running on the {interface} domain can talk to the webserver
+  //This will ensure that only Javascript running on the {host} domain can talk to the webserver
+  /*
   val corsAllowedMethods = immutable.Seq(GET, POST, HEAD, OPTIONS, PATCH, PUT, DELETE)
   val corsSettings = CorsSettings(system)
     .withAllowedMethods(corsAllowedMethods)
-    .withAllowedOrigins(HttpOriginMatcher(HttpOrigin(s"http://${interface}:${port}")))
+    .withAllowedOrigins(HttpOriginMatcher(HttpOrigin(s"http://$host:$port")))
 
   val corsRoute: Route =
     handleRejections(corsRejectionHandler)(cors(corsSettings)(api.RestApi.route(url)))
+   */
 
   Http()
-    .bindAndHandle(corsRoute, interface, port)
+    .bindAndHandle(api.RestApi.route(clusterUrl), host, port)
     .onComplete {
       case Failure(ex) ⇒
         system.log.error(ex, "Critical error during bootstrap")
@@ -56,7 +58,7 @@ case class Bootstrap(interface: String, port: Int, url: String)(implicit system:
         shutdown.addTask(PhaseServiceRequestsDone, "api.terminate") { () ⇒
           system.log.info("api.terminate")
           //graceful termination request being handled on this connection
-          binding.terminate(termDeadline).map(_ ⇒ Done)(ExecutionContext.global)
+          binding.terminate(terminationDeadline).map(_ ⇒ Done)(ExecutionContext.global)
         }
     }
 }
