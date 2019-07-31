@@ -14,8 +14,8 @@ Collects data from an existing akka cluster and draw it.
 
   Where:
     
-    *  `URL` points out on an existing akka cluster that runs `akka-management-cluster-http` module. For example https://.../cluster/members
-    *  `PASSWORD` passwords that protects `URL`.
+    *  URL points out on an existing akka cluster that runs `akka-management-cluster-http` module. For example https://.../cluster/members
+    *  PASSWORD passwords that protects URL.
 
  
 ### Live demo link
