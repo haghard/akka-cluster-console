@@ -10,7 +10,6 @@ import console.scripts.AppScript
 object RestApi extends Directives {
 
   private val folderName = "public"
-  //private val folderName = "public/lib/bootstrap/js/"
 
   /*pathSingleSlash {
     //get(encodeResponse(getFromDirectory(folderName + "/" + chartHtml)))
