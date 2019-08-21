@@ -4,7 +4,7 @@ import sbtdocker.ImageName
 import scala.sys.process.Process
 
 val scalaV = "2.12.8"
-val akkaVersion = "2.5.23"
+val akkaVersion = "2.5.25"
 val version = "0.1.0"
 
 lazy val server = (project in file("server")).settings(
@@ -33,7 +33,7 @@ lazy val server = (project in file("server")).settings(
     "com.lihaoyi"     %%  "scalatags"       % "0.7.0",
     //"pl.setblack"     %%  "cryptotpyrc"     % "0.4.3",
   ) ++ Seq(
-    "com.typesafe.akka" %% "akka-http" % "10.1.8",
+    "com.typesafe.akka" %% "akka-http" % "10.1.9",
     "ch.megard"         %% "akka-http-cors" % "0.4.1",
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "com.typesafe.akka" %% "akka-stream" % akkaVersion,
