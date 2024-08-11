@@ -2,10 +2,6 @@
 
 Collects data from an existing akka cluster and draw it.    
 
-###  How to build
-      
-    `sbt -Denv=development docker && docker push haghard/cluster-console:0.1.0`
-
 ### How to run locally
 
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.11.jdk/Contents/Home
@@ -19,6 +15,24 @@ sbt c
 http://127.0.0.1:8080/console
 
 ```
+
+or
+
+```
+sbt server/assembly
+
+
+java -server -Xmx128M -XX:+PrintCommandLineFlags -XshowSettings:vm -XX:+UseG1GC -DCONFIG=./server/conf -DENV=development -Dakka.remote.artery.canonical.port=2550 -Dakka.remote.artery.canonical.hostname=127.0.0.1 -DHTTP_PORT=8080 -DURL=http://127.0.0.1:8080/cluster/members -jar server/target/scala-2.12/akka-cluster-console-0.1.0.jar
+java -server -Xmx128M -XX:+PrintCommandLineFlags -XshowSettings:vm -XX:+UseG1GC -DCONFIG=./server/conf -DENV=development -Dakka.remote.artery.canonical.port=2550 -Dakka.remote.artery.canonical.hostname=127.0.0.2 -DHTTP_PORT=8080 -DURL=http://127.0.0.2:8080/cluster/members -jar server/target/scala-2.12/akka-cluster-console-0.1.0.jar
+
+```
+
+
+###  How to build
+
+    `sbt -Denv=development docker && docker push haghard/cluster-console:0.1.0`
+
+
 
 ### How to run
 

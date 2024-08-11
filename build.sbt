@@ -35,7 +35,7 @@ lazy val server = (project in file("server"))
     //run / fork := true,
 
     libraryDependencies ++= Seq(
-        "ch.qos.logback" % "logback-classic" % "1.4.12",
+        "ch.qos.logback" % "logback-classic" % "1.2.3",
         "org.webjars"    % "bootstrap"       % "3.3.6",
         "com.lihaoyi"    %% "scalatags"      % "0.9.1"
         //"pl.setblack"     %%  "cryptotpyrc"     % "0.4.3",
@@ -94,11 +94,13 @@ lazy val server = (project in file("server"))
     (Runtime / managedClasspath) += (Assets / packageBin).value,
     assembly / mainClass := Some("console.Application"),
     assembly / assemblyJarName := s"akka-cluster-console-$version.jar",
+
     // Resolve duplicates for Sbt Assembly
     assembly / assemblyMergeStrategy := {
       case PathList(xs @ _*) if xs.last == "io.netty.versions.properties" ⇒ MergeStrategy.rename
       case other                                                          ⇒ (assembly / assemblyMergeStrategy).value(other)
     },
+
     docker / imageNames := Seq(
         ImageName(namespace = Some("haghard"), repository = "cluster-console", tag = Some(version))
       ),
@@ -240,8 +242,6 @@ lazy val sharedJvm = shared.jvm
 lazy val sharedJs  = shared.js
 
 //cancelable in Global := true
-
-scalaModuleInfo ~= (_.map(_.withOverrideScalaVersion(true)))
 
 scalafmtOnCompile := true
 

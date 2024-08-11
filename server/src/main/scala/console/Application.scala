@@ -18,7 +18,7 @@ object Application extends App with AppSupport {
 
   val confPath = Option(System.getProperty("CONFIG")).getOrElse(throw new Exception("CONFIG is expected"))
   val hostname = Option(System.getProperty("akka.remote.artery.canonical.hostname"))
-    .getOrElse(throw new Exception("HOSTNAME is expected"))
+    .getOrElse(throw new Exception("akka.remote.artery.canonical.hostname is expected"))
   val akkaPort =
     Option(System.getProperty("akka.remote.artery.canonical.port")).getOrElse(throw new Exception("Port is expected"))
   val url      = Option(System.getProperty("URL")).getOrElse(throw new Exception("URL is expected"))
