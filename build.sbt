@@ -2,6 +2,8 @@ import sbt.*
 import com.typesafe.sbt.web.SbtWeb
 import sbtdocker.ImageName
 
+import java.util.concurrent.TimeUnit
+import scala.concurrent.duration.FiniteDuration
 import scala.sys.process.Process
 
 val scalaV          = "2.13.1"
@@ -245,10 +247,24 @@ lazy val sharedJs  = shared.js
 
 scalafmtOnCompile := true
 
+
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+Global / semanticdbEnabled := true
+Global / semanticdbVersion := scalafixSemanticdb.revision
+Global / watchAntiEntropy := FiniteDuration(5000, TimeUnit.MILLISECONDS)
+
+
+addCommandAlias("sfix", "scalafix OrganizeImports; test:scalafix OrganizeImports")
+addCommandAlias("sFixCheck", "scalafix --check OrganizeImports; test:scalafix --check OrganizeImports")
+addCommandAlias("c", "compile")
+addCommandAlias("r", "reload")
+
+
 def execute(dir: File): Unit = {
   Process(s"mkdir ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
   Process(s"mkdir ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css").!
   Process(s"cp ${dir}/src/main/resources/react/main.css ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css").!
+  Process(s"cp ${dir}/src/main/resources/react/chat.css ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css").!
   val ec = Process(s"cp ${dir}/src/main/resources/akka-small.jpg  ${dir}/target").!
   if(ec != 0) throw new Exception("Copy error")
 }

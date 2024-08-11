@@ -10,13 +10,14 @@ object JsScript {
     html(
       head(),
       body(
-        link(rel := "stylesheet", href := "/console-assets/lib/bootstrap/css/bootstrap.css"),
-        // link(rel      := "stylesheet", href     := "/console-assets/lib/bootstrap/css/main.css"),
-        script(`type` := "text/javascript", src := "/console-assets/lib/jquery/jquery.js"),
-        script(`type` := "text/javascript", src := "/console-assets/lib/bootstrap/js/bootstrap.js"),
-        script(`type` := "text/javascript", src := "/console-assets/ui-jsdeps.js"),
+        link(rel      := "stylesheet", href     := "/assets/lib/bootstrap/css/bootstrap.css"),
+        link(rel      := "stylesheet", href     := "/assets/lib/bootstrap/css/main.css"),
+        link(rel      := "stylesheet", href     := "/assets/lib/bootstrap/css/chat.css"),
+        script(`type` := "text/javascript", src := "/assets/lib/jquery/jquery.js"),
+        script(`type` := "text/javascript", src := "/assets/lib/bootstrap/js/bootstrap.js"),
+        script(`type` := "text/javascript", src := "/assets/ui-jsdeps.js"),
         // script(`type` := "text/javascript", src := "/console-assets/ui-fastopt.js"),
-        script(`type` := "text/javascript", src := "/console-assets/ui-opt.js"),
+        script(`type` := "text/javascript", src := "/assets/ui-opt.js"),
         div(id        := targetDiv, style       := "position:relative"),
         script(s"JsApp(`$system`,`$url`,'$targetDiv')")
       )

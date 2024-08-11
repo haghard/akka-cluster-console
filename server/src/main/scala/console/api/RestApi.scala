@@ -31,17 +31,7 @@ object RestApi extends Directives {
         clusterConsolePage(systemName, url) ~
           path("pics" / Remaining) { _ =>
             getFromResource("akka-small.jpg")
-          } ~
-          path("console") {
-            (optionalHeaderValueByType(Host) & optionalHeaderValueByType(`X-Real-Ip`) & optionalHeaderValueByType(
-              `X-Forwarded-For`
-            )) { (host, ip, ipF) =>
-              complete {
-                log.info("GET console {}/{}/{}", host, ip, ipF)
-                HttpResponse(entity = Strict(ContentTypes.`text/html(UTF-8)`, ByteString(AppScript(url).render)))
-              }
-            }
-          } ~ pathPrefix("console-assets" / Remaining) { file =>
+          } ~ pathPrefix("assets" / Remaining) { file =>
             // log.info("GET {}", file)
             encodeResponse(getFromResource(folderName + "/" + file))
           }
