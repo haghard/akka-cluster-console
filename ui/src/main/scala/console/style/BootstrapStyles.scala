@@ -19,7 +19,7 @@ class BootstrapStyles(implicit r: Register) extends StyleSheet.Inline()(r) {
   val contextDomain = Domain.ofValues(success, info, warning, danger)
 
   def commonStyle[A: UnivEq](domain: Domain[A], base: String) =
-    styleF(domain)(opt ⇒ styleS(addClassNames(base, s"$base-$opt")))
+    styleF(domain)(opt => styleS(addClassNames(base, s"$base-$opt")))
 
   def styleWrap(classNames: String*) = style(addClassNames(classNames: _*))
 
@@ -35,7 +35,7 @@ class BootstrapStyles(implicit r: Register) extends StyleSheet.Inline()(r) {
 
   val label = labelOpt(default)
 
-  //val alert = commonStyle(contextDomain, "alert")
+  // val alert = commonStyle(contextDomain, "alert")
 
   val panelHeading = styleWrap("panel-heading")
 

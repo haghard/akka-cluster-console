@@ -1,32 +1,43 @@
 package console
 
 import java.io.File
-import java.lang.management.ManagementFactory
 import java.util.TimeZone
 import java.time.LocalDateTime
-
 import akka.actor.ActorSystem
-import akka.stream.ActorMaterializerSettings
 import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.collection._
+import scala.concurrent.duration.{FiniteDuration, NANOSECONDS}
 
 object Application extends App with AppSupport {
 
-  val HttpDispatcher = "akka.http.dispatcher"
+  val HttpDispatcher = "http"
 
   val opts: Map[String, String] = argsToOpts(args.toList)
   applySystemProperties(opts)
 
   val confPath = Option(System.getProperty("CONFIG")).getOrElse(throw new Exception("CONFIG is expected"))
-  val hostname = Option(System.getProperty("HOSTNAME")).getOrElse(throw new Exception("HOSTNAME is expected"))
+  val hostname = Option(System.getProperty("akka.remote.artery.canonical.hostname"))
+    .getOrElse(throw new Exception("HOSTNAME is expected"))
+  val akkaPort =
+    Option(System.getProperty("akka.remote.artery.canonical.port")).getOrElse(throw new Exception("Port is expected"))
   val url      = Option(System.getProperty("URL")).getOrElse(throw new Exception("URL is expected"))
-  val pws      = Option(System.getProperty("PSW")).getOrElse(throw new Exception("PSW is expected"))
   val httpPort = Option(System.getProperty("HTTP_PORT")).getOrElse(throw new Exception("HTTP_PORT is expected"))
 
-  val env        = Option(System.getProperty("ENV")).getOrElse(throw new Exception("ENV is expected"))
-  val configFile = new File(s"${new File(confPath).getAbsolutePath}/" + env + ".conf")
-  val confDir    = new File(confPath)
+  val env = Option(System.getProperty("ENV")).getOrElse(throw new Exception("ENV is expected"))
+  val configFile =
+    new File(s"${new File(confPath).getAbsolutePath}/" + env + ".conf")
+
+  applySystemProperties(
+    Map(
+      "-Dakka.remote.artery.bind.hostname"   -> hostname,
+      "-Dakka.remote.artery.bind.port"       -> akkaPort,
+      "-Dakka.management.http.hostname"      -> hostname,
+      "-Dakka.management.http.port"          -> (httpPort.toInt + 1).toString,
+      "-Dakka.management.http.bind-hostname" -> hostname,
+      "-Dakka.management.http.bind-port"     -> (httpPort.toInt + 1).toString
+    )
+  )
 
   val config: Config =
     ConfigFactory
@@ -36,23 +47,13 @@ object Application extends App with AppSupport {
 
   config.getConfig(HttpDispatcher)
 
-  implicit val system = ActorSystem("cluster-console", config)
-  implicit val mat = akka.stream.ActorMaterializer(
-    ActorMaterializerSettings
-      .create(system)
-      .withDispatcher(HttpDispatcher)
-  )(system)
-
-  val memorySize = ManagementFactory.getOperatingSystemMXBean
-    .asInstanceOf[com.sun.management.OperatingSystemMXBean]
-    .getTotalPhysicalMemorySize
+  implicit val system = ActorSystem("my-console", config)
   val runtimeInfo = new StringBuilder()
     .append('\n')
     .append(s"Cores:${Runtime.getRuntime.availableProcessors}")
     .append(" Total Memory:" + Runtime.getRuntime.totalMemory / 1000000 + "Mb")
     .append(" Max Memory:" + Runtime.getRuntime.maxMemory / 1000000 + "Mb")
     .append(" Free Memory:" + Runtime.getRuntime.freeMemory / 1000000 + "Mb")
-    .append(" RAM:" + memorySize / 1000000 + "Mb")
     .append('\n')
     .append("=================================================================================================")
 
@@ -80,5 +81,20 @@ object Application extends App with AppSupport {
   system.log.info(greeting.toString)
   system.log.info(runtimeInfo.toString())
 
-  Bootstrap(hostname, httpPort.toInt, url + "?password=" + pws)
+  Bootstrap(hostname, httpPort.toInt, url)
+
+  akka.management.scaladsl.AkkaManagement(system).start()
+  akka.management.cluster.bootstrap.ClusterBootstrap(system).start()
+
+  val _ = scala.io.StdIn.readLine()
+  system.log.warning("★ ★ ★ ★ ★ ★  Shutting down ... ★ ★ ★ ★ ★ ★")
+  system.terminate()
+  scala.concurrent.Await
+    .result(
+      system.whenTerminated,
+      FiniteDuration(
+        system.settings.config.getDuration("akka.coordinated-shutdown.default-phase-timeout").toNanos,
+        NANOSECONDS
+      )
+    )
 }

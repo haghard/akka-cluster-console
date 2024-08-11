@@ -3,8 +3,7 @@ package console.style
 import japgolly.scalajs.react.ReactNode
 import japgolly.scalajs.react.vdom.prefix_<^._
 
-/**
-  * Provides type-safe access to Font Awesome icons
+/** Provides type-safe access to Font Awesome icons
   */
 object Icon {
   type Icon = ReactNode

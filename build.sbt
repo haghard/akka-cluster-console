@@ -1,211 +1,261 @@
-import sbt._
+import sbt.*
 import com.typesafe.sbt.web.SbtWeb
 import sbtdocker.ImageName
+
 import scala.sys.process.Process
 
-val scalaV = "2.12.8"
-val akkaVersion = "2.5.25"
-val version = "0.1.0"
+val scalaV          = "2.12.10"
+val akkaVersion     = "2.6.21"
+val version         = "0.1.0"
+val AkkaMngVersion  = "1.4.1"
+val AkkaHttpVersion = "10.2.10"
 
-lazy val server = (project in file("server")).settings(
-  name := "server",
+val scalaOps = Seq("-feature", "-Xfatal-warnings", "-deprecation", "-unchecked")
 
-  resolvers ++= Seq(
-    "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/",
-    "isarn project" at "https://dl.bintray.com/isarn/maven/"
-  ),
+//scalaVersion := scalaV
 
-  scalacOptions in(Compile, console) := Seq("-feature", "-Xfatal-warnings", "-deprecation", "-unchecked"),
-  scalaVersion             := scalaV,
-  scalaJSProjects          := Seq(ui),
-  pipelineStages in Assets := Seq(scalaJSPipeline),
+lazy val server = (project in file("server"))
+  .settings(
+    name := "server",
+    resolvers ++= Seq("Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"),
+    scalaVersion := scalaV,
+    scalaJSProjects := Seq(ui),
+    Assets / pipelineStages := Seq(scalaJSPipeline),
 
-  compile in Compile := (compile in Compile).dependsOn(scalaJSPipeline).value,
-  scalafmtOnCompile := true,
+    Compile / scalacOptions := scalaOps,
+    console / scalacOptions := scalaOps,
+    Compile / compile := (Compile / compile).dependsOn(scalaJSPipeline, copyJsArtifacts).value,
+    scalafmtOnCompile := true,
 
-  //For ammonite project server;test:run to work
-  //fork in runMain := true,
-  //fork in run := true,
+    run / fork := true,
+    run / connectInput := true,
 
-  libraryDependencies ++= Seq(
-    "ch.qos.logback"  %   "logback-classic" % "1.1.2",
-    "org.webjars"     %   "bootstrap"       % "3.3.6",
-    "com.lihaoyi"     %%  "scalatags"       % "0.7.0",
-    //"pl.setblack"     %%  "cryptotpyrc"     % "0.4.3",
-  ) ++ Seq(
-    "com.typesafe.akka" %% "akka-http" % "10.1.9",
-    "ch.megard"         %% "akka-http-cors" % "0.4.1",
-    "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-    "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-    ("com.lihaoyi" % "ammonite" % "1.6.9" % "test").cross(CrossVersion.full)
-  ),
+    //For ammonite project server;test:run to work
+    //runMain / fork := true,
+    //run / fork := true,
 
-  /*
-  javaOptions in Universal ++= Seq(
-    // -J params will be added as jvm parameters
-    "-J-Xmn1G",
-    "-J-Xms1G",
-    "-J-Xmx3G",
-    // others will be added as app parameters
-    "-Dlog4j.configurationFile=conf/log4j2.xml"
-  ),
-  */
+    libraryDependencies ++= Seq(
+        "ch.qos.logback" % "logback-classic" % "1.4.12",
+        "org.webjars"    % "bootstrap"       % "3.3.6",
+        "com.lihaoyi"    %% "scalatags"      % "0.9.1"
+        //"pl.setblack"     %%  "cryptotpyrc"     % "0.4.3",
+      ) ++ Seq(
+        "com.typesafe.akka"             %% "akka-http"                         % AkkaHttpVersion,
+        "ch.megard"                     %% "akka-http-cors"                    % "1.2.0",
+        "com.typesafe.akka"             %% "akka-slf4j"                        % akkaVersion,
+        "com.typesafe.akka"             %% "akka-stream"                       % akkaVersion,
+        "com.typesafe.akka"             %% "akka-cluster-metrics"              % akkaVersion,
+        "com.typesafe.akka"             %% "akka-discovery"                    % akkaVersion,
+        "com.lightbend.akka.management" %% "akka-management-cluster-bootstrap" % AkkaMngVersion,
+        "com.lightbend.akka.management" %% "akka-management-cluster-http"      % AkkaMngVersion,
+        ("com.lihaoyi" % "ammonite" % "2.5.0" % "test").cross(CrossVersion.full)
+      ),
+    dependencyOverrides ++= Seq(
+        "com.typesafe.akka"             %% "akka-actor-typed"                  % akkaVersion,
+        "com.typesafe.akka"             %% "akka-protobuf"                     % akkaVersion,
+        "com.typesafe.akka"             %% "akka-protobuf-v3"                  % akkaVersion,
+        "com.typesafe.akka"             %% "akka-cluster-sharding"             % akkaVersion,
+        "com.typesafe.akka"             %% "akka-cluster-metrics"              % akkaVersion,
+        "com.typesafe.akka"             %% "akka-slf4j"                        % akkaVersion,
+        "com.typesafe.akka"             %% "akka-discovery"                    % akkaVersion,
+        "com.typesafe.akka"             %% "akka-distributed-data"             % akkaVersion,
+        "com.typesafe.akka"             %% "akka-persistence"                  % akkaVersion,
+        "com.typesafe.akka"             %% "akka-persistence-query"            % akkaVersion,
+        "com.typesafe.akka"             %% "akka-persistence-typed"            % akkaVersion,
+        "com.typesafe.akka"             %% "akka-actor"                        % akkaVersion,
+        "com.typesafe.akka"             %% "akka-cluster"                      % akkaVersion,
+        "com.typesafe.akka"             %% "akka-cluster-sharding-typed"       % akkaVersion,
+        "com.typesafe.akka"             %% "akka-coordination"                 % akkaVersion,
+        "com.typesafe.akka"             %% "akka-stream"                       % akkaVersion,
+        "com.typesafe.akka"             %% "akka-cluster-tools"                % akkaVersion,
+        "com.typesafe.akka"             %% "akka-http"                         % AkkaHttpVersion,
+        "com.typesafe.akka"             %% "akka-http-core"                    % AkkaHttpVersion,
+        "com.typesafe.akka"             %% "akka-http-spray-json"              % AkkaHttpVersion,
+        "com.typesafe.akka"             %% "akka-discovery"                    % akkaVersion,
+        "com.lightbend.akka.management" %% "akka-management-cluster-bootstrap" % AkkaMngVersion,
+        "com.lightbend.akka.management" %% "akka-management-cluster-http"      % AkkaMngVersion
+      ),
+    
+    javaOptions ++= Seq(
+      "-XX:+PrintCommandLineFlags",
+      "-XshowSettings:system",
+      "-Xms128m",
+      "-Xmx256m",
+      "-XX:-UseAdaptiveSizePolicy",   //heap never resizes
+      "-XX:MaxDirectMemorySize=128m", //Will get a error if allocate more mem for direct byte buffers
+      "-XX:+UseParallelGC",  //with heaps <4GB
+      //"-XX:+UseG1GC",  //with heaps >4GB
+      //"-XX:+UseZGC",  //apps that require sub-millisecond GC pauses, with gigantic (terabyte range) heaps
+      //https://softwaremill.com/reactive-event-sourcing-benchmarks-part-2-postgresql/
+      "-XX:ActiveProcessorCount=2",
+    ),
 
-  WebKeys.packagePrefix in Assets := "public/",
+    Assets / WebKeys.packagePrefix := "public/",
+    (Runtime / managedClasspath) += (Assets / packageBin).value,
+    assembly / mainClass := Some("console.Application"),
+    assembly / assemblyJarName := s"akka-cluster-console-$version.jar",
+    // Resolve duplicates for Sbt Assembly
+    assembly / assemblyMergeStrategy := {
+      case PathList(xs @ _*) if xs.last == "io.netty.versions.properties" ⇒ MergeStrategy.rename
+      case other                                                          ⇒ (assembly / assemblyMergeStrategy).value(other)
+    },
+    docker / imageNames := Seq(
+        ImageName(namespace = Some("haghard"), repository = "cluster-console", tag = Some(version))
+      ),
+    docker / buildOptions := BuildOptions(
+        cache = false,
+        removeIntermediateContainers = BuildOptions.Remove.Always,
+        pullBaseImage = BuildOptions.Pull.Always
+      ),
+    //test:run
+    Test / sourceGenerators += Def.task {
+        val file = (Test / sourceManaged).value / "amm.scala"
+        IO.write(file, """object amm extends App { ammonite.Main().run() }""")
+        Seq(file)
+      }.taskValue,
+    docker / dockerfile := {
+      //development | production
+      val appEnv = sys.props.getOrElse("env", "production")
+      println(s"★ ★ ★ ★ ★ ★ Build Docker image for Env:$appEnv ★ ★ ★ ★ ★ ★")
 
-  (managedClasspath in Runtime) += (packageBin in Assets).value,
+      //val appConfig = "/app/conf"
+      val baseDir        = baseDirectory.value
+      val artifact: File = assembly.value
 
-  mainClass in assembly := Some("console.Application"),
+      val imageAppBaseDir       = "/app"
+      val configDir             = "conf"
+      val artifactTargetPath    = s"$imageAppBaseDir/${artifact.name}"
+      val artifactTargetPath_ln = s"$imageAppBaseDir/${appEnv}-${name.value}.jar"
 
-  assemblyJarName in assembly := s"akka-cluster-console-$version.jar",
+      val dockerResourcesDir        = baseDir / "docker-resources"
+      val dockerResourcesTargetPath = s"$imageAppBaseDir/"
 
-  // Resolve duplicates for Sbt Assembly
-  assemblyMergeStrategy in assembly := {
-    case PathList(xs@_*) if xs.last == "io.netty.versions.properties" => MergeStrategy.rename
-    case other => (assemblyMergeStrategy in assembly).value(other)
-  },
+      val prodConfigSrc = baseDir / "conf" / "production.conf"
+      val devConfigSrc  = baseDir / "conf" / "development.conf"
 
-  imageNames in docker := Seq(
-    ImageName(namespace = Some("haghard"), repository = "cluster-console",
-    tag = Some(version))),
+      //val curEnv = System.getenv("ENV")
 
-  buildOptions in docker := BuildOptions(cache = false,
-    removeIntermediateContainers = BuildOptions.Remove.Always,
-    pullBaseImage = BuildOptions.Pull.Always),
+      val appProdConfTarget = s"$imageAppBaseDir/$configDir/production.conf"
+      val appDevConfTarget  = s"$imageAppBaseDir/$configDir/development.conf"
 
-  //test:run
-  sourceGenerators in Test += Def.task {
-    val file = (sourceManaged in Test).value / "amm.scala"
-    IO.write(file, """object amm extends App { ammonite.Main().run() }""")
-    Seq(file)
-  }.taskValue,
+      new sbtdocker.mutable.Dockerfile {
+        from("adoptopenjdk/openjdk11")
+        //from("openjdk:10-jre")
+        //from("openjdk:9-jre")
+        maintainer("haghard")
 
-  dockerfile in docker := {
-    //development | production
-    val appEnv = sys.props.getOrElse("env", "production")
-    println(s"★ ★ ★ ★ ★ ★ Build Docker image for Env:$appEnv ★ ★ ★ ★ ★ ★")
+        env("VERSION", version)
+        env("APP_BASE", imageAppBaseDir)
+        env("CONFIG", s"$imageAppBaseDir/$configDir")
+        env("ENV", appEnv)
 
-    //val appConfig = "/app/conf"
-    val baseDir = baseDirectory.value
-    val artifact: File = assembly.value
+        workDir(imageAppBaseDir)
+        copy(artifact, artifactTargetPath)
+        copy(dockerResourcesDir, dockerResourcesTargetPath)
 
-    val imageAppBaseDir = "/app"
-    val configDir = "conf"
-    val artifactTargetPath = s"$imageAppBaseDir/${artifact.name}"
-    val artifactTargetPath_ln = s"$imageAppBaseDir/${appEnv}-${name.value}.jar"
+        if (prodConfigSrc.exists)
+          copy(prodConfigSrc, appProdConfTarget) //Copy the prod config
 
-    val dockerResourcesDir = baseDir / "docker-resources"
-    val dockerResourcesTargetPath = s"$imageAppBaseDir/"
+        if (devConfigSrc.exists)
+          copy(devConfigSrc, appDevConfTarget) //Copy the prod config
 
-    val prodConfigSrc = baseDir / "conf" / "production.conf"
-    val devConfigSrc =  baseDir / "conf" / "development.conf"
+        runRaw(s"ls $appProdConfTarget")
+        runRaw(s"ls $appDevConfTarget")
 
-    //val curEnv = System.getenv("ENV")
+        runRaw(s"cd $configDir && ls -la && cd ..")
+        runRaw("ls -la")
 
-    val appProdConfTarget = s"$imageAppBaseDir/$configDir/production.conf"
-    val appDevConfTarget = s"$imageAppBaseDir/$configDir/development.conf"
+        //Symlink the service jar to a non version specific name
+        run("ln", "-sf", s"$artifactTargetPath", s"$artifactTargetPath_ln")
 
-    new sbtdocker.mutable.Dockerfile {
-      from("adoptopenjdk/openjdk12")
-      //from("openjdk:10-jre")
-      //from("openjdk:9-jre")
-      maintainer("haghard")
-
-      env("VERSION", version)
-      env("APP_BASE", imageAppBaseDir)
-      env("CONFIG", s"$imageAppBaseDir/$configDir")
-
-      env("ENV", appEnv)
-
-      //workDir(imageAppBaseDir)
-      //run("mkdir", configDir)
-
-      workDir(imageAppBaseDir)
-
-      copy(artifact, artifactTargetPath)
-      copy(dockerResourcesDir, dockerResourcesTargetPath)
-
-      if(prodConfigSrc.exists)
-        copy(prodConfigSrc, appProdConfTarget) //Copy the prod config
-
-      if(devConfigSrc.exists)
-        copy(devConfigSrc, appDevConfTarget) //Copy the prod config
-
-      runRaw(s"ls $appProdConfTarget")
-      runRaw(s"ls $appDevConfTarget")
-
-      runRaw(s"cd $configDir && ls -la && cd ..")
-      runRaw("ls -la")
-
-      //Symlink the service jar to a non version specific name
-      run("ln", "-sf", s"$artifactTargetPath", s"$artifactTargetPath_ln")
-
-      entryPoint(s"${dockerResourcesTargetPath}docker-entrypoint.sh")
+        entryPoint(s"${dockerResourcesTargetPath}docker-entrypoint.sh")
+      }
     }
-  }
-).enablePlugins(SbtWeb, sbtdocker.DockerPlugin, BuildInfoPlugin)
+  )
+  .enablePlugins(SbtWeb, sbtdocker.DockerPlugin, BuildInfoPlugin)
   .dependsOn(sharedJvm)
 
 def haltOnCmdResultError(result: Int) {
   if (result != 0) throw new Exception("Build failed")
 }
 
-lazy val ui = (project in file("ui")).settings(
-  resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
-  scalaVersion := scalaV,
-  scalafmtOnCompile := true,
-
-  libraryDependencies ++= Seq(
-    "org.singlespaced" %%% "scalajs-d3" %     "0.3.4",
-    "com.github.japgolly.scalajs-react" %%%   "core"      % "0.11.3",
-    "com.github.japgolly.scalajs-react" %%%   "extra"     % "0.11.3",
-    "com.github.japgolly.scalacss"      %%%   "ext-react" % "0.5.1",
-    //"pl.setblack"                       %%%   "cryptotpyrc" % "0.4.3",
-  ),
-
-  jsDependencies ++= Seq(
-    "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js",
-
-    "org.webjars.bower" % "react" % "15.4.2"
-        /        "react-with-addons.js"
-        minified "react-with-addons.min.js"
-        commonJSName "React",
-
-      "org.webjars.bower" % "react" % "15.4.2"
-        /         "react-dom.js"
-        minified  "react-dom.min.js"
-        dependsOn "react-with-addons.js"
-        commonJSName "ReactDOM",
-
-      "org.webjars.bower" % "react" % "15.4.2"
-        /         "react-dom-server.js"
-        minified  "react-dom-server.min.js"
-        dependsOn "react-dom.js"
-        commonJSName "ReactDOMServer"
-  ),
-
-  assemblyMergeStrategy in assembly := {
-    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-    case _ => MergeStrategy.first
-  }
-
-).enablePlugins(ScalaJSPlugin, ScalaJSWeb).dependsOn(sharedJs)
-
-lazy val shared = sbtcrossproject.CrossPlugin.autoImport.crossProject(JSPlatform, JVMPlatform)
-  .crossType(sbtcrossproject.CrossType.Pure)
+lazy val ui = (project in file("ui"))
   .settings(
+    resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
     scalaVersion := scalaV,
     scalafmtOnCompile := true,
+
+    //resolvers += "jitpack" at "https://jitpack.io"
+    //libraryDependencies += "com.github.fdietze.scala-js-d3v4" %%% "scala-js-d3v4" % "809f086"
+
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "upickle" % "0.6.6",
-    ),
-    assemblyMergeStrategy in assembly := {
+        "org.singlespaced"                  %%% "scalajs-d3" % "0.3.4",//"0.4.0"
+        "com.github.japgolly.scalajs-react" %%% "core"       % "0.11.5",// "0.11.5",
+        "com.github.japgolly.scalajs-react" %%% "extra"      % "0.11.5",//"0.11.5",
+        "com.github.japgolly.scalacss"      %%% "ext-react"  % "0.5.1"
+        //"pl.setblack"                       %%%   "cryptotpyrc" % "0.4.3",
+      ),
+    //"2.1.4"
+    jsDependencies ++= Seq(
+        "org.webjars"       % "jquery" % "3.7.1" / "3.7.1/jquery.js",
+        "org.webjars.bower" % "react"  % "15.4.2"
+        / "react-with-addons.js"
+        minified "react-with-addons.min.js"
+        commonJSName "React",
+        "org.webjars.bower" % "react" % "15.4.2"
+        / "react-dom.js"
+        minified "react-dom.min.js"
+        dependsOn "react-with-addons.js"
+        commonJSName "ReactDOM",
+        "org.webjars.bower" % "react" % "15.4.2"
+        / "react-dom-server.js"
+        minified "react-dom-server.min.js"
+        dependsOn "react-dom.js"
+        commonJSName "ReactDOMServer"
+      ),
+    assembly / assemblyMergeStrategy := {
       case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-      case _ => MergeStrategy.first
+      case _                             => MergeStrategy.first
     }
-  ).jsConfigure(_ enablePlugins ScalaJSWeb)
+  )
+  .enablePlugins(ScalaJSPlugin, ScalaJSWeb)
+  .dependsOn(sharedJs)
+
+lazy val shared =
+  sbtcrossproject.CrossPlugin.autoImport
+    .crossProject(JSPlatform, JVMPlatform)
+    .crossType(sbtcrossproject.CrossType.Pure)
+    .settings(
+      scalaVersion := scalaV,
+      scalafmtOnCompile := true,
+      libraryDependencies ++= Seq("com.lihaoyi" %%% "upickle" % "1.0.0"), //"0.6.6"
+      assembly / assemblyMergeStrategy := {
+        case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+        case _                             => MergeStrategy.first
+      }
+    )
+    .jsConfigure(_ enablePlugins ScalaJSWeb)
 
 lazy val sharedJvm = shared.jvm
-lazy val sharedJs = shared.js
+lazy val sharedJs  = shared.js
 
 //cancelable in Global := true
+
+scalaModuleInfo ~= (_.map(_.withOverrideScalaVersion(true)))
+
+scalafmtOnCompile := true
+
+def execute(dir: File): Unit = {
+  val ec = Process(s"cp ${dir}/src/main/resources/akka-small.jpg  ${dir}/target").!
+  if(ec != 0) throw new Exception("Copy error")
+}
+
+def copyJsArtifacts = baseDirectory.map { dir =>
+  println("Update js resources ...")
+  execute(dir)
+}
+
+
+addCommandAlias("fmt", "scalafmt")
+addCommandAlias("c", "compile")
+addCommandAlias("r", "reload")

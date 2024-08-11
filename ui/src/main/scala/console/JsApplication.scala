@@ -18,11 +18,10 @@ object JsApplication {
 
   def routerConfig(url: String) =
     RouterConfigDsl[Route]
-      .buildConfig { dsl ⇒
+      .buildConfig { dsl =>
         import dsl._
-
-        (staticRoute(root, DashboardRoute) ~> renderR(router ⇒ MetricsModule(router))
-        | staticRoute("#cluster", ClusterMapRoute) ~> renderR(router ⇒ <.div(ClusterViewModule("none", url))))
+        (staticRoute(root, DashboardRoute) ~> renderR(router => MetricsModule(router)) |
+          staticRoute("#cluster", ClusterMapRoute) ~> renderR(router => <.div(ClusterViewModule("none", url))))
           .notFound(redirectToPage(DashboardRoute)(Redirect.Replace))
       }
       .renderWith(layout)
@@ -43,11 +42,11 @@ object JsApplication {
   @JSExport
   def main(url: String): Unit = {
     import scalacss.Defaults._
-    scalacss.internal.mutable.GlobalRegistry.onRegistration { s ⇒
+    scalacss.internal.mutable.GlobalRegistry.onRegistration { s =>
       val style: StyleA = s.styles.head
-    //println(style.render[String])
-    //println(new GraphStyles().render[String])
-    //println(style.className.value)
+      // println(style.render[String])
+      // println(new GraphStyles().render[String])
+      println(url)
     }
 
     GlobalStyles.addToDocument()

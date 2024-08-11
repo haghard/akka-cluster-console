@@ -8,8 +8,8 @@ import japgolly.scalajs.react.vdom.prefix_<^._
 object MetricsModule {
 
   private val component =
-    ReactComponentB[RouterCtl[Route]]("Metrics").stateless.render_P { props ⇒
-      //org.scalajs.dom.console.log("Metrics: " + props.byPath.baseUrl.value)
+    ReactComponentB[RouterCtl[Route]]("Metrics").stateless.render_P { props =>
+      // org.scalajs.dom.console.log("Metrics: " + props.byPath.baseUrl.value)
       <.div(^.cls := "container", ^.paddingTop := "6px")("Hello Metrics Module.")
     }.build
 

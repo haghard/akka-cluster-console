@@ -6,18 +6,32 @@ Collects data from an existing akka cluster and draw it.
       
     `sbt -Denv=development docker && docker push haghard/cluster-console:0.1.0`
 
-### How to run 
-  
-  * `docker run --net=host -d -p 8081:8081 -e HOSTNAME=192.168.77.10 -e HTTP_PORT=8081 -e URL=... -e PASSWORD=... -m 250MB haghard/cluster-console:0.1.0`
-  *  Open http://192.168.77.10:8080/console
-  *  Click on "Cluster" tab 
+### How to run locally
 
-  Where:
-    
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.11.jdk/Contents/Home
+
+```
+
+sbt a
+sbt b
+sbt c
+
+http://127.0.0.1:8080/console
+
+```
+
+### How to run
+
+* `docker run --net=host -d -p 8081:8081 -e HOSTNAME=192.168.77.10 -e HTTP_PORT=8081 -e URL=... -e PASSWORD=... -m 250MB haghard/cluster-console:0.1.0`
+*  Open http://192.168.77.10:8080/console
+*  Click on "Cluster" tab
+
+Where:
+
     *  URL points out on an existing akka cluster that runs `akka-management-cluster-http` module. For example https://.../cluster/members
     *  PASSWORD passwords that protects URL.
 
- 
+
 ### Live demo link
 https://codelfsolutions.com/console  
 	  

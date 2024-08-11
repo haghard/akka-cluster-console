@@ -2,7 +2,7 @@ package shared
 
 import scala.collection.immutable.Seq
 
-import upickle.default.{ReadWriter ⇒ RW, macroRW}
+import upickle.default.{macroRW, ReadWriter => RW}
 
 object protocol {
 
@@ -22,10 +22,10 @@ object protocol {
 
   object Mode {
     def fromString(s: String) = s match {
-      case Members.name ⇒ Members
-      case Roles.name   ⇒ Roles
-      case Nodes.name   ⇒ Nodes
-      case _            ⇒ Members
+      case Members.name => Members
+      case Roles.name   => Roles
+      case Nodes.name   => Nodes
+      case _            => Members
     }
   }
 
@@ -42,21 +42,26 @@ object protocol {
   }
 
   sealed trait NodeState
-
-  case object Up extends NodeState
-
-  case object Unreachable extends NodeState
-
-  case object Removed extends NodeState
-
-  case object Exited extends NodeState
-
   object NodeState {
+    def fromStr(state: String): NodeState =
+      state match {
+        case "" => Up
+      }
+
+    case object Up extends NodeState
+
+    case object Unreachable extends NodeState
+
+    case object Removed extends NodeState
+
+    case object Exited extends NodeState
+
     implicit val rw: RW[NodeState] = macroRW
+
   }
 
   case class ClusterMember(address: HostPort, roles: Set[String], state: NodeState) {
-    def label = address.label + s" roles[${roles.mkString(",").map(r ⇒ r)}] status[$state]"
+    def label = address.label + s" roles[${roles.mkString(",").map(r => r)}] status[$state]"
 
     def labelSimple = address.label
   }
