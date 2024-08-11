@@ -1,9 +1,11 @@
+/*
 package console.components
 
-import japgolly.scalajs.react.ReactComponentB
+//import japgolly.scalajs.react.ReactComponentB
 import japgolly.scalajs.react.extra.router.RouterCtl
 import console.JsApplication.Route
-import japgolly.scalajs.react.vdom.prefix_<^._
+//import japgolly.scalajs.react.vdom.prefix_<^._
+import japgolly.scalajs.react.vdom.html_<^._
 
 object MetricsModule {
 
@@ -16,3 +18,4 @@ object MetricsModule {
   def apply(r: RouterCtl[Route]) =
     component(r)
 }
+ */

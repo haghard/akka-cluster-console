@@ -28,6 +28,9 @@ java -server -Xmx128M -XX:+PrintCommandLineFlags -XshowSettings:vm -XX:+UseG1GC 
 ```
 
 
+https://www.scala-js.org/doc/tutorial/basic/0.6.x.html
+
+
 ###  How to build
 
     `sbt -Denv=development docker && docker push haghard/cluster-console:0.1.0`

@@ -1,6 +1,6 @@
 package console.components
 
-import japgolly.scalajs.react.vdom.prefix_<^._
+import japgolly.scalajs.react.vdom.html_<^._
 import java.util.concurrent.ThreadLocalRandom
 import japgolly.scalajs.react
 import japgolly.scalajs.react.{BackendScope, CallbackTo}
@@ -20,9 +20,26 @@ import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 
 object ClusterViewModule extends GraphSupport {
 
-  case class GraphProps(system: String, url: String, refreshTimeout: Long)
+  val Exp = """akka://([-|\w]*)@(\d{1,4}).(\d{1,4}).(\d{1,4}).(\d{1,4}):(\d{1,9})""".r
+  val quotes = Vector(
+    """
+      |The Dynamo system design principals: a) consistent hashing to determine key placement b) partial quorums for reading and writing
+      |c) conflict detection and read repair via vector clocks d) gossip for replica synchronization.#Distributed systems for fun and profit.#unknown
+      |""".stripMargin,
+    "Eventual consistency(EC) guarantees that if no new updates are made to the object, eventually all accesses will return the last updated value.#Werner Vogels",
+    "Causal consistency guarantees that write operations that are causally related must be seen in the same order by all processes, but no ordering is defined for causally unrelated operations.#unknown",
+    "The natural state in a distributed system is partial order.#Distributed systems for fun and profit",
+    "Two-phase commit is the anti-availability protocol.#Pat Helland",
+    "Developers simply do not implement large scalable applications assuming distributed transactions.#Pat Helland",
+    "If a tree falls in a forest and no one is around to hear it, does it make a sound ?#Philosopher George Berkeley",
+    "The truth is the log. The database is a cache of a subset of the log.#Pat Helland",
+    "Linearizable consistency: Under linearizable consistency, all operations appear to have executed atomically in an order that is consistent with the global real-time ordering of operations.#Herlihy & Wing, 1991",
+    "Sequential consistency: Under sequential consistency, all operations appear to have executed atomically in some order that is consistent with the order seen at individual nodes and that is equal at all nodes.#Lamport, 1979",
+    "Developers simply do not implement large scalable applications assuming distributed transactions#Pat Helland"
+  )
 
-  case class GraphState(
+  final case class ConsoleProps(system: String, url: String, refreshTimeout: Long)
+  final case class ConsoleState(
     system: Option[String] = None,
     nodes: Array[Vertix] = Array[Vertix](),
     links: Array[Edge] = Array[Edge](),
@@ -30,31 +47,11 @@ object ClusterViewModule extends GraphSupport {
     force: Option[forceModule.Force[Vertix, Edge]] = None
   )
 
-  class GraphBackend(scope: BackendScope[GraphProps, GraphState]) extends OnUnmount {
-    val quotes = Vector(
-      """
-        |The Dynamo system design principals: a) consistent hashing to determine key placement b) partial quorums for reading and writing
-        |c) conflict detection and read repair via vector clocks d) gossip for replica synchronization.#Distributed systems for fun and profit.#unknown
-        |""".stripMargin,
-      "Eventual consistency(EC) guarantees that if no new updates are made to the object, eventually all accesses will return the last updated value.#Werner Vogels",
-      "Causal consistency guarantees that write operations that are causally related must be seen in the same order by all processes, but no ordering is defined for causally unrelated operations.#unknown",
-      "The natural state in a distributed system is partial order.#Distributed systems for fun and profit",
-      "Two-phase commit is the anti-availability protocol.#Pat Helland",
-      "Developers simply do not implement large scalable applications assuming distributed transactions.#Pat Helland",
-      "If a tree falls in a forest and no one is around to hear it, does it make a sound ?#Philosopher George Berkeley",
-      "The truth is the log. The database is a cache of a subset of the log.#Pat Helland",
-      "Linearizable consistency: Under linearizable consistency, all operations appear to have executed atomically in an order that is consistent with the global real-time ordering of operations.#Herlihy & Wing, 1991",
-      "Sequential consistency: Under sequential consistency, all operations appear to have executed atomically in some order that is consistent with the order seen at individual nodes and that is equal at all nodes.#Lamport, 1979",
-      "Developers simply do not implement large scalable applications assuming distributed transactions#Pat Helland"
-    )
-
-    var interval: js.UndefOr[js.timers.SetIntervalHandle] = js.undefined
-
+  class GraphBackend(scope: BackendScope[ConsoleProps, ConsoleState]) extends OnUnmount {
+    // var interval: js.UndefOr[js.timers.SetIntervalHandle] = js.undefined
     val p         = 10
     val svgWidth  = 1200
     val svgHeight = 700
-
-    val Exp = """akka://([-|\w]*)@(\d{1,4}).(\d{1,4}).(\d{1,4}).(\d{1,4}):(\d{1,9})""".r
 
     val tooltip = d3
       .select("body") // body
@@ -72,7 +69,7 @@ object ClusterViewModule extends GraphSupport {
       .style("border-radius", "8px")
       .style("pointer-events", "none")
 
-    private def tick =
+    /*private def tick =
       scope.modState { prev =>
         val nextForce = prev.force.map { f =>
           f.stop()
@@ -86,7 +83,7 @@ object ClusterViewModule extends GraphSupport {
           onDelete(prev.selection.get, f, influentialNodes, influentialLinks)
         }
         prev.copy(force = nextForce)
-      }
+      }*/
 
     /*def start = Callback {
       //to delete links for a search session
@@ -113,7 +110,7 @@ object ClusterViewModule extends GraphSupport {
                   <.footer(quoteAndAuthor(1))
                 )
               ),
-              <.h4(s"System: $system")
+              <.h4(s"Actor-System: $system")
             )
           }
         }
@@ -134,7 +131,7 @@ object ClusterViewModule extends GraphSupport {
       }
     }
 
-    def reload(props: GraphProps): Callback =
+    def reload(props: ConsoleProps): Callback =
       for {
         _ <- fetchClusterProfile(props)
         i <- CallbackTo(js.timers.setInterval(props.refreshTimeout)(fetchClusterProfile(props).runNow()))
@@ -142,7 +139,7 @@ object ClusterViewModule extends GraphSupport {
         _ <- onUnmount(c)
       } yield ()
 
-    private def fetchClusterProfile(props: GraphProps): CallbackTo[Unit] =
+    private def fetchClusterProfile(props: ConsoleProps): CallbackTo[Unit] =
       react.Callback.future {
         // dom.console.log("fetch-cluster-profile")
         org.scalajs.dom.ext.Ajax
@@ -194,14 +191,16 @@ object ClusterViewModule extends GraphSupport {
                 ).asInstanceOf[Vertix]
               }
 
-              val vertices: js.Array[Vertix] = (members ++ hosts).toJsArray
+              val vertices: js.Array[Vertix] = js.Array[Vertix]((members ++ hosts).toSeq: _*) // .toJsArray
 
               val edges0 = hosts.flatMap(r => members.filter(_.host == r.host).map(h => Link(r, h)))
               val edges: js.Array[Edge] =
-                (if (hosts.size > 1) {
-                   val localSeq = hosts.toSeq
-                   edges0 ++ (1 to localSeq.size - 1).map(i => NodeLink(localSeq(i - 1), localSeq(i))).toSet
-                 } else edges0).toJsArray
+                js.Array[Edge](
+                  (if (hosts.size > 1) {
+                     val localSeq = hosts.toSeq
+                     edges0 ++ (1 to localSeq.size - 1).map(i => NodeLink(localSeq(i - 1), localSeq(i))).toSet
+                   } else edges0).toSeq: _*
+                ) // .toJsArray
 
               dom.console.log(s"vertices/edges:${vertices.size}/${edges.size}")
 
@@ -339,7 +338,7 @@ object ClusterViewModule extends GraphSupport {
 
       nodeEnter
         .append("circle")
-        .attr("r", (n: Vertix) => if (n.isHost) 35 else 5)
+        .attr("r", (n: Vertix) => if (n.isHost) 35 else 7)
         .style(
           "fill",
           (n: Vertix) => if (n.isHost) "#2FA02B" else "#ede7e6" // "#bedee6"
@@ -416,8 +415,9 @@ object ClusterViewModule extends GraphSupport {
   }
 
   val component =
-    ReactComponentB[GraphProps]("Graph-Component")
-      .initialState(GraphState())
+    ScalaComponent
+      .builder[ConsoleProps]("Console")
+      .initialState(ConsoleState())
       .backend(new GraphBackend(_))
       .renderPS { (scope, props, state) =>
         scope.backend.render()
@@ -436,5 +436,5 @@ object ClusterViewModule extends GraphSupport {
       .build
 
   def apply(system: String, url: String) =
-    component(GraphProps(system, url, 10000))
+    component(ConsoleProps(system, url, 5_000))
 }

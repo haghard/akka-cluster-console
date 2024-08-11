@@ -56,7 +56,7 @@ case class Bootstrap(host: String, port: Int, clusterUrl: String)(implicit syste
 
   Http()
     .newServerAt(host, port)
-    .bindFlow(cors()(api.RestApi.routes(clusterUrl)))
+    .bindFlow(cors()(api.RestApi.routes(system.name, clusterUrl)))
     // .bindFlow(corsRoute)
     // .bindFlow(api.RestApi.route(clusterUrl))
     .onComplete {

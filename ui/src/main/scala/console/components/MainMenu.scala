@@ -1,3 +1,4 @@
+/*
 package console.components
 
 import japgolly.scalajs.react.extra.OnUnmount
@@ -44,3 +45,4 @@ object MainMenu {
   def apply(props: Props) =
     MainMenu(props)
 }
+ */

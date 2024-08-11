@@ -1,3 +1,5 @@
+/*
+
 package console
 
 import console.style.{GlobalStyles, GraphStyles}
@@ -5,7 +7,7 @@ import japgolly.scalajs.react.ReactDOM
 import console.components.{ClusterViewModule, MainMenu, MetricsModule}
 import japgolly.scalajs.react.extra.router.{BaseUrl, Redirect, Resolution, Router, RouterConfigDsl, RouterCtl}
 import org.scalajs.dom
-import japgolly.scalajs.react.vdom.prefix_<^._
+import japgolly.scalajs.react.vdom.html_<^._
 
 import scala.scalajs.js.annotation.JSExport
 
@@ -41,7 +43,9 @@ object JsApplication {
 
   @JSExport
   def main(url: String): Unit = {
-    import scalacss.Defaults._
+    //import scalacss.Defaults._
+    import scalacss.DevDefaults._
+
     scalacss.internal.mutable.GlobalRegistry.onRegistration { s =>
       val style: StyleA = s.styles.head
       // println(style.render[String])
@@ -56,3 +60,5 @@ object JsApplication {
     ReactDOM.render(router(), dom.document.getElementById("scene"))
   }
 }
+
+ */

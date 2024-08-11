@@ -4,7 +4,7 @@ import sbtdocker.ImageName
 
 import scala.sys.process.Process
 
-val scalaV          = "2.12.10"
+val scalaV          = "2.13.1"
 val akkaVersion     = "2.6.21"
 val version         = "0.1.0"
 val AkkaMngVersion  = "1.4.1"
@@ -191,10 +191,10 @@ lazy val ui = (project in file("ui"))
     //libraryDependencies += "com.github.fdietze.scala-js-d3v4" %%% "scala-js-d3v4" % "809f086"
 
     libraryDependencies ++= Seq(
-        "org.singlespaced"                  %%% "scalajs-d3" % "0.3.4",//"0.4.0"
-        "com.github.japgolly.scalajs-react" %%% "core"       % "0.11.5",// "0.11.5",
-        "com.github.japgolly.scalajs-react" %%% "extra"      % "0.11.5",//"0.11.5",
-        "com.github.japgolly.scalacss"      %%% "ext-react"  % "0.5.1"
+        "org.singlespaced"                  %%% "scalajs-d3" % "0.4.0",//"0.4.0" local build
+        "com.github.japgolly.scalajs-react" %%% "core"       % "1.5.0",// "0.11.5",
+        "com.github.japgolly.scalajs-react" %%% "extra"      % "1.5.0",//"0.11.5",
+        "com.github.japgolly.scalacss"      %%% "ext-react"  % "0.6.0"
         //"pl.setblack"                       %%%   "cryptotpyrc" % "0.4.3",
       ),
     //"2.1.4"
@@ -246,6 +246,9 @@ lazy val sharedJs  = shared.js
 scalafmtOnCompile := true
 
 def execute(dir: File): Unit = {
+  Process(s"mkdir ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/js").!
+  Process(s"mkdir ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css").!
+  Process(s"cp ${dir}/src/main/resources/react/main.css ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css").!
   val ec = Process(s"cp ${dir}/src/main/resources/akka-small.jpg  ${dir}/target").!
   if(ec != 0) throw new Exception("Copy error")
 }
