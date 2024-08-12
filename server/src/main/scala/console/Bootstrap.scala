@@ -1,30 +1,42 @@
 package console
 
-import Bootstrap._
-import akka.http.scaladsl.server.RouteResult._
-import akka.actor.{ActorSystem, CoordinatedShutdown}
 import akka.Done
-import akka.actor.CoordinatedShutdown.{PhaseServiceRequestsDone, PhaseServiceUnbind, Reason}
-import akka.dispatch.MessageDispatcher
+import akka.actor.ActorSystem
+import akka.actor.CoordinatedShutdown
+import akka.actor.CoordinatedShutdown.PhaseServiceRequestsDone
+import akka.actor.CoordinatedShutdown.PhaseServiceUnbind
+import akka.actor.CoordinatedShutdown.Reason
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.HttpMethods.{DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT}
+import akka.http.scaladsl.model.HttpMethods.DELETE
+import akka.http.scaladsl.model.HttpMethods.GET
+import akka.http.scaladsl.model.HttpMethods.HEAD
+import akka.http.scaladsl.model.HttpMethods.OPTIONS
+import akka.http.scaladsl.model.HttpMethods.PATCH
+import akka.http.scaladsl.model.HttpMethods.POST
+import akka.http.scaladsl.model.HttpMethods.PUT
 import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.server.RouteResult._
 import akka.http.scaladsl.server.directives.ExecutionDirectives._
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives.corsRejectionHandler
 import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
 
 import scala.collection.immutable
 import scala.concurrent.ExecutionContext
-import scala.util.{Failure, Success}
 import scala.concurrent.duration._
-import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
-import ch.megard.akka.http.cors.scaladsl.CorsDirectives.corsRejectionHandler
+import scala.util.Failure
+import scala.util.Success
+
+import Bootstrap._
 
 object Bootstrap {
   final private case object BindFailure extends Reason
 }
 
-case class Bootstrap(host: String, port: Int, clusterUrl: String)(implicit system: ActorSystem) {
-  implicit val ex: MessageDispatcher = system.dispatchers.lookup(Application.HttpDispatcher)
+case class Bootstrap(host: String, port: Int, clusterUrl: String)(implicit
+  system: ActorSystem
+) {
+  import system.dispatcher
 
   val terminationDeadline = FiniteDuration(
     system.settings.config.getDuration("akka.coordinated-shutdown.default-phase-timeout").toNanos,

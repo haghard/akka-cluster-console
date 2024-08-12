@@ -2,10 +2,8 @@ package console.style
 
 import console.components.Bootstrap.CommonStyle
 import console.components.Bootstrap.CommonStyle._
-
-import scalacss.Defaults._
 import japgolly.univeq.UnivEq
-
+import scalacss.Defaults._
 import scalacss.internal.mutable.Register
 
 class BootstrapStyles(implicit r: Register) extends StyleSheet.Inline()(r) {

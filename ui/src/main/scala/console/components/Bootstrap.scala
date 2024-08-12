@@ -1,7 +1,6 @@
 package console.components
 
 import console.style.GlobalStyles
-import scala.language.implicitConversions
 
 object Bootstrap {
   @inline private def bss = GlobalStyles.bootstrapStyles

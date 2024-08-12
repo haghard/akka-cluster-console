@@ -1,8 +1,9 @@
 package shared
 
-import scala.collection.immutable.Seq
+import upickle.default.macroRW
+import upickle.default.{ReadWriter => RW}
 
-import upickle.default.{macroRW, ReadWriter => RW}
+import scala.collection.immutable.Seq
 
 object protocol {
 

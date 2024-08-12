@@ -1,8 +1,6 @@
 package console.components
 
-import console.jsGraph.{AkkaClusterNode, CgraphNode, GraphNode}
-
-import scala.scalajs.js
+import console.jsGraph.AkkaClusterNode
 
 object GraphSupport {
 

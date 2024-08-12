@@ -1,22 +1,29 @@
 package console.components
 
-import japgolly.scalajs.react.vdom.html_<^._
-import java.util.concurrent.ThreadLocalRandom
 import japgolly.scalajs.react
-import japgolly.scalajs.react.{BackendScope, CallbackTo}
-import org.scalajs.dom
-import org.singlespaced.d3js.Ops._
-import org.singlespaced.d3js.{d3, forceModule, Selection}
-
-import scala.scalajs.js
-import scala.scalajs.js.{Array, Dynamic}
+import japgolly.scalajs.react.BackendScope
+import japgolly.scalajs.react.CallbackTo
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.OnUnmount
-import shared.protocol.{ClusterMember, ClusterProfile, HostPort, NodeState}
+import japgolly.scalajs.react.vdom.html_<^._
+import org.scalajs.dom
+import org.singlespaced.d3js.Ops._
+import org.singlespaced.d3js.Selection
+import org.singlespaced.d3js.d3
+import org.singlespaced.d3js.forceModule
+import shared.protocol.ClusterMember
+import shared.protocol.ClusterProfile
+import shared.protocol.HostPort
+import shared.protocol.NodeState
 
-import Dynamic.{literal => lit}
+import java.util.concurrent.ThreadLocalRandom
 import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
+import scala.scalajs.js
+import scala.scalajs.js.Array
+import scala.scalajs.js.Dynamic
+
+import Dynamic.{literal => lit}
 
 object ClusterViewModule extends GraphSupport {
 

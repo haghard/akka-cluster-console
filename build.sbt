@@ -17,16 +17,39 @@ val scalaOps = Seq("-feature", "-Xfatal-warnings", "-deprecation", "-unchecked")
 //https://repo1.maven.org/maven2/com/lihaoyi/ammonite-compiler_3.3.1/3.0.0-M2-3-b5eb4787/
 val AmmoniteVersion = "3.0.0-M2-3-b5eb4787"
 
+lazy val scalacSettings2_13_14 = Seq(
+  scalacOptions ++= Seq(
+    //"-Xsource:3-cross",
+    "-language:existentials",
+    "-language:experimental.macros",
+    "-release:17",
+    "-deprecation",
+    "-feature",
+    "-unchecked",
+    "-Yrangepos", //semanticdb-scalac
+    "-Xlog-reflective-calls",
+    "-Xcheckinit", // runtime error when a val is not initialized due to trait hierarchies (instead of NPE somewhere else)
+    "-Xlint",
+    //"-Xfatal-warnings",
+    "-Wunused:imports",
+    "-Wconf:cat=other-match-analysis:error", //Transforms exhaustivity warnings into errors.
+    "-Wconf:msg=lambda-parens:s",
+    "-Xmigration", //Emit migration warnings under -Xsource:3 as fatal warnings, not errors; -Xmigration disables fatality (#10439 by @som-snytt, #10511)
+  )
+)
+
 lazy val server = (project in file("server"))
+  .settings(scalacSettings2_13_14)
   .settings(
     name := "server",
     resolvers ++= Seq("Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"),
     scalaVersion            := scalaV,
     scalaJSProjects         := Seq(ui),
     Assets / pipelineStages := Seq(scalaJSPipeline),
-    Compile / scalacOptions := scalaOps,
-    console / scalacOptions := scalaOps,
+    //Compile / scalacOptions := scalaOps,
+    //console / scalacOptions := scalaOps,
     Compile / compile       := (Compile / compile).dependsOn(scalaJSPipeline, copyJsArtifacts).value,
+
     scalafmtOnCompile       := true,
     run / fork              := true,
     run / connectInput      := true,
@@ -181,6 +204,7 @@ def haltOnCmdResultError(result: Int) {
 }
 
 lazy val ui = (project in file("ui"))
+  .settings(scalacSettings2_13_14)
   .settings(
     resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
     scalaVersion      := scalaV,
@@ -227,6 +251,7 @@ lazy val shared =
   sbtcrossproject.CrossPlugin.autoImport
     .crossProject(JSPlatform, JVMPlatform)
     .crossType(sbtcrossproject.CrossType.Pure)
+    .settings(scalacSettings2_13_14)
     .settings(
       scalaVersion      := scalaV,
       scalafmtOnCompile := true,

@@ -1,13 +1,15 @@
 package console
 
-import java.io.File
-import java.util.TimeZone
-import java.time.LocalDateTime
 import akka.actor.ActorSystem
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.Config
+import com.typesafe.config.ConfigFactory
 
+import java.io.File
+import java.time.LocalDateTime
+import java.util.TimeZone
 import scala.collection._
-import scala.concurrent.duration.{FiniteDuration, NANOSECONDS}
+import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.duration.NANOSECONDS
 
 object Application extends App with AppSupport {
 

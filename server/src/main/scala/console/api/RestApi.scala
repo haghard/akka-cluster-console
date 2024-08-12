@@ -1,10 +1,10 @@
 package console.api
 
+import akka.http.scaladsl.model.ContentTypes
 import akka.http.scaladsl.model.HttpEntity.Strict
-import akka.http.scaladsl.model.headers._
-import akka.http.scaladsl.model.{ContentTypes, HttpResponse}
-import akka.http.scaladsl.server.Directives.getFromResource
-import akka.http.scaladsl.server.{Directives, Route}
+import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.server.Directives
+import akka.http.scaladsl.server.Route
 import akka.util.ByteString
 import console.scripts.JsScript
 
@@ -31,7 +31,7 @@ object RestApi extends Directives {
           path("pics" / Remaining) { _ =>
             getFromResource("akka-small.jpg")
           } ~ pathPrefix("assets" / Remaining) { file =>
-            // log.info("GET {}", file)
+            log.info("GET assets {}", file)
             encodeResponse(getFromResource(folderName + "/" + file))
           }
       } ~ akka.management.cluster.scaladsl.ClusterHttpManagementRoutes(akka.cluster.Cluster(system))
