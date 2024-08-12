@@ -5,6 +5,7 @@ import akka.http.scaladsl.server.RouteResult._
 import akka.actor.{ActorSystem, CoordinatedShutdown}
 import akka.Done
 import akka.actor.CoordinatedShutdown.{PhaseServiceRequestsDone, PhaseServiceUnbind, Reason}
+import akka.dispatch.MessageDispatcher
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpMethods.{DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT}
 import akka.http.scaladsl.server.Route
@@ -23,7 +24,7 @@ object Bootstrap {
 }
 
 case class Bootstrap(host: String, port: Int, clusterUrl: String)(implicit system: ActorSystem) {
-  implicit val ex = system.dispatchers.lookup(Application.HttpDispatcher)
+  implicit val ex: MessageDispatcher = system.dispatchers.lookup(Application.HttpDispatcher)
 
   val terminationDeadline = FiniteDuration(
     system.settings.config.getDuration("akka.coordinated-shutdown.default-phase-timeout").toNanos,

@@ -198,7 +198,9 @@ object ClusterViewModule extends GraphSupport {
                 js.Array[Edge](
                   (if (hosts.size > 1) {
                      val localSeq = hosts.toSeq
-                     edges0 ++ (1 to localSeq.size - 1).map(i => NodeLink(localSeq(i - 1), localSeq(i))).toSet
+                     edges0 ++ (1 to localSeq.size - 1)
+                       .map(i => GraphSupport.NodeLink(localSeq(i - 1), localSeq(i)))
+                       .toSet
                    } else edges0).toSeq: _*
                 ) // .toJsArray
 
@@ -338,11 +340,11 @@ object ClusterViewModule extends GraphSupport {
 
       nodeEnter
         .append("circle")
-        .attr("r", (n: Vertix) => if (n.isHost) 35 else 7)
+        .attr("r", (n: Vertix) => if (n.isHost.getOrElse(false)) 35 else 7)
         .style(
           "fill",
-          (n: Vertix) => if (n.isHost) "#2FA02B" else "#ede7e6" // "#bedee6"
-        )                                                       // "#489dbd","#48abbd", "#1629a6", "#f2593a"
+          (n: Vertix) => if (n.isHost.getOrElse(false)) "#2FA02B" else "#ede7e6" // "#bedee6"
+        ) // "#489dbd","#48abbd", "#1629a6", "#f2593a"
         .style("opacity", .9)
         .style("stroke", "black")
         .style("stroke-miterlimit", 10)
@@ -395,7 +397,7 @@ object ClusterViewModule extends GraphSupport {
       tooltip
         .html(s"id: ${n.id} <br/>\naddress: ${n.host}:${n.port} <br/>\n role: ${n.roles}")
         .style("left", n.x + "px")
-        .style("top", (n.y - 20) + "px")
+        .style("top", n.y.map(_ - 20).getOrElse(0d) + "px")
     }
 
     private def onClick(n: Vertix): Unit =
@@ -436,5 +438,5 @@ object ClusterViewModule extends GraphSupport {
       .build
 
   def apply(system: String, url: String) =
-    component(ConsoleProps(system, url, 5_000))
+    component(ConsoleProps(system, url, 7_000))
 }

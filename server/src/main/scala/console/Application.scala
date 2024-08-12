@@ -47,7 +47,7 @@ object Application extends App with AppSupport {
 
   config.getConfig(HttpDispatcher)
 
-  implicit val system = ActorSystem("my-console", config)
+  implicit val system: ActorSystem = ActorSystem("my-console", config)
   val runtimeInfo = new StringBuilder()
     .append('\n')
     .append(s"Cores:${Runtime.getRuntime.availableProcessors}")
@@ -86,7 +86,7 @@ object Application extends App with AppSupport {
   akka.management.scaladsl.AkkaManagement(system).start()
   akka.management.cluster.bootstrap.ClusterBootstrap(system).start()
 
-  val _ = scala.io.StdIn.readLine()
+  val line = scala.io.StdIn.readLine()
   system.log.warning("★ ★ ★ ★ ★ ★  Shutting down ... ★ ★ ★ ★ ★ ★")
   system.terminate()
   scala.concurrent.Await

@@ -1,4 +1,4 @@
-package console
+package console.scripts
 
 import scalatags.Text.all._
 
@@ -16,9 +16,9 @@ object JsScript {
         script(`type` := "text/javascript", src := "/assets/lib/jquery/jquery.js"),
         script(`type` := "text/javascript", src := "/assets/lib/bootstrap/js/bootstrap.js"),
         script(`type` := "text/javascript", src := "/assets/ui-jsdeps.js"),
-        // script(`type` := "text/javascript", src := "/console-assets/ui-fastopt.js"),
-        script(`type` := "text/javascript", src := "/assets/ui-opt.js"),
-        div(id        := targetDiv, style       := "position:relative"),
+        script(`type` := "text/javascript", src := "/assets/ui-fastopt.js"),
+        // script(`type` := "text/javascript", src := "/assets/ui-opt.js"),
+        div(id := targetDiv, style := "position:relative"),
         script(s"JsApp(`$system`,`$url`,'$targetDiv')")
       )
     )

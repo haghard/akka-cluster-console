@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
 import scala.sys.process.Process
 
-val scalaV          = "2.13.1"
+val scalaV          = "2.13.14"
 val akkaVersion     = "2.6.21"
 val version         = "0.1.0"
 val AkkaMngVersion  = "1.4.1"
@@ -14,7 +14,10 @@ val AkkaHttpVersion = "10.2.10"
 
 val scalaOps = Seq("-feature", "-Xfatal-warnings", "-deprecation", "-unchecked")
 
-//scalaVersion := scalaV
+
+
+//https://repo1.maven.org/maven2/com/lihaoyi/ammonite-compiler_3.3.1/3.0.0-M2-3-b5eb4787/
+val AmmoniteVersion = "3.0.0-M2-3-b5eb4787"
 
 lazy val server = (project in file("server"))
   .settings(
@@ -50,7 +53,7 @@ lazy val server = (project in file("server"))
         "com.typesafe.akka"             %% "akka-discovery"                    % akkaVersion,
         "com.lightbend.akka.management" %% "akka-management-cluster-bootstrap" % AkkaMngVersion,
         "com.lightbend.akka.management" %% "akka-management-cluster-http"      % AkkaMngVersion,
-        ("com.lihaoyi" % "ammonite" % "2.5.0" % "test").cross(CrossVersion.full)
+        ("com.lihaoyi" % "ammonite" % AmmoniteVersion % "test").cross(CrossVersion.full)
       ),
     dependencyOverrides ++= Seq(
         "com.typesafe.akka"             %% "akka-actor-typed"                  % akkaVersion,
@@ -193,14 +196,15 @@ lazy val ui = (project in file("ui"))
     //libraryDependencies += "com.github.fdietze.scala-js-d3v4" %%% "scala-js-d3v4" % "809f086"
 
     libraryDependencies ++= Seq(
-        "org.singlespaced"                  %%% "scalajs-d3" % "0.4.0",//"0.4.0" local build
-        "com.github.japgolly.scalajs-react" %%% "core"       % "1.5.0",// "0.11.5",
-        "com.github.japgolly.scalajs-react" %%% "extra"      % "1.5.0",//"0.11.5",
-        "com.github.japgolly.scalacss"      %%% "ext-react"  % "0.6.0"
+        "org.singlespaced"                  %%% "scalajs-d3" % "0.5.0",//"0.5.0" local build with @JSGlobal
+        "com.github.japgolly.scalajs-react" %%% "core"       % "1.7.7",
+        "com.github.japgolly.scalajs-react" %%% "extra"      % "1.7.7",
+        "com.github.japgolly.scalacss"      %%% "ext-react"  % "0.6.1"
         //"pl.setblack"                       %%%   "cryptotpyrc" % "0.4.3",
       ),
     //"2.1.4"
     jsDependencies ++= Seq(
+        "org.webjars" % "d3js" % "3.5.17" / "3.5.17/d3.min.js",
         "org.webjars"       % "jquery" % "3.7.1" / "3.7.1/jquery.js",
         "org.webjars.bower" % "react"  % "15.4.2"
         / "react-with-addons.js"
@@ -232,7 +236,7 @@ lazy val shared =
     .settings(
       scalaVersion := scalaV,
       scalafmtOnCompile := true,
-      libraryDependencies ++= Seq("com.lihaoyi" %%% "upickle" % "1.0.0"), //"0.6.6"
+      libraryDependencies ++= Seq("com.lihaoyi" %%% "upickle" % "1.0.0"),
       assembly / assemblyMergeStrategy := {
         case PathList("META-INF", xs @ _*) => MergeStrategy.discard
         case _                             => MergeStrategy.first

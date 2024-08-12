@@ -6,8 +6,7 @@ import akka.http.scaladsl.model.{ContentTypes, HttpResponse}
 import akka.http.scaladsl.server.Directives.getFromResource
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.util.ByteString
-import console.JsScript
-import console.scripts.AppScript
+import console.scripts.JsScript
 
 object RestApi extends Directives {
 

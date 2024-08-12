@@ -5,55 +5,55 @@ import scala.scalajs.js
 package object jsGraph {
 
   trait GraphNode extends js.Object {
-    var id: Double                     = js.native
-    var index: Double                  = js.native
-    var name: String                   = js.native
-    var px: Double                     = js.native
-    var py: Double                     = js.native
-    var size: Double                   = js.native
-    var weight: Double                 = js.native
-    var x: Double                      = js.native
-    var y: Double                      = js.native
-    var subindex: Double               = js.native
-    var startAngle: Double             = js.native
-    var endAngle: Double               = js.native
-    var value: Double                  = js.native
-    var fixed: Boolean                 = js.native
-    var children: js.Array[GraphNode]  = js.native
-    var _children: js.Array[GraphNode] = js.native
-    var parent: GraphNode              = js.native
-    var depth: Double                  = js.native
+    var id: js.UndefOr[Double]                     = js.undefined
+    var index: js.UndefOr[Double]                  = js.undefined
+    var name: js.UndefOr[String]                   = js.undefined
+    var px: js.UndefOr[Double]                     = js.undefined
+    var py: js.UndefOr[Double]                     = js.undefined
+    var size: js.UndefOr[Double]                   = js.undefined
+    var weight: js.UndefOr[Double]                 = js.undefined
+    var x: js.UndefOr[Double]                      = js.undefined
+    var y: js.UndefOr[Double]                      = js.undefined
+    var subindex: js.UndefOr[Double]               = js.undefined
+    var startAngle: js.UndefOr[Double]             = js.undefined
+    var endAngle: js.UndefOr[Double]               = js.undefined
+    var value: js.UndefOr[Double]                  = js.undefined
+    var fixed: js.UndefOr[Boolean]                 = js.undefined
+    var children: js.UndefOr[GraphNode]            = js.undefined
+    var _children: js.UndefOr[js.Array[GraphNode]] = js.undefined
+    var parent: js.UndefOr[GraphNode]              = js.undefined
+    var depth: js.UndefOr[Double]                  = js.undefined
   }
 
   trait GraphLink extends js.Object {
-    var source: GraphNode = js.native
-    var target: GraphNode = js.native
+    var source: js.UndefOr[GraphNode] = js.undefined
+    var target: js.UndefOr[GraphNode] = js.undefined
   }
 
   trait ClusterGraphLink extends GraphLink {
-    var sourceHost: String = js.native
-    var targetHost: String = js.native
+    var sourceHost: js.UndefOr[String] = js.undefined
+    var targetHost: js.UndefOr[String] = js.undefined
   }
 
   trait CgraphNode extends GraphNode {
-    var host: String   = js.native
-    var port: Int      = js.native
-    var roles: String  = js.native
-    var status: String = js.native
+    var host: js.UndefOr[String]   = js.undefined
+    var port: js.UndefOr[Int]      = js.undefined
+    var roles: js.UndefOr[String]  = js.undefined
+    var status: js.UndefOr[String] = js.undefined
   }
 
   trait AkkaClusterNode extends js.Object {
-    var id: Double      = js.native
-    var x: Double       = js.native
-    var y: Double       = js.native
-    var isHost: Boolean = js.native
-    var host: String    = js.native
-    var port: Int       = js.native
-    var roles: String   = js.native
-    var status: String  = js.native
+    var id: js.UndefOr[Double]      = js.undefined
+    var x: js.UndefOr[Double]       = js.undefined
+    var y: js.UndefOr[Double]       = js.undefined
+    var isHost: js.UndefOr[Boolean] = js.undefined
+    var host: js.UndefOr[String]    = js.undefined
+    var port: js.UndefOr[Int]       = js.undefined
+    var roles: js.UndefOr[String]   = js.undefined
+    var status: js.UndefOr[String]  = js.undefined
   }
 
   trait ClusterGraphRoleLink extends ClusterGraphLink {
-    var index: Int = js.native
+    var index: js.UndefOr[Int] = js.undefined
   }
 }
