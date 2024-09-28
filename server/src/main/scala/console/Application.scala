@@ -67,7 +67,23 @@ object Application extends App with AppSupport {
     .append('\n')
     .append(s"★ ★ ★  TimeZone: ${TimeZone.getDefault.getID} Started at ${LocalDateTime.now}  ★ ★ ★")
     .append('\n')
-    .append(s"★ ★ ★  ${hostname}:${httpPort} - ${url} ★ ★ ★")
+    .append(s"★ ★ ★  $hostname:$httpPort - $url ★ ★ ★")
+    .append(
+      s"""
+        |These urls should work
+        |====================================
+        |http://127.0.0.1:8080/
+        |http://127.0.0.2:8080/
+        |
+        |http://127.0.0.1:8080/crop-circle
+        |http://127.0.0.1:8080/crop-circle1
+        |
+        |http://localhost:8080/monitor
+        |http://localhost:8080/monitor2
+        |http://localhost:8080/monitor3
+        |====================================
+        |""".stripMargin
+    )
     .append('\n')
     .append(
       """

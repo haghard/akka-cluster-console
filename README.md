@@ -19,7 +19,6 @@ http://127.0.0.1:8080/crop-circle
 http://127.0.0.1:8080/crop-circle1
 
 http://localhost:8080/monitor
-http://localhost:8080/monitor1
 http://localhost:8080/monitor2
 http://localhost:8080/monitor3
 
@@ -56,7 +55,7 @@ https://www.scala-js.org/doc/tutorial/basic/0.6.x.html
 
 Where:
 
-    *  URL points out on an existing akka cluster that runs `akka-management-cluster-http` module. For example https://.../cluster/members
+    *  URL points out on the existing akka cluster that runs `akka-management-cluster-http` module. For example https://.../cluster/members
     *  PASSWORD passwords that protects URL.
 
 

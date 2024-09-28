@@ -1,7 +1,7 @@
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.0.0")
 addSbtPlugin("com.vmunier" % "sbt-web-scalajs" % "1.1.0")
 
-addSbtPlugin("org.scala-js" % "sbt-scalajs"     % "1.16.0") //"1.16.0"
+addSbtPlugin("org.scala-js" % "sbt-scalajs"     % "1.17.0")
 
 addSbtPlugin("org.scala-js" % "sbt-jsdependencies" % "1.0.1")
 
