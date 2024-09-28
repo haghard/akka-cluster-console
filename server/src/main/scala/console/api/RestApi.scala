@@ -3,10 +3,15 @@ package console.api
 import akka.http.scaladsl.model.ContentTypes
 import akka.http.scaladsl.model.HttpEntity.Strict
 import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.http.scaladsl.server.Directives
 import akka.http.scaladsl.server.Route
+import akka.stream.scaladsl.{Flow, Sink, Source}
 import akka.util.ByteString
 import console.scripts.JsScript
+
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.DurationInt
 
 object RestApi extends Directives {
 
@@ -21,6 +26,44 @@ object RestApi extends Directives {
       }
     }
 
+  // val replicas: SortedMultiDict[String, Replica] = SortedMultiDict.empty[String, Replica],
+
+  def flow(implicit ec: ExecutionContext) = {
+    val circle = Set("a", "b", "c").foldLeft(CropCircle("cluster")) { (circle, c) =>
+      circle :+ (c, "aaaa") :+ (c, "bbbb") :+ (c, "cccc")
+    }
+
+    val f =
+      Flow.fromSinkAndSourceCoupled[Message, Message](
+        Sink.ignore,
+        Source.tick(0.second, 5.second, TextMessage.Strict(circle.toString))
+      )
+
+    f.watchTermination()((_, d) => d.onComplete(_ => println("Done")))
+    f
+  }
+
+  def cropCircleView1(ec: ExecutionContext) =
+    get(path("crop-circle1")(getFromResource("view1.html"))) ~
+      path("d3" / Remaining) { file =>
+        encodeResponse(getFromResource("d3/" + file))
+      }
+
+  // Take a look at path("view")(get(encodeResponse(getFromFile(folderName + "/" + circlePage))))
+  def cropCircleView(ec: ExecutionContext) =
+    get(path("crop-circle")(getFromResource("view.html"))) ~
+      path("d3.v5.js")(get(encodeResponse(getFromResource("d3.v5.js")))) ~
+      path("events")(handleWebSocketMessages(flow(ec)))
+
+  def monitorView =
+    get(path("monitor")(getFromResource("monitor/monitor.html")))
+
+  def monitorView2 =
+    get(path("monitor2")(getFromResource("monitor/monitor2.html")))
+
+  def monitorView3 =
+    get(path("monitor3")(getFromResource("monitor/monitor3.html")))
+
   def routes(
     systemName: String,
     url: String
@@ -29,12 +72,15 @@ object RestApi extends Directives {
       extractLog { log =>
         clusterConsolePage(systemName, url) ~
           path("pics" / Remaining) { _ =>
-            getFromResource("akka-small.jpg")
+            encodeResponse(getFromResource("akka-small.jpg"))
           } ~ pathPrefix("assets" / Remaining) { file =>
             log.info("GET assets {}", file)
             encodeResponse(getFromResource(folderName + "/" + file))
           }
-      } ~ akka.management.cluster.scaladsl.ClusterHttpManagementRoutes(akka.cluster.Cluster(system))
+      } ~ akka.management.cluster.scaladsl.ClusterHttpManagementRoutes(akka.cluster.Cluster(system)) ~
+        cropCircleView(system.dispatcher) ~
+        cropCircleView1(system.dispatcher) ~
+        monitorView ~ monitorView2 ~ monitorView3
     }
 
 }

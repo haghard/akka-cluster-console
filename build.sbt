@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
 import scala.sys.process.Process
 
-val scalaV          = "2.13.14"
+val scalaV          = "2.13.15"
 val akkaVersion     = "2.6.21"
 val version         = "0.1.0"
 val AkkaMngVersion  = "1.4.1"
@@ -14,10 +14,10 @@ val AkkaHttpVersion = "10.2.10"
 
 val scalaOps = Seq("-feature", "-Xfatal-warnings", "-deprecation", "-unchecked")
 
-//https://repo1.maven.org/maven2/com/lihaoyi/ammonite-compiler_3.3.1/3.0.0-M2-3-b5eb4787/
-val AmmoniteVersion = "3.0.0-M2-3-b5eb4787"
+//https://repo1.maven.org/maven2/com/lihaoyi/ammonite-compiler_3.3.0
+val AmmoniteVersion = "3.0.0"
 
-lazy val scalacSettings2_13_14 = Seq(
+lazy val scalacSettings2_13 = Seq(
   scalacOptions ++= Seq(
     //"-Xsource:3-cross",
     "-language:existentials",
@@ -39,7 +39,7 @@ lazy val scalacSettings2_13_14 = Seq(
 )
 
 lazy val server = (project in file("server"))
-  .settings(scalacSettings2_13_14)
+  .settings(scalacSettings2_13)
   .settings(
     name := "server",
     resolvers ++= Seq("Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"),
@@ -59,7 +59,7 @@ lazy val server = (project in file("server"))
     // run / fork := true,
 
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.2.3",
+      "ch.qos.logback" % "logback-classic" % "1.2.11",
       "org.webjars"    % "bootstrap"       % "3.3.6",
       "com.lihaoyi"   %% "scalatags"       % "0.9.1",
       "pl.setblack"   %% "cryptotpyrc"     % "0.4.2"
@@ -204,7 +204,7 @@ def haltOnCmdResultError(result: Int) {
 }
 
 lazy val ui = (project in file("ui"))
-  .settings(scalacSettings2_13_14)
+  .settings(scalacSettings2_13)
   .settings(
     resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
     scalaVersion      := scalaV,
@@ -251,7 +251,7 @@ lazy val shared =
   sbtcrossproject.CrossPlugin.autoImport
     .crossProject(JSPlatform, JVMPlatform)
     .crossType(sbtcrossproject.CrossType.Pure)
-    .settings(scalacSettings2_13_14)
+    .settings(scalacSettings2_13)
     .settings(
       scalaVersion      := scalaV,
       scalafmtOnCompile := true,
@@ -285,8 +285,16 @@ def execute(dir: File): Unit = {
   Process(s"mkdir ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css").!
   Process(s"cp ${dir}/src/main/resources/react/main.css ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css").!
   Process(s"cp ${dir}/src/main/resources/react/chat.css ${dir}/target/web/web-modules/main/webjars/lib/bootstrap/css").!
-  val ec = Process(s"cp ${dir}/src/main/resources/akka-small.jpg  ${dir}/target").!
-  if (ec != 0) throw new Exception("Copy error")
+  Process(s"cp ${dir}/src/main/resources/view.html ${dir}/target").!
+  Process(s"cp ${dir}/src/main/resources/view1.html ${dir}/target").!
+  Process(s"mkdir ${dir}/target/monitor").!
+  Process(s"cp ${dir}/src/main/resources/monitor/monitor.html ${dir}/target/monitor").!
+  Process(s"cp ${dir}/src/main/resources/monitor/monitor2.html ${dir}/target/monitor").!
+  Process(s"cp ${dir}/src/main/resources/monitor/monitor3.html ${dir}/target/monitor").!
+  Process(s"cp ${dir}/src/main/resources/d3.v5.js ${dir}/target").!
+
+  /*val ec = Process(s"cp ${dir}/src/main/resources/akka-small.jpg  ${dir}/target").!
+  if (ec != 0) throw new Exception("Copy error")*/
 }
 
 def copyJsArtifacts = baseDirectory.map { dir =>

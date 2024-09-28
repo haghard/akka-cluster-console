@@ -14,6 +14,15 @@ sbt c
 
 http://127.0.0.1:8080/
 http://127.0.0.2:8080/
+
+http://127.0.0.1:8080/crop-circle
+http://127.0.0.1:8080/crop-circle1
+
+http://localhost:8080/monitor
+http://localhost:8080/monitor1
+http://localhost:8080/monitor2
+http://localhost:8080/monitor3
+
 ```
 
 or
@@ -22,8 +31,8 @@ or
 sbt server/assembly
 
 
-java -server -Xmx128M -XX:+PrintCommandLineFlags -XshowSettings:vm -XX:+UseG1GC -DCONFIG=./server/conf -DENV=development -Dakka.remote.artery.canonical.port=2550 -Dakka.remote.artery.canonical.hostname=127.0.0.1 -DHTTP_PORT=8080 -DURL=http://127.0.0.1:8080/cluster/members -jar server/target/scala-2.12/akka-cluster-console-0.1.0.jar
-java -server -Xmx128M -XX:+PrintCommandLineFlags -XshowSettings:vm -XX:+UseG1GC -DCONFIG=./server/conf -DENV=development -Dakka.remote.artery.canonical.port=2550 -Dakka.remote.artery.canonical.hostname=127.0.0.2 -DHTTP_PORT=8080 -DURL=http://127.0.0.2:8080/cluster/members -jar server/target/scala-2.12/akka-cluster-console-0.1.0.jar
+java -server -Xmx128M -XX:+PrintCommandLineFlags -XshowSettings:vm -XX:+UseG1GC -DCONFIG=./server/conf -DENV=development -Dakka.remote.artery.canonical.port=2550 -Dakka.remote.artery.canonical.hostname=127.0.0.1 -DHTTP_PORT=8080 -DURL=http://127.0.0.1:8080/cluster/members -jar server/target/scala-2.13/akka-cluster-console-0.1.0.jar
+java -server -Xmx128M -XX:+PrintCommandLineFlags -XshowSettings:vm -XX:+UseG1GC -DCONFIG=./server/conf -DENV=development -Dakka.remote.artery.canonical.port=2550 -Dakka.remote.artery.canonical.hostname=127.0.0.2 -DHTTP_PORT=8080 -DURL=http://127.0.0.2:8080/cluster/members -jar server/target/scala-2.13/akka-cluster-console-0.1.0.jar
 
 http://127.0.0.1:8080/
 http://127.0.0.2:8080/
