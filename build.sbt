@@ -59,7 +59,7 @@ lazy val server = (project in file("server"))
     // run / fork := true,
 
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.2.11",
+      "ch.qos.logback" % "logback-classic" % "1.2.13",
       "org.webjars"    % "bootstrap"       % "3.3.6",
       "com.lihaoyi"   %% "scalatags"       % "0.9.1",
       "pl.setblack"   %% "cryptotpyrc"     % "0.4.2"
