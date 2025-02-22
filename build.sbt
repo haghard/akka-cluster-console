@@ -6,23 +6,22 @@ import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
 import scala.sys.process.Process
 
-val scalaV          = "2.13.15"
+val scalaV          = "2.13.16"
 val akkaVersion     = "2.6.21"
 val version         = "0.1.0"
 val AkkaMngVersion  = "1.4.1"
 val AkkaHttpVersion = "10.2.10"
 
-val scalaOps = Seq("-feature", "-Xfatal-warnings", "-deprecation", "-unchecked")
-
-//https://repo1.maven.org/maven2/com/lihaoyi/ammonite-compiler_3.3.0
-val AmmoniteVersion = "3.0.0"
+//https://repo1.maven.org/maven2/com/lihaoyi/ammonite-compiler_3.6.3/3.0.2/
+val AmmoniteVersion = "3.0.2"
 
 lazy val scalacSettings2_13 = Seq(
   scalacOptions ++= Seq(
     //"-Xsource:3-cross",
     "-language:existentials",
     "-language:experimental.macros",
-    "-release:17",
+    "-target:21",
+    "-release:21",
     "-deprecation",
     "-feature",
     "-unchecked",
@@ -37,6 +36,8 @@ lazy val scalacSettings2_13 = Seq(
     "-Xmigration", //Emit migration warnings under -Xsource:3 as fatal warnings, not errors; -Xmigration disables fatality (#10439 by @som-snytt, #10511)
   )
 )
+
+javacOptions ++= Seq("-source", "21", "-target", "21")
 
 lazy val server = (project in file("server"))
   .settings(scalacSettings2_13)
@@ -55,11 +56,11 @@ lazy val server = (project in file("server"))
     run / connectInput      := true,
 
     // For ammonite project server;test:run to work
-    // runMain / fork := true,
-    // run / fork := true,
+    //runMain / fork := true,
+    //run / fork := true,
 
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.2.13",
+      "ch.qos.logback" % "logback-classic" % "1.5.11",
       "org.webjars"    % "bootstrap"       % "3.3.6",
       "com.lihaoyi"   %% "scalatags"       % "0.9.1",
       "pl.setblack"   %% "cryptotpyrc"     % "0.4.2"
@@ -305,3 +306,7 @@ def copyJsArtifacts = baseDirectory.map { dir =>
 addCommandAlias("fmt", "scalafmt")
 addCommandAlias("c", "compile")
 addCommandAlias("r", "reload")
+
+//++2.13.15
+//show javacOptions
+//show scalacOptions
