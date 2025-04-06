@@ -60,7 +60,7 @@ lazy val server = (project in file("server"))
     //run / fork := true,
 
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.5.11",
+      "ch.qos.logback" % "logback-classic" % "1.5.18",
       "org.webjars"    % "bootstrap"       % "3.3.6",
       "com.lihaoyi"   %% "scalatags"       % "0.9.1",
       "pl.setblack"   %% "cryptotpyrc"     % "0.4.2"
@@ -294,6 +294,14 @@ def execute(dir: File): Unit = {
   Process(s"cp ${dir}/src/main/resources/monitor/monitor3.html ${dir}/target/monitor").!
   Process(s"cp ${dir}/src/main/resources/d3.v5.js ${dir}/target").!
 
+  Process(s"mkdir ${dir}/target/chat").!
+  Process(s"cp ${dir}/src/main/resources/chat/index.html ${dir}/target/chat").!
+  Process(s"cp ${dir}/src/main/resources/chat/api.js ${dir}/target/chat").!
+  Process(s"cp ${dir}/src/main/resources/chat/chat.css ${dir}/target/chat").!
+  Process(s"cp ${dir}/src/main/resources/chat/chat.js ${dir}/target/chat").!
+  Process(s"cp ${dir}/src/main/resources/chat/favicon.ico ${dir}/target/chat").!
+
+
   /*val ec = Process(s"cp ${dir}/src/main/resources/akka-small.jpg  ${dir}/target").!
   if (ec != 0) throw new Exception("Copy error")*/
 }
@@ -307,6 +315,11 @@ addCommandAlias("fmt", "scalafmt")
 addCommandAlias("c", "compile")
 addCommandAlias("r", "reload")
 
-//++2.13.15
+//javaHome := Some(file("/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/")),
+javaHome := Some(file("/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/"))
+//javaHome := Some(file("/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home/")),
+
+
+//++2.13.16
 //show javacOptions
 //show scalacOptions

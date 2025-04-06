@@ -82,6 +82,9 @@ object Application extends App with AppSupport {
         |http://localhost:8080/monitor2
         |http://localhost:8080/monitor3
         |====================================
+        |http://localhost:8080/mychat
+        |====================================
+        |
         |""".stripMargin
     )
     .append('\n')

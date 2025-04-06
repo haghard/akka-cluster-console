@@ -13,7 +13,7 @@ import console.scripts.JsScript
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 
-object RestApi extends Directives {
+object RestApi extends Directives with JsonSupport {
 
   private val folderName = "public"
 
@@ -64,6 +64,28 @@ object RestApi extends Directives {
   def monitorView3 =
     get(path("monitor3")(getFromResource("monitor/monitor3.html")))
 
+  def chatView =
+    get(path("mychat")(getFromResource("chat/index.html"))) ~
+      path("chat" / Remaining) { file =>
+        encodeResponse(getFromResource("chat/" + file))
+      }
+
+  //  /chat/completions
+  def completions =
+    path("chat" / "messages") {
+      post {
+        entity(as[ChatMessage]) { req =>
+          complete {
+            println("*****" + req)
+            // """{ "data": "1.asasasfasfasfasfasfa", "choices": [{"finish_reason":"1"}], "context":"2222" }"""
+            // parsedResponse.choices[0].delta.content
+            s"""{ "choices":[{"finish_reason":null, "delta":{"content":"Echo: ${req.message} at ${System
+                .currentTimeMillis()}"}}]}"""
+          }
+        }
+      }
+    }
+
   def routes(
     systemName: String,
     url: String
@@ -80,7 +102,7 @@ object RestApi extends Directives {
       } ~ akka.management.cluster.scaladsl.ClusterHttpManagementRoutes(akka.cluster.Cluster(system)) ~
         cropCircleView(system.dispatcher) ~
         cropCircleView1(system.dispatcher) ~
-        monitorView ~ monitorView2 ~ monitorView3
+        monitorView ~ monitorView2 ~ monitorView3 ~ chatView ~ completions
     }
 
 }
