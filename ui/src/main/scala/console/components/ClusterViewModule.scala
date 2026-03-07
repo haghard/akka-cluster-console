@@ -27,7 +27,7 @@ import Dynamic.{literal => lit}
 
 object ClusterViewModule extends GraphSupport {
 
-  val Exp = """akka://([-|\w]*)@(\d{1,4}).(\d{1,4}).(\d{1,4}).(\d{1,4}):(\d{1,9})""".r
+  val Exp    = """akka://([-|\w]*)@(\d{1,4}).(\d{1,4}).(\d{1,4}).(\d{1,4}):(\d{1,9})""".r
   val quotes = Vector(
     """
       |The Dynamo system design principals: a) consistent hashing to determine key placement b) partial quorums for reading and writing
@@ -155,7 +155,7 @@ object ClusterViewModule extends GraphSupport {
             // scala.scalajs.js.JSON.stringify()
             val parsedJson = scala.scalajs.js.JSON.parse(resp.responseText)
             // dom.console.log(resp.responseText)
-            val json = parsedJson.asInstanceOf[scala.scalajs.js.Dictionary[scala.scalajs.js.Any]]
+            val json    = parsedJson.asInstanceOf[scala.scalajs.js.Dictionary[scala.scalajs.js.Any]]
             val members =
               json("members").asInstanceOf[scala.scalajs.js.Array[scala.scalajs.js.Dictionary[scala.scalajs.js.Any]]]
 
@@ -200,7 +200,7 @@ object ClusterViewModule extends GraphSupport {
 
               val vertices: js.Array[Vertix] = js.Array[Vertix]((members ++ hosts).toSeq: _*) // .toJsArray
 
-              val edges0 = hosts.flatMap(r => members.filter(_.host == r.host).map(h => Link(r, h)))
+              val edges0                = hosts.flatMap(r => members.filter(_.host == r.host).map(h => Link(r, h)))
               val edges: js.Array[Edge] =
                 js.Array[Edge](
                   (if (hosts.size > 1) {
@@ -267,7 +267,7 @@ object ClusterViewModule extends GraphSupport {
         .remove()
 
       s.selectAll[Edge]("line.link")
-        .data[Edge](newLinks, (d: Edge, i: Int) => d.source.id + "-" + d.target.id)
+        .data[Edge](newLinks, (d: Edge, i: Int) => d.source.id.toString + "-" + d.target.id.toString)
         .exit()
         .transition()
         .duration(1000)
@@ -329,7 +329,7 @@ object ClusterViewModule extends GraphSupport {
 
     private def onChange(s: Selection[org.scalajs.dom.EventTarget], force: forceModule.Force[Vertix, Edge]): Unit = {
       s.selectAll[Edge]("line.link")
-        .data[Edge](force.links(), (d: Edge, i: Int) => d.source.id + "-" + d.target.id)
+        .data[Edge](force.links(), (d: Edge, i: Int) => d.source.id.toString + "-" + d.target.id.toString)
         .enter()
         .append("line")
         .style("opacity", 1.0)
@@ -403,7 +403,7 @@ object ClusterViewModule extends GraphSupport {
       tooltip.transition().duration(200).style("opacity", .9)
       tooltip
         .html(s"id: ${n.id} <br/>\naddress: ${n.host}:${n.port} <br/>\n role: ${n.roles}")
-        .style("left", n.x + "px")
+        .style("left", n.x.toString + "px")
         .style("top", n.y.map(_ - 20).getOrElse(0d) + "px")
     }
 

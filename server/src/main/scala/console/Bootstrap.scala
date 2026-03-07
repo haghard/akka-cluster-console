@@ -47,7 +47,7 @@ case class Bootstrap(host: String, port: Int, clusterUrl: String)(implicit
 
   val corsAllowedMethods = immutable.Seq(GET, POST, HEAD, OPTIONS, PATCH, PUT, DELETE)
   val corsSettings       = CorsSettings.defaultSettings.withAllowedMethods(corsAllowedMethods)
-  val routes: Route = handleRejections(corsRejectionHandler)(
+  val routes: Route      = handleRejections(corsRejectionHandler)(
     cors(corsSettings)(
       api.RestApi.routes(system.name, clusterUrl)
     )

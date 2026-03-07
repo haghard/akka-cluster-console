@@ -26,7 +26,7 @@ object Application extends App with AppSupport {
   val url      = Option(System.getProperty("URL")).getOrElse(throw new Exception("URL is expected"))
   val httpPort = Option(System.getProperty("HTTP_PORT")).getOrElse(throw new Exception("HTTP_PORT is expected"))
 
-  val env = Option(System.getProperty("ENV")).getOrElse(throw new Exception("ENV is expected"))
+  val env        = Option(System.getProperty("ENV")).getOrElse(throw new Exception("ENV is expected"))
   val configFile =
     new File(s"${new File(confPath).getAbsolutePath}/" + env + ".conf")
 
@@ -50,7 +50,7 @@ object Application extends App with AppSupport {
   config.getConfig(HttpDispatcher)
 
   implicit val system: ActorSystem = ActorSystem("my-console", config)
-  val runtimeInfo = new StringBuilder()
+  val runtimeInfo                  = new StringBuilder()
     .append('\n')
     .append(s"Cores:${Runtime.getRuntime.availableProcessors}")
     .append(" Total Memory:" + Runtime.getRuntime.totalMemory / 1000000 + "Mb")

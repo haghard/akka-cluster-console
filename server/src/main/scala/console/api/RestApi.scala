@@ -8,6 +8,7 @@ import akka.http.scaladsl.server.Directives
 import akka.http.scaladsl.server.Route
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import akka.util.ByteString
+import console.Protocol.ChatMessage
 import console.scripts.JsScript
 
 import scala.concurrent.ExecutionContext

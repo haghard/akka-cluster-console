@@ -1,6 +1,7 @@
 package console.api
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import console.Protocol.ChatMessage
 import spray.json.DefaultJsonProtocol
 import spray.json.RootJsonFormat
 

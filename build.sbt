@@ -6,18 +6,20 @@ import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
 import scala.sys.process.Process
 
-val scalaV          = "2.13.16"
+val scala2_13       = "2.13.18"
 val akkaVersion     = "2.6.21"
 val version         = "0.1.0"
 val AkkaMngVersion  = "1.4.1"
 val AkkaHttpVersion = "10.2.10"
 
+scalaVersion := scala2_13
+
 //https://repo1.maven.org/maven2/com/lihaoyi/ammonite-compiler_3.6.3/3.0.2/
-val AmmoniteVersion = "3.0.2"
+val AmmoniteVersion = "3.0.8"
 
 lazy val scalacSettings2_13 = Seq(
   scalacOptions ++= Seq(
-    //"-Xsource:3-cross",
+    "-Xsource:3-cross",
     "-language:existentials",
     "-language:experimental.macros",
     "-target:21",
@@ -25,15 +27,15 @@ lazy val scalacSettings2_13 = Seq(
     "-deprecation",
     "-feature",
     "-unchecked",
-    "-Yrangepos", //semanticdb-scalac
+    "-Yrangepos", // semanticdb-scalac
     "-Xlog-reflective-calls",
     "-Xcheckinit", // runtime error when a val is not initialized due to trait hierarchies (instead of NPE somewhere else)
     "-Xlint",
-    //"-Xfatal-warnings",
+    // "-Xfatal-warnings",
     "-Wunused:imports",
-    "-Wconf:cat=other-match-analysis:error", //Transforms exhaustivity warnings into errors.
+    "-Wconf:cat=other-match-analysis:error", // Transforms exhaustivity warnings into errors.
     "-Wconf:msg=lambda-parens:s",
-    "-Xmigration", //Emit migration warnings under -Xsource:3 as fatal warnings, not errors; -Xmigration disables fatality (#10439 by @som-snytt, #10511)
+    "-Xmigration" // Emit migration warnings under -Xsource:3 as fatal warnings, not errors; -Xmigration disables fatality (#10439 by @som-snytt, #10511)
   )
 )
 
@@ -44,20 +46,19 @@ lazy val server = (project in file("server"))
   .settings(
     name := "server",
     resolvers ++= Seq("Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"),
-    scalaVersion            := scalaV,
+    scalaVersion            := scala2_13,
     scalaJSProjects         := Seq(ui),
     Assets / pipelineStages := Seq(scalaJSPipeline),
-    //Compile / scalacOptions := scalaOps,
-    //console / scalacOptions := scalaOps,
-    Compile / compile       := (Compile / compile).dependsOn(scalaJSPipeline, copyJsArtifacts).value,
-
-    scalafmtOnCompile       := true,
-    run / fork              := true,
-    run / connectInput      := true,
+    // Compile / scalacOptions := scalaOps,
+    // console / scalacOptions := scalaOps,
+    Compile / compile  := (Compile / compile).dependsOn(scalaJSPipeline, copyJsArtifacts).value,
+    scalafmtOnCompile  := true,
+    run / fork         := true,
+    run / connectInput := true,
 
     // For ammonite project server;test:run to work
-    //runMain / fork := true,
-    //run / fork := true,
+    // runMain / fork := true,
+    // run / fork := true,
 
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % "1.5.18",
@@ -208,7 +209,7 @@ lazy val ui = (project in file("ui"))
   .settings(scalacSettings2_13)
   .settings(
     resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
-    scalaVersion      := scalaV,
+    scalaVersion      := scala2_13,
     scalafmtOnCompile := true,
 
     // resolvers += "jitpack" at "https://jitpack.io"
@@ -219,7 +220,7 @@ lazy val ui = (project in file("ui"))
       "com.github.japgolly.scalajs-react" %%% "core"        % "1.7.7",
       "com.github.japgolly.scalajs-react" %%% "extra"       % "1.7.7",
       "com.github.japgolly.scalacss"      %%% "ext-react"   % "0.6.1",
-      "pl.setblack"                       %%% "cryptotpyrc" % "0.4.2"
+      "pl.setblack"                       %%% "cryptotpyrc" % "0.4.2"  //local build
     ),
     // "2.1.4"
     jsDependencies ++= Seq(
@@ -254,7 +255,7 @@ lazy val shared =
     .crossType(sbtcrossproject.CrossType.Pure)
     .settings(scalacSettings2_13)
     .settings(
-      scalaVersion      := scalaV,
+      scalaVersion      := scala2_13,
       scalafmtOnCompile := true,
       libraryDependencies ++= Seq("com.lihaoyi" %%% "upickle" % "1.0.0"),
       assembly / assemblyMergeStrategy := {
@@ -301,7 +302,6 @@ def execute(dir: File): Unit = {
   Process(s"cp ${dir}/src/main/resources/chat/chat.js ${dir}/target/chat").!
   Process(s"cp ${dir}/src/main/resources/chat/favicon.ico ${dir}/target/chat").!
 
-
   /*val ec = Process(s"cp ${dir}/src/main/resources/akka-small.jpg  ${dir}/target").!
   if (ec != 0) throw new Exception("Copy error")*/
 }
@@ -319,7 +319,6 @@ addCommandAlias("r", "reload")
 javaHome := Some(file("/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/"))
 //javaHome := Some(file("/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home/")),
 
-
-//++2.13.16
+//++2.13.18
 //show javacOptions
 //show scalacOptions
