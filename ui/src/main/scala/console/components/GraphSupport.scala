@@ -16,6 +16,6 @@ trait GraphSupport {
   type Edge   = GraphSupport.NodeLink[Vertix]
 
   object Link {
-    def apply(x: Vertix, y: Vertix): Edge = GraphSupport.NodeLink(x, y)
+    def apply(x: Vertix, y: Vertix): Edge = GraphSupport.NodeLink[Vertix](x, y)
   }
 }

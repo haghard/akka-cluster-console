@@ -4,14 +4,11 @@ set -e
 set -x
 
 APP_OPTS="-server \
-          -XX:MaxGCPauseMillis=400 \
-          -XX:+UseStringDeduplication \
-          -XX:+UseG1GC \
-          -XX:ConcGCThreads=4 -XX:ParallelGCThreads=4 \
+          -XX:+UseParallelGC \
           -XX:+UseContainerSupport \
           -XX:+PreferContainerQuotaForCPUCount \
           -XX:MaxRAMFraction=1 \
-          -XshowSettings \
+          -XshowSettings:system \
           -DHTTP_PORT=${HTTP_PORT} \
           -DENV=${ENV} \
           -DHOSTNAME=${HOSTNAME} \

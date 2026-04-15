@@ -6,24 +6,46 @@ import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
 import scala.sys.process.Process
 
-val scala2_13       = "2.13.18"
-val akkaVersion     = "2.6.21"
 val version         = "0.1.0"
+
+
+val scala2_13       = "2.13.18"
+
+//export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
+javaHome := Some(file("/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/"))
+//javaHome := Some(file("/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/"))
+
+val requiredJvmVersion = "17"
+
+val akkaVersion     = "2.6.21"
 val AkkaMngVersion  = "1.4.1"
 val AkkaHttpVersion = "10.2.10"
+
+initialize := {
+  val _ = initialize.value
+  val current  = sys.props("java.specification.version")
+  if (current != requiredJvmVersion)
+    sys.error(s"Java $requiredJvmVersion is required for this project. Found $current instead.")
+}
 
 scalaVersion := scala2_13
 
 //https://repo1.maven.org/maven2/com/lihaoyi/ammonite-compiler_3.6.3/3.0.2/
-val AmmoniteVersion = "3.0.8"
+val AmmoniteVersion = "3.0.9"
+
+val scalajsReactVersion = "1.7.7"
+val scalatagsVersion = "0.11.0"
 
 lazy val scalacSettings2_13 = Seq(
   scalacOptions ++= Seq(
-    "-Xsource:3-cross",
+    //Migration mode. Preparing your code to be fully moved to Scala 3.
+    //It enables Scala 3 specific syntax (like * for wildcards instead of _) and changes certain compiler behaviors to match Scala 3’s stricter rules.
+    "-Xsource:3",
+    //"-Xsource:3-cross",
     "-language:existentials",
     "-language:experimental.macros",
-    "-target:21",
-    "-release:21",
+    s"-release:$requiredJvmVersion",
+    "-Vtype-diffs",
     "-deprecation",
     "-feature",
     "-unchecked",
@@ -31,6 +53,7 @@ lazy val scalacSettings2_13 = Seq(
     "-Xlog-reflective-calls",
     "-Xcheckinit", // runtime error when a val is not initialized due to trait hierarchies (instead of NPE somewhere else)
     "-Xlint",
+    "-Xsource-features:infer-override",
     // "-Xfatal-warnings",
     "-Wunused:imports",
     "-Wconf:cat=other-match-analysis:error", // Transforms exhaustivity warnings into errors.
@@ -39,7 +62,7 @@ lazy val scalacSettings2_13 = Seq(
   )
 )
 
-javacOptions ++= Seq("-source", "21", "-target", "21")
+javacOptions ++= Seq("-source", requiredJvmVersion, "-target", requiredJvmVersion)
 
 lazy val server = (project in file("server"))
   .settings(scalacSettings2_13)
@@ -61,14 +84,14 @@ lazy val server = (project in file("server"))
     // run / fork := true,
 
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.5.18",
+      "ch.qos.logback" % "logback-classic" % "1.5.32",
       "org.webjars"    % "bootstrap"       % "3.3.6",
-      "com.lihaoyi"   %% "scalatags"       % "0.9.1",
-      "pl.setblack"   %% "cryptotpyrc"     % "0.4.2"
+      "com.lihaoyi"   %% "scalatags"       % scalatagsVersion,
+      "pl.setblack"   %% "cryptotpyrc"     % "0.4.2" //depends on "upickle" % "1.0.0"
       // "pl.setblack"     %%  "cryptotpyrc"     % "0.4.3",
     ) ++ Seq(
       "com.typesafe.akka"             %% "akka-http"                         % AkkaHttpVersion,
-      "ch.megard"                     %% "akka-http-cors"                    % "1.2.0",
+      "ch.megard"                     %% "akka-http-cors"                    % "1.3.1", //"1.2.0",
       "com.typesafe.akka"             %% "akka-slf4j"                        % akkaVersion,
       "com.typesafe.akka"             %% "akka-stream"                       % akkaVersion,
       "com.typesafe.akka"             %% "akka-cluster-metrics"              % akkaVersion,
@@ -108,11 +131,8 @@ lazy val server = (project in file("server"))
       "-Xms128m",
       "-Xmx256m",
       "-XX:-UseAdaptiveSizePolicy",   // heap never resizes
-      "-XX:MaxDirectMemorySize=128m", // Will get a error if allocate more mem for direct byte buffers
+      "-XX:MaxDirectMemorySize=64m", // Will get a error if allocate more mem for direct byte buffers
       "-XX:+UseParallelGC",           // with heaps <4GB
-      // "-XX:+UseG1GC",  //with heaps >4GB
-      // "-XX:+UseZGC",  //apps that require sub-millisecond GC pauses, with gigantic (terabyte range) heaps
-      // https://softwaremill.com/reactive-event-sourcing-benchmarks-part-2-postgresql/
       "-XX:ActiveProcessorCount=2"
     ),
     Assets / WebKeys.packagePrefix := "public/",
@@ -123,6 +143,7 @@ lazy val server = (project in file("server"))
     // Resolve duplicates for Sbt Assembly
     assembly / assemblyMergeStrategy := {
       case PathList(xs @ _*) if xs.last == "io.netty.versions.properties" => MergeStrategy.rename
+      case PathList("module-info.class") => MergeStrategy.discard
       case other => (assembly / assemblyMergeStrategy).value(other)
     },
     docker / imageNames := Seq(
@@ -165,9 +186,8 @@ lazy val server = (project in file("server"))
       val appDevConfTarget  = s"$imageAppBaseDir/$configDir/development.conf"
 
       new sbtdocker.mutable.Dockerfile {
-        from("adoptopenjdk/openjdk11")
-        // from("openjdk:10-jre")
-        // from("openjdk:9-jre")
+        from("haghard/jdk17-open-table:1.0.1")
+        //from("adoptopenjdk/openjdk11")
         maintainer("haghard")
 
         env("VERSION", version)
@@ -217,8 +237,8 @@ lazy val ui = (project in file("ui"))
 
     libraryDependencies ++= Seq(
       "org.singlespaced"                  %%% "scalajs-d3"  % "0.5.0", // "0.5.0" local build with @JSGlobal
-      "com.github.japgolly.scalajs-react" %%% "core"        % "1.7.7",
-      "com.github.japgolly.scalajs-react" %%% "extra"       % "1.7.7",
+      "com.github.japgolly.scalajs-react" %%% "core"  % scalajsReactVersion withSources (),
+      "com.github.japgolly.scalajs-react" %%% "extra" % scalajsReactVersion withSources (),
       "com.github.japgolly.scalacss"      %%% "ext-react"   % "0.6.1",
       "pl.setblack"                       %%% "cryptotpyrc" % "0.4.2"  //local build
     ),
@@ -315,9 +335,6 @@ addCommandAlias("fmt", "scalafmt")
 addCommandAlias("c", "compile")
 addCommandAlias("r", "reload")
 
-//javaHome := Some(file("/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/")),
-javaHome := Some(file("/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/"))
-//javaHome := Some(file("/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home/")),
 
 //++2.13.18
 //show javacOptions

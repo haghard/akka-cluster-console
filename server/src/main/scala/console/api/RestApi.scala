@@ -103,7 +103,7 @@ object RestApi extends Directives with JsonSupport {
       } ~ akka.management.cluster.scaladsl.ClusterHttpManagementRoutes(akka.cluster.Cluster(system)) ~
         cropCircleView(system.dispatcher) ~
         cropCircleView1(system.dispatcher) ~
-        monitorView ~ monitorView2 ~ monitorView3 ~ chatView ~ completions
+        monitorView ~ monitorView2 ~ monitorView3 // ~ chatView ~ completions
     }
 
 }

@@ -1,10 +1,8 @@
 ## Akka cluster console
 
-Collects data from an existing akka cluster and draw it.    
+Collects data from an existing akka cluster and draw the cluster topology.    
 
 ### How to run locally
-
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.11.jdk/Contents/Home
 
 ```
 
