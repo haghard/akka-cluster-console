@@ -4,11 +4,12 @@ set -e
 set -x
 
 APP_OPTS="-server \
+          -XX:+PrintCommandLineFlags \
+          -XshowSettings:system \
           -XX:+UseParallelGC \
           -XX:MaxRAMPercentage=75.0 \
           -XX:InitialRAMPercentage=75.0 \
           -XX:+ExitOnOutOfMemoryError \
-          -XshowSettings:system \
           -DHTTP_PORT=${HTTP_PORT} \
           -DENV=${ENV} \
           -DHOSTNAME=${HOSTNAME} \

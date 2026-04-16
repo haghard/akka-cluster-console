@@ -41,7 +41,6 @@ lazy val scalacSettings2_13 = Seq(
     //Migration mode. Preparing your code to be fully moved to Scala 3.
     //It enables Scala 3 specific syntax (like * for wildcards instead of _) and changes certain compiler behaviors to match Scala 3’s stricter rules.
     "-Xsource:3",
-    //"-Xsource:3-cross",
     "-language:existentials",
     "-language:experimental.macros",
     s"-release:$requiredJvmVersion",
@@ -53,6 +52,7 @@ lazy val scalacSettings2_13 = Seq(
     "-Xlog-reflective-calls",
     "-Xcheckinit", // runtime error when a val is not initialized due to trait hierarchies (instead of NPE somewhere else)
     "-Xlint",
+    "-Vtype-diffs", // turns type error messages into colored diffs between the two types
     "-Xsource-features:infer-override",
     // "-Xfatal-warnings",
     "-Wunused:imports",
@@ -128,6 +128,10 @@ lazy val server = (project in file("server"))
     javaOptions ++= Seq(
       "-XX:+PrintCommandLineFlags",
       "-XshowSettings:system",
+      "-XX:+UseParallelGC",
+      "-XX:MaxRAMPercentage=75",
+      "-XX:InitialRAMPercentage=75",
+      "-XX:+ExitOnOutOfMemoryError",
       "-Xms128m",
       "-Xmx256m",
       "-XX:-UseAdaptiveSizePolicy",   // heap never resizes
