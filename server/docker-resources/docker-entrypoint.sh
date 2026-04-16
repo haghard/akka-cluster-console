@@ -5,9 +5,9 @@ set -x
 
 APP_OPTS="-server \
           -XX:+UseParallelGC \
-          -XX:+UseContainerSupport \
-          -XX:+PreferContainerQuotaForCPUCount \
-          -XX:MaxRAMFraction=1 \
+          -XX:MaxRAMPercentage=75.0 \
+          -XX:InitialRAMPercentage=75.0 \
+          -XX:+ExitOnOutOfMemoryError \
           -XshowSettings:system \
           -DHTTP_PORT=${HTTP_PORT} \
           -DENV=${ENV} \
